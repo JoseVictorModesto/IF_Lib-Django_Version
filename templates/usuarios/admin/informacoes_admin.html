@@ -1,0 +1,37 @@
+{% extends 'bases_templates/base/base_perfil.html' %}
+{% load static %}
+{% block content %}
+
+        <div class="opcoes_user_adm">
+            <hr class="linha_opcoes_user">
+            <div class="Lista_opcoes_adm">
+                <div class="opcoes">
+                    <a href="{% url 'perfil_admin' %}" class="opcao selecionado">Informações</a>
+                    <a href="{% url 'cad_instituicao' %}" class="opcao">Instituições</a>
+                    <a href="#" class="opcao">Cursos</a>
+                    <a href="#" class="opcao">Campus</a>
+                    <a href="#" class="opcao">Categorias</a>
+                    <a href="#" class="opcao">Tipos</a>
+                    <a href="#" class="opcao opcao_cad_perfil">Bibliotecário</a>
+                    <a href="{% url 'cadastro_admin' %}" class="opcao opcao_cad_perfil">ADMIN</a>
+                </div>
+            </div>
+        </div>
+
+        <form class="form_cad">
+
+            <h1 class="titulo_form">Informações Gerais</h1>
+
+            <div class="botoes_form">
+                
+            </div>
+        </form>
+
+    </main>
+
+
+    {% include 'bases_templates/partials/footer_pag.html' %}
+
+    <script src="{% static '/scripts.js/app.js' %}"> </script>
+
+{% endblock %}

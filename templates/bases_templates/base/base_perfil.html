@@ -1,0 +1,63 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IF_Lib Perfil</title>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="{% static '/styles/style_user_adm.css'%}">
+</head>
+<body class="body_perfil_adm">
+    
+        {% include 'bases_templates/partials/cabecalho.html' %}
+
+        {% for message in messages %}
+        <div>
+            <p id="messages" class="menssage_py">{{message}}</p>
+        </div>
+        {% endfor %}
+
+    <main class="main_user">
+        <div class="user_perfil">
+            
+            <div class="edit_perfil">
+
+                {% if infor_admin.foto_perfil %}
+                    <img src="{{ infor_admin.foto_perfil.url }}" alt="perfil" class="foto_perfil">
+                {% else %}
+                    <img src="{% static 'styles/imagens/Design sem nome.png' %}" alt="perfil" class="foto_perfil">
+                {% endif %}
+
+                <div class="div_botoes_perfilx">
+                    <a href="{% url 'editar_perfil' %}" class="botoes_perfilx"><i class="bi bi-gear"></i>Editar Perfil</a>
+                    <a href="{% url 'logout' %}" class="botoes_perfilx" onclick="return confirmar()"><i class="bi bi-box-arrow-left"></i>Sair</a>
+                </div>
+            </div>
+
+
+
+            <hr class="linha_user">
+
+            
+            <div class="infor_user">
+                <div class="nome_user">
+                    <h1 class="nome" >{{ infor_admin.usuario.first_name }}</h1>
+                </div>
+                <div class="infor_geral_user">
+                    <h2 class="infor_geral"><strong class="infor_geral_desk">ADMIN:</strong>{{ infor_admin.usuario.id }}</h2>
+                    <h2 class="infor_geral"><strong class="infor_geral_desk">E-mail:</strong>{{ infor_admin.usuario.email }}</h2>
+                    <h2 class="infor_geral"><strong class="infor_geral_desk">Matrícula:</strong>{{ infor_admin.usuario.username }}</h2>
+                </div>
+            </div>
+        </div>
+
+
+        {% block content %}
+        {% endblock %}
+
+
+</body>
+</html>

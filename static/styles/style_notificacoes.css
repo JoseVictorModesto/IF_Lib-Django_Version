@@ -1,0 +1,64 @@
+@import url(style_user_padrao.css);
+
+.mensagens{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.mensagem{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 15px;
+    color: var(--cinza1);
+    font-family: var(--fonte1);
+    border: 2px solid var(--verde1);
+    background-color: #7373733d;
+    width: 700px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.motivo_msg{
+    font-size: 1.5em;
+    font-weight: 300;
+    text-align: center;
+}
+
+.infor_msg{
+    font-size: 1em;
+    font-weight: 300;
+}
+
+.botao_msg{
+    text-decoration: none;
+    color: var(--cinza1);
+    background-color: rgb(22, 131, 40);
+    padding: 6px;
+    border-radius: 3px;
+}
+
+.delete_msg{
+    background-color: rgb(193, 35, 35);
+}
+
+.linha_msg{
+    border: none;
+    background-color: var(--verde1);
+    height: 2px;
+}
+
+.opcoes_mensagens{
+    padding: 12px;
+    margin-left: 70%;
+}
+
+.botao_msg:hover{
+    background-color: rgb(26, 164, 49);
+}
+
+.delete_msg:hover{
+    background-color: rgb(218, 56, 56)
+}

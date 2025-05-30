@@ -1,0 +1,330 @@
+@import url(style.css);
+
+:root {
+    --fundo: linear-gradient(195deg, #000000, #1c211f, #000000);
+    --botao_verde: linear-gradient(#298b0e, #071D00);
+    --botao_verde_active: linear-gradient(#37be12, #0b3000);
+    --botao_vermelho: linear-gradient(#ac0f0f, #1d0000);
+    --botao_vermelho_active: linear-gradient(#c41212, #3f0000);
+    --fundo_form: #35533c;
+    --fundo_form_b: linear-gradient(#35533c17, #35533c54, #35533c17);
+    --fundo_form_c: radial-gradient(#35533c42, #35533c65, #35533c36);
+    --fundo_form_d: linear-gradient(#35533c23, #35533c49, #35533c23);
+    --cinza2: #D9D9D9;
+}
+
+.body_perfil_adm{
+    background: var(--fundo);
+    background-attachment: fixed;
+    height: 100vh;
+}
+
+.main_user{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.user_perfil{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 50px;
+    margin-top: 100px;
+    background: var(--fundo_form_b);
+    padding: 1.3%;
+    border-radius: 50px;
+}
+
+.foto_perfil{
+    height: 220px;
+    width: auto;
+    border: solid var(--verde1) 3px;
+    border-radius: 60px;
+}
+
+.linha_user{
+    width: 2px;
+    height: 265px;
+    background-color: #2f92135b;
+    border: none;
+}
+
+.infor_user{
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+.nome_user{  
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 40px;
+    width: 500px;
+    background: linear-gradient(#368123, #204916);
+    border-radius: 50px;
+}
+
+.nome{
+    color: var(--branco);
+    font-family: var(--fonte1);
+    font-weight: 400;
+    font-size: 1.5em;
+}
+
+.infor_geral_user{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-left: 15px;
+}
+
+.infor_geral{
+    color: var(--branco);
+    font-family: var(--fonte1);
+    font-size: 1.1em;
+    font-weight: 200;
+}
+
+.infor_geral_desk{
+    color: var(--verde2);
+    font-weight: 300;
+}
+
+.linha_opcoes_user{
+    height: 2px;
+    width: 900px;
+    background-color: #2f921349;
+    border: none;
+    margin-top: 55px;
+}
+
+.opcoes_user_adm{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.Lista_opcoes_adm{
+    display: flex;
+    align-items: center;
+    margin-top: 45px;
+}
+
+.opcoes{
+    display: flex;
+    gap: 25px;
+}
+
+.opcao{
+    font-family: var(--fonte2);
+    text-decoration: none;
+    color: var(--verde1);
+    padding: 6px;
+    border: solid var(--verde1) 1px;
+    font-weight: 300;
+    font-size: 1em;
+    border-radius: 5px;
+    transition: 0.1s;
+}
+
+.opcao:hover{
+    scale: 1.05;
+    background: var(--botao_verde);
+    border: none;
+    color: var(--branco);
+    font-weight: 300;
+}
+
+.opcao:active{
+    background: var(--botao_verde_active);
+}
+
+.opcao_cad_perfil{
+    color: var(--vermelho);
+    border: solid var(--vermelho) 1px;
+}
+
+.opcao_cad_perfil:hover{
+    scale: 1.1;
+    background: var(--botao_vermelho);
+    border: none;
+    color: var(--branco);
+    font-weight: 300;
+}
+
+.opcao_cad_perfil:active{
+    background: var(--botao_vermelho_active);
+}
+
+.selecionado{
+    background: var(--botao_verde);
+    border: none;
+    color: var(--branco);
+    font-weight: 300;
+}
+
+.selecionado_vermelho{
+    background: var(--botao_vermelho);
+    border: none;
+    color: var(--branco);
+    font-weight: 300;
+}
+
+.form_cad{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 30px;
+    padding: 30px;
+    width: 450px;
+    background: var(--fundo_form_c);
+    border-radius: 40px;
+    margin-top: 60px;
+}
+
+.titulo_form{
+    font-family: var(--fonte1);
+    color: var(--cinza2);
+    font-size: 1.7em;
+    font-weight: 300;
+}
+
+.inputs_cad{
+    display: flex;
+    flex-direction: column;
+    gap: 13px;
+    margin-top: 20px;
+}
+
+.div_input{
+    display: flex;
+    flex-direction: column;
+    font-family: var(--fonte2);
+    color: #bdbdbd;
+    font-size: 0.9em;
+    gap: 5px;
+    font-weight: 300;
+}
+
+.botoes_form{
+    display: flex;
+    text-align: center;
+    gap: 30px;
+    margin-top: 30px;
+}
+
+.input_cad{
+    width: 400px;
+    height: 28px;
+    border-radius: 7px;
+    background-color: var(--cinza2);
+    border: none;
+}
+
+.botao_cad{
+    width: 90px;
+    height: 35px;
+    font-size: 0.9em;
+    font-weight: 400;
+    border-radius: 5px;
+    border: none;
+    background: var(--botao_verde);
+    color: var(--branco);
+    cursor: pointer;
+    box-shadow: 1px 1px 5px rgb(31, 31, 31);
+    transition: 0.2s;
+    font-family: var(--fonte1);
+}
+
+.botao_cad:hover{
+    scale: 1.1;
+}
+
+.botao_cad:active{
+    background: var(--botao_verde_active);
+}
+
+.botao_can{
+    width: 90px;
+    height: 35px;
+    font-size: 0.9em;
+    font-weight: 300;
+    border-radius: 5px;
+    border: none;
+    background: var(--botao_vermelho);
+    color: var(--branco);
+    cursor: pointer;
+    box-shadow: 1px 1px 5px rgb(31, 31, 31);
+    transition: 0.2s;
+    font-family: var(--fonte1);
+}
+
+.botao_can:hover{
+    scale: 1.1;
+}
+
+.botao_can:active{
+    background: var(--botao_vermelho_active);
+}
+
+.titulo_consulta_ob{
+    color: var(--cinza2);
+    font-family: var(--fonte1);
+    font-size: 2.2em;
+    font-weight: 400;
+}
+
+.consultas_ob{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 50px;
+    margin-top: 40px;
+}
+
+.input_busca_consulta{
+    border-radius: 8px;
+}
+
+.tablela_ob{
+    padding: 30px;
+    border: none;
+    margin-top: 20px;
+}
+
+.cabecalho_tabela{
+    background: linear-gradient(#005f15, #003d0d);
+}
+
+.nome_atributo{
+    padding: 10px;
+    font-family: var(--fonte2);
+    font-size: 0.9em;
+    color: var(--cinza2);
+    font-weight: 500;
+}
+
+.infor_tabela{
+    background-color:rgba(53, 83, 70, 0.886) ;
+    font-family: var(--fonte2);
+    color: var(--cinza2);
+    font-size: 0.9em;
+    font-weight: 300;
+    text-align: center;
+}
+
+.atributo{
+    padding: 8px;
+}
+
+.funcao_tabela{
+    color: var(--cinza2);
+}
+
+.funcao_tabela:hover{
+    color: var(--branco);
+}

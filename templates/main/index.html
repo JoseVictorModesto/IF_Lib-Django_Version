@@ -1,0 +1,261 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IF_Lib</title>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
+    <link rel="stylesheet" href="{% static '/styles/style.css' %}">
+</head>
+
+<body class="body_index">
+    
+    {% include 'bases_templates/partials/cabecalho.html' %}
+
+    {% for message in messages %}
+    <div>
+        <p id="messages" class="menssage_py">{{message}}</p>
+    </div>
+    {% endfor %} 
+
+    <main class="main_pag_principal">
+        <h1 class="categoria">Tecnologia</h1>
+        <div class="swiper swiper-index swiper-tecnologia">
+            
+            <div class="swiper-wrapper">
+
+              <div class="swiper-slide">
+                <div href="#" class="card">
+                    <div>
+                        <img src="{% static '/styles/imagens/tecnologia-da-informacao-890x500-1-1.jpg' %}" class="img_card">
+                    </div>
+                    <div class="base_card">
+                        <a href="/templates/conteudos/conteudo_academico.html" class="titulo_card">Servidores e Microchips</a> 
+                        <div class="infor_card">  
+                            <h2 class="inst_card">IFTO</h2>
+                            <button class="descricao_card">Descrição...</button>
+                        </div>
+                    </div>
+                    <div class="detalhes_card">
+                        <h2 class="tipo_card"><strong class="card_strong">Tipo</strong> Projeto de Pesquisa</h2>
+                        <h3 class="tipo_card"><strong class="card_strong">Postado em</strong> 25/04/2025</h3>
+                        <p class="paragrafo_card"><strong class="card_strong">Descrição</strong> A expressão "servidores e microchips" não tem um significado direto ou específico no contexto que você pode estar procurando. No entanto, podemos analisar separadamente cada termo e como eles podem estar relacionados:</p>
+                        <button class="retornar_card">Voltar</button>
+                    </div>
+                </div>
+              </div>
+
+            </div>
+
+            <div class="swiper-pagination"></div>
+          
+            <div class="swiper-button-prev tecnologia-prev"></div>
+            <div class="swiper-button-next tecnologia-next"></div>
+          
+            <div class="swiper-scrollbar"></div>
+        </div>
+
+        <h1 class="categoria">Saude</h1>
+        <div class="swiper swiper-index swiper-saude">
+            
+            <div class="swiper-wrapper">
+              
+             <div class="swiper-slide">
+                <div href="#" class="card">
+                    <div>
+                        <img src="{% static '/styles/imagens/tecnologia-da-informacao-890x500-1-1.jpg' %}" class="img_card">
+                    </div>
+                    <div class="base_card">
+                        <a href="/templates/conteudos/conteudo_academico.html" class="titulo_card">Servidores e Microchips</a> 
+                        <div class="infor_card">  
+                            <h2 class="inst_card">IFTO</h2>
+                            <button class="descricao_card">Descrição...</button>
+                        </div>
+                    </div>
+                    <div class="detalhes_card">
+                        <h2 class="tipo_card"><strong class="card_strong">Tipo</strong> Projeto de Pesquisa</h2>
+                        <h3 class="tipo_card"><strong class="card_strong">Postado em</strong> 25/04/2025</h3>
+                        <p class="paragrafo_card"><strong class="card_strong">Descrição</strong> A expressão "servidores e microchips" não tem um significado direto ou específico no contexto que você pode estar procurando. No entanto, podemos analisar separadamente cada termo e como eles podem estar relacionados:</p>
+                        <button class="retornar_card">Voltar</button>
+                    </div>
+                </div>
+              </div>
+
+            </div>
+            <div class="swiper-pagination"></div>
+          
+            <div class="swiper-button-prev saude-prev"></div>
+            <div class="swiper-button-next saude-next"></div>
+          
+            <div class="swiper-scrollbar"></div>
+        </div>
+
+        <h1 class="categoria">Conteúdos Externos</h1>
+        <div class="swiper swiper-index swiper-externos">
+            
+            <div class="swiper-wrapper">
+              
+              <div class="swiper-slide">
+                <div href="#" class="card">
+                    <div>
+                        <img src="{% static '/styles/imagens/tecnologia-da-informacao-890x500-1-1.jpg' %}" class="img_card">
+                    </div>
+                    <div class="base_card">
+                        <a href="/templates/conteudos/conteudo_academico.html" class="titulo_card">Servidores e Microchips</a> 
+                        <div class="infor_card">  
+                            <h2 class="inst_card">IFTO</h2>
+                            <button class="descricao_card">Descrição...</button>
+                        </div>
+                    </div>
+                    <div class="detalhes_card">
+                        <h2 class="tipo_card"><strong class="card_strong">Tipo</strong> Projeto de Pesquisa</h2>
+                        <h3 class="tipo_card"><strong class="card_strong">Postado em</strong> 25/04/2025</h3>
+                        <p class="paragrafo_card"><strong class="card_strong">Descrição</strong> A expressão "servidores e microchips" não tem um significado direto ou específico no contexto que você pode estar procurando. No entanto, podemos analisar separadamente cada termo e como eles podem estar relacionados:</p>
+                        <button class="retornar_card">Voltar</button>
+                    </div>
+                </div>
+              </div>
+
+            </div>
+
+            <div class="swiper-pagination"></div>
+          
+            <div class="swiper-button-prev externos-prev"></div>
+            <div class="swiper-button-next externos-next"></div>
+          
+            <div class="swiper-scrollbar"></div>
+        </div>
+
+    </main>
+
+    {% include 'bases_templates/partials/footer_main.html' %}
+
+    <script src="{% static '/scripts.js/app.js' %}"> </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <script>
+        const swipertecnologia = new Swiper('.swiper-tecnologia',{ navigation: { nextEl: '.tecnologia-next', prevEl: '.tecnologia-prev',}, slidesPerView: 6, 
+            breakpoints:{
+                1700: {
+                    slidesPerView: 7,
+                    },
+                
+                1450: {
+                    slidesPerView: 6,
+                    },
+
+                1200: {
+                    slidesPerView: 5,
+                    },
+
+                950: {
+                    slidesPerView: 4,
+                    },
+
+                700: {
+                    slidesPerView: 3,
+                    },
+
+                650: {
+                    slidesPerView: 4,
+                    },
+                
+                500: {
+                    slidesPerView: 3,
+                    },
+
+                300: {
+                    slidesPerView: 2,
+                    },
+                
+                100: {
+                    slidesPerView: 1,
+                    },
+            }    
+        });
+
+        const swiperSaude = new Swiper('.swiper-saude',{ navigation: { nextEl: '.saude-next', prevEl: '.saude-prev',}, slidesPerView: 6,breakpoints:{
+                1700: {
+                    slidesPerView: 7,
+                    },
+                
+                1450: {
+                    slidesPerView: 6,
+                    },
+
+                1200: {
+                    slidesPerView: 5,
+                    },
+
+                950: {
+                    slidesPerView: 4,
+                    },
+
+                700: {
+                    slidesPerView: 3,
+                    },
+
+                650: {
+                    slidesPerView: 4,
+                    },
+                
+                500: {
+                    slidesPerView: 3,
+                    },
+
+                300: {
+                    slidesPerView: 2,
+                    },
+                
+                100: {
+                    slidesPerView: 1,
+                    },
+            }    
+        });
+
+        const swiperExternos = new Swiper('.swiper-externos',{ navigation: { nextEl: '.externos-next', prevEl: '.externos-prev',}, slidesPerView: 6,breakpoints:{
+                1700: {
+                    slidesPerView: 7,
+                    },
+                
+                1450: {
+                    slidesPerView: 6,
+                    },
+
+                1200: {
+                    slidesPerView: 5,
+                    },
+
+                950: {
+                    slidesPerView: 4,
+                    },
+
+                700: {
+                    slidesPerView: 3,
+                    },
+
+                650: {
+                    slidesPerView: 4,
+                    },
+                
+                500: {
+                    slidesPerView: 3,
+                    },
+
+                300: {
+                    slidesPerView: 2,
+                    },
+                
+                100: {
+                    slidesPerView: 1,
+                    },
+            }    
+        });
+    </script>
+    
+</body>
+</html>

@@ -1,0 +1,85 @@
+{% extends 'bases_templates/base/base_perfil.html' %}
+{% load static %}
+{% block content %}
+
+        <div class="opcoes_user_adm">
+            <hr class="linha_opcoes_user">
+            <div class="Lista_opcoes_adm">
+                <div class="opcoes">
+                    <a href="{% url 'perfil_admin' %}" class="opcao">Informações</a>
+                    <a href="{% url 'cad_instituicao' %}" class="opcao">Instituições</a>
+                    <a href="#" class="opcao">Cursos</a>
+                    <a href="#" class="opcao">Campus</a>
+                    <a href="#" class="opcao">Categorias</a>
+                    <a href="#" class="opcao">Tipos</a>
+                    <a href="#" class="opcao opcao_cad_perfil">Bibliotecário</a>
+                    <a href="{% url 'cadastro_admin' %}" class="opcao opcao_cad_perfil selecionado_vermelho">ADMIN</a>
+                </div>
+            </div>
+        </div>
+
+        <form class="form_cad" action="{% url 'cadastro_admin' %}" method="POST">
+
+            {% csrf_token %}
+
+            <h1 class="titulo_form">Cadastrar ADMIN</h1>
+
+            <div class="inputs_cad">
+                {% for field in formulario_cadastro_admin  %}
+                <div class="div_input">
+                    <label for="{{ field.id_for_label }}">{{field.label}}</label>
+                    {{ field }}
+                </div>
+                {% endfor %}
+            </div>
+
+            <div class="botoes_form">
+                <button type="submit" class="botao_cad" onclick="return confirmar()">Cadastrar</button>
+                <button type="reset" class="botao_can">Cancelar</button>
+            </div>
+        </form>
+
+        <div class="consultas_ob">
+            <h1 class="titulo_consulta_ob">Administradores</h1>
+            <form class="busca busca_consulta_ob">
+                <input type="search" class="input_busca input_busca_consulta" placeholder="   Digite o nome de um Adiministrador">
+                <button type="submit" class="botao_busca"><i class="bi bi-search"></i></button>
+            </form>
+        </div>
+
+        <table class="tablela_ob">
+            <thead class="cabecalho_tabela">
+                <th class="nome_atributo">ID</th>
+                <th class="nome_atributo">Nome</th>
+                <th class="nome_atributo">Matrícula</th>
+                <th class="nome_atributo">E-mail</th>
+                <th class="nome_atributo">Editar</th>
+                <th class="nome_atributo">Deletar</th>
+            </thead>
+            <tbody class="infor_tabela">
+
+                {% if admin_tab %}
+
+                {% for i in admin_tab %}
+                <tr>
+                    <td class="atributo">{{ i.id }}</td>
+                    <td class="atributo">{{ i.first_name }}</td>
+                    <td class="atributo">{{ i.username }}</td>
+                    <td class="atributo">{{ i.email }}</td>
+                    <td class="atributo"><a href="{% url 'editar_user_admin' i.id %}" class="funcao_tabela"> <i class="bi bi-pencil-square"></i> </a></td>
+                    <td class="atributo"><a href="{% url 'deletar_user_admin' i.id %}" class="funcao_tabela" onclick="return confirmar()" onclick="return deletarTexto()"> <i class="bi bi-trash"></i> </a></td>
+                </tr>
+                {% endfor %}
+
+                {% else %}
+                {% endif %}
+
+        </table>
+
+    </main>
+
+    {% include 'bases_templates/partials/footer_pag.html' %}
+
+    <script src="{% static '/scripts.js/app.js' %}"> </script>
+
+{% endblock %}
