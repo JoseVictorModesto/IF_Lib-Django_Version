@@ -30,11 +30,12 @@
         </div>
 
         <form class="form_login" action="{% url 'login' %}" method="POST">
-
+            <!-- protege envio de formularios -->
             {% csrf_token %}
 
             <h1 class="titulo_login">Login</h1>
 
+            <!-- Formulario de login-->
             {% for field in formulario_login  %}
             <div class="inputs_login">
                 <label for="{{ field.id_for_label }}" class="label_login">{{field.label}}</label>

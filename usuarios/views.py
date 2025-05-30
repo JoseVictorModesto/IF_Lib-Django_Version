@@ -10,6 +10,8 @@ from usuarios.models import PerfilAdmin
 
 # funçao global de informlções basicas dos perfis
 def infor_perfis(request):
+    # puxa as informações do usuario a partir do model PerfilAdmin que esteja logado
+    # caso o usuario recem criado nao tenha ainda uma tabela no bd o django cria uma para esse user
     perfil, perfil_creat = PerfilAdmin.objects.get_or_create(usuario=request.user)
     return perfil
 
@@ -85,28 +87,33 @@ def editar_perfil(request):
     infor_admin = infor_perfis(request)
 
     if request.method == 'POST':
-        form = perfilAdminForm(request.POST, request.FILES, instance=infor_admin)
-        if form.is_valid():
-            form.save()
+        # gera um formulario a partir do perfilAdminForm instanciado pelo usuario logado e salva as alteraçoes
+        formulario = perfilAdminForm(request.POST, request.FILES, instance=infor_admin)
+        if formulario.is_valid():
+            formulario.save()
             messages.success(request, 'Perfil alterado com sucesso!')
             return redirect('editar_perfil')
+        
+    # caso o formulario nao seja post gera apenas o o formulario
     else:
-        form = perfilAdminForm()
+        formulario = perfilAdminForm()
 
-    return render(request, 'usuarios/admin/editar_perfil_adm.html', {'infor_admin': infor_admin, 'form': form})
+    return render(request, 'usuarios/admin/editar_perfil_adm.html', {'infor_admin': infor_admin, 'formulario': formulario})
 
 # deletar a foto de perfil do usuario
 def deletar_foto_perfil(request, id):
-    
-    foto = get_object_or_404(PerfilAdmin, id=id, usuario=request.user)
+    # procura um perfil pelo id a partir do model PerfilAdmin e que esteja logado ou 404
+    perfil = get_object_or_404(PerfilAdmin, id=id, usuario=request.user)
 
-    if foto.foto_perfil:
-        foto.foto_perfil.delete()
-        foto.save()
-        messages.success(request, 'imagem Salva')
+    # se o perfil tiver foto
+    if perfil.foto_perfil:
+        # sera deletado e salvo as alterações
+        perfil.foto_perfil.delete()
+        perfil.save()
+        messages.success(request, 'Foto de perfil alterada')
 
     else:
-        messages.error(request, 'Nenhuma foto')
+        messages.error(request, 'Nenhuma foto!')
 
     return redirect('editar_perfil')
 

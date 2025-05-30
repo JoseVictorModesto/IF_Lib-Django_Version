@@ -11,9 +11,9 @@
             {% csrf_token %}
 
             <h1 class="titulo_form">Editar Perfil</h1>
-
+            <!-- Formulario de editar o perfil do admin -->
             <div class="inputs_cad">
-                {% for field in form %}
+                {% for field in formulario %}
                 <div class="div_input">
                     <label for="{{ field.id_for_label }}">{{field.label}}</label>
                     {{ field }}
