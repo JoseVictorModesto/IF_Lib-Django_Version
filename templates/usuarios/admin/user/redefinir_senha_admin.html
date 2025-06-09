@@ -6,26 +6,21 @@
             <hr class="linha_opcoes_user">
             <div class="Lista_opcoes_adm">
                 <div class="opcoes">
-                    <a href="{% url 'perfil_admin' %}" class="opcao">Informações</a>
-                    <a href="{% url 'cad_instituicao' %}" class="opcao">Instituições</a>
-                    <a href="#" class="opcao">Cursos</a>
-                    <a href="#" class="opcao">Campus</a>
-                    <a href="#" class="opcao">Categorias</a>
-                    <a href="#" class="opcao">Tipos</a>
-                    <a href="#" class="opcao opcao_cad_perfil">Bibliotecário</a>
-                    <a href="{% url 'cadastro_admin' %}" class="opcao opcao_cad_perfil">ADMIN</a>
+                    <a href="{% url 'editar_perfil_admin' %}" class="opcao"><i class="bi bi-image"></i>  Editar Foto</a>
+                    <a href="{% url 'redefinir_senha_admin' %}" class="opcao selecionado"><i class="bi bi-file-lock2"></i>  Redefinir Senha</a>
+                    <a href="{% url 'perfil_admin' %}" class="opcao opcao_cad_perfil"><i class="bi bi-arrow-left-circle"></i>  Retornar</a>
                 </div>
             </div>
         </div>
 
-        <form class="form_cad" action="{% url 'editar_user_admin' id %}" method="POST">
+        <form class="form_cad" action="{% url 'redefinir_senha_admin' %}" method="POST" enctype="multipart/form-data">
 
             {% csrf_token %}
 
-            <h1 class="titulo_form">Editar ADMIN</h1>
-            <!-- Formulario de editar usuario admin -->
+            <h1 class="titulo_form">Redefinir senha</h1>
+            <!-- Formulario de redefinir a senha do admin -->
             <div class="inputs_cad">
-                {% for field in formulario_edit_admin  %}
+                {% for field in formulario %}
                 <div class="div_input">
                     <label for="{{ field.id_for_label }}">{{field.label}}</label>
                     {{ field }}
@@ -35,7 +30,7 @@
 
             <div class="botoes_form">
                 <button type="submit" class="botao_cad" onclick="return confirmar()">Salvar</button>
-                <a href="{% url 'cadastro_admin' %}" class="botao_can">Cancelar</a>
+                <button type="reset" class="botao_can">Cancelar</button>
             </div>
         </form>
 

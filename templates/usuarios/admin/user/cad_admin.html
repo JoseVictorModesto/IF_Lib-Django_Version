@@ -8,10 +8,10 @@
                 <div class="opcoes">
                     <a href="{% url 'perfil_admin' %}" class="opcao">Informações</a>
                     <a href="{% url 'cad_instituicao' %}" class="opcao">Instituições</a>
-                    <a href="#" class="opcao">Cursos</a>
-                    <a href="#" class="opcao">Campus</a>
-                    <a href="#" class="opcao">Categorias</a>
-                    <a href="#" class="opcao">Tipos</a>
+                    <a href="{% url 'cad_curso' %}" class="opcao">Cursos</a>
+                    <a href="{% url 'cad_campus' %}" class="opcao">Campus</a>
+                    <a href="{% url 'cad_categoria' %}" class="opcao">Categorias</a>
+                    <a href="{% url 'cad_tipo' %}" class="opcao">Tipos</a>
                     <a href="#" class="opcao opcao_cad_perfil">Bibliotecário</a>
                     <a href="{% url 'cadastro_admin' %}" class="opcao opcao_cad_perfil selecionado_vermelho">ADMIN</a>
                 </div>

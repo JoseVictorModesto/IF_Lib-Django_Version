@@ -6,14 +6,14 @@
             <hr class="linha_opcoes_user">
         </div>
 
-        <form class="form_cad" action="{% url 'editar_perfil' %}" method="POST" enctype="multipart/form-data">
+        <form class="form_cad" action="{% url 'editar_user_admin' id %}" method="POST">
 
             {% csrf_token %}
 
-            <h1 class="titulo_form">Editar Perfil</h1>
-            <!-- Formulario de editar o perfil do admin -->
+            <h1 class="titulo_form">Editar ADMIN</h1>
+            <!-- Formulario de editar usuario admin -->
             <div class="inputs_cad">
-                {% for field in formulario %}
+                {% for field in formulario_edit_admin  %}
                 <div class="div_input">
                     <label for="{{ field.id_for_label }}">{{field.label}}</label>
                     {{ field }}
@@ -23,8 +23,7 @@
 
             <div class="botoes_form">
                 <button type="submit" class="botao_cad" onclick="return confirmar()">Salvar</button>
-                <a href="{% url 'cadastro_admin' %}" class="botao_can">Cancelar</a>
-                <a href="{% url 'deletar_foto_perfil' infor_admin.id %}" class="botao_can btn_foto" onclick="return confirmar()">Remover foto</a>
+                <a href="{% url 'cadastro_admin' %}" class="botao_can">Retornar</a>
             </div>
         </form>
 
