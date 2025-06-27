@@ -1,0 +1,119 @@
+{% extends 'bases_templates/base/base_perfil.html' %}
+{% load static %}
+{% block content %}
+
+        <div class="opcoes_user_adm">
+            <hr class="linha_opcoes_user">
+            <div class="Lista_opcoes_adm">
+                <div class="opcoes">
+                    <a href="{% url 'perfil_admin' %}" class="opcao">Informações</a>
+                    <a href="{% url 'cad_instituicao' %}" class="opcao">Instituições</a>
+                    <a href="{% url 'cad_curso' %}" class="opcao">Cursos</a>
+                    <a href="{% url 'cad_campus' %}" class="opcao">Campus</a>
+                    <a href="{% url 'cad_categoria' %}" class="opcao">Categorias</a>
+                    <a href="{% url 'cad_tipo' %}" class="opcao">Tipos</a>
+                    <a href="{% url 'cad_bibliotecario' %}" class="opcao opcao_cad_perfil selecionado_vermelho">Bibliotecário</a>
+                    <a href="{% url 'cadastro_admin' %}" class="opcao opcao_cad_perfil">ADMIN</a>
+                </div>
+            </div>
+        </div>
+
+        <form class="form_cad" action="{% url 'cad_bibliotecario' %}" method="POST">
+
+            {% csrf_token %}
+
+            <h1 class="titulo_form">Cadastrar Bibliotecário</h1>
+
+            <!-- formularios de cadastro de Bibliotecarios -->
+            <div class="inputs_cad">
+                {% for field in formulario_cadastro_bibliotecario %}
+                <div class="div_input">
+                    <label for="{{ field.id_for_label }}">{{field.label}}</label>
+                    {{ field }}
+                </div>
+                {% endfor %}
+
+                {% for field in formulario_perfil_bibliotecario %}
+                <div class="div_input">
+                    <label for="{{ field.id_for_label }}">{{field.label}}</label>
+                    {{ field }}
+                </div>
+                {% endfor %}
+            </div>
+
+            <div class="botoes_form">
+                <button type="submit" class="botao_cad" onclick="return confirmar()">Cadastrar</button>
+                <button type="reset" class="botao_can">Cancelar</button>
+            </div>
+        </form>
+
+        <div class="consultas_ob">
+            <h1 class="titulo_consulta_ob">Bibliotecário</h1>
+            <form class="busca busca_consulta_ob">
+                <input type="search" class="input_busca input_busca_consulta" placeholder="   Digite o nome de um Bibliotecário">
+                <button type="submit" class="botao_busca"><i class="bi bi-search"></i></button>
+            </form>
+        </div>
+
+        <!-- tabela de Bibliotecarios -->
+
+        <!-- verifica se a algum Bibliotecario Cadastrado -->
+        {% if bibliotecario_tab %}
+
+        <table class="tablela_ob">
+                <thead class="cabecalho_tabela">
+                    <th class="nome_atributo">ID</th>
+                    <th class="nome_atributo">Nome</th>
+                    <th class="nome_atributo">Matrícula</th>
+                    <th class="nome_atributo">E-mail</th>
+                    <th class="nome_atributo">Campus</th>
+                    <th class="nome_atributo">Instituição</th>
+                    <th class="nome_atributo">Criador</th>
+                    <th class="nome_atributo">Editar</th>
+                    <th class="nome_atributo">Deletar</th>
+                </thead>
+                <tbody class="infor_tabela">
+
+                {% for i in bibliotecario_tab %}
+                <tr>
+                    <td class="atributo">{{ i.usuario.id }}</td>
+                    <td class="atributo">{{ i.usuario.first_name }}</td>
+                    <td class="atributo">{{ i.usuario.username }}</td>
+                    <td class="atributo">{{ i.usuario.email }}</td>
+
+                    {% if i.campus %}
+                        <td class="atributo">{{ i.campus.nome_campus }}</td>
+                    {% else %}
+                        <td class="atributo">Campus Deletado</td>
+                    {% endif %}
+                    
+                    {% if i.instituicao %}
+                        <td class="atributo">{{ i.instituicao.sigla }}</td>
+                    {% else %}
+                        <td class="atributo">Instituição Deletada</td>
+                    {% endif %}
+
+                    {% if i.criador %}
+                        <td class="atributo">{{ i.criador.first_name }}</td>
+                    {% else %}
+                        <td class="atributo">Usúario Deletado</td>
+                    {% endif %}
+
+                    <td class="atributo"><a href="{% url 'editar_user_bibliotecario' i.id %}" class="funcao_tabela"> <i class="bi bi-pencil-square"></i> </a></td>
+                    <td class="atributo"><a href="{% url 'deletar_bibliotecario' i.usuario.id %}" class="funcao_tabela" onclick="return confirmar()" onclick="return deletarTexto()"> <i class="bi bi-trash"></i> </a></td>
+                </tr>
+                {% endfor %}
+            <!-- se não houver exibe a mensagem -->
+            {% else %}
+                <h1 class="nome_atributo" style="margin-top: 30px; font-size: 1.5em; font-weight: 300;" >Nenhum Bibliotecário cadastrado</h1>
+            {% endif %}
+        </table>
+
+    </main>
+
+
+    {% include 'bases_templates/partials/footer_pag.html' %}
+
+    <script src="{% static '/scripts.js/app.js' %}"> </script>
+
+{% endblock %}

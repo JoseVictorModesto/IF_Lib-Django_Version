@@ -1,0 +1,45 @@
+{% extends 'bases_templates/base/base_perfil.html' %}
+{% load static %}
+{% block content %}
+
+        <div class="opcoes_user_adm">
+            <hr class="linha_opcoes_user">
+            <div class="Lista_opcoes_adm">
+                <div class="opcoes">
+                    <a href="{% url 'editar_perfil_bibliotecario' %}" class="opcao"><i class="bi bi-person-vcard"></i>  Editar Perfil</a>
+                    <a href="{% url 'editar_foto_bibliotecario' %}" class="opcao selecionado"><i class="bi bi-card-image"></i>  Editar Foto</a>
+                    <a href="{% url 'redefinir_senha_bibliotecario' %}" class="opcao"><i class="bi bi-file-lock2"></i>  Redefinir Senha</a>
+                    <a href="{% url 'informacoes_bibliotecario' %}" class="opcao opcao_cad_perfil"><i class="bi bi-arrow-left-circle"></i>  Retornar</a>
+                </div>
+            </div>
+        </div>
+
+        <form class="form_cad" action="{% url 'editar_foto_bibliotecario' %}" method="POST" enctype="multipart/form-data">
+
+            {% csrf_token %}
+
+            <h1 class="titulo_form">Editar Foto</h1>
+            <!-- Formulario de editar a foto do bibliotecario -->
+            <div class="inputs_cad">
+                {% for field in formulario %}
+                <div class="div_input">
+                    <label for="{{ field.id_for_label }}">{{field.label}}</label>
+                    {{ field }}
+                </div>
+                {% endfor %}
+            </div>
+
+            <div class="botoes_form">
+                <button type="submit" class="botao_cad" onclick="return confirmar()">Salvar</button>
+                <!-- Botao de deleter foto do perfil -->
+                <a href="{% url 'deletar_foto_bibliotecario' infor_bibliotecario.id %}" class="botao_can" style="font-size: 0.8em;" onclick="return confirmar()">Remover foto</a>
+            </div>
+        </form>
+
+    </main>
+
+    {% include 'bases_templates/partials/footer_pag.html' %}
+
+    <script src="{% static '/scripts.js/app.js' %}"> </script>
+
+{% endblock %}

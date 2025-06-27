@@ -41,7 +41,7 @@ def login(request):
             auth.login(request, usuario)
 
             # mensagem de sucesso
-            messages.success(request, f'Usúario {matricula} logado com sucesso!')         
+            messages.success(request, f'Seja bem vindo {request.user.first_name} ao Lib')         
             return redirect('home')
         
         # caso contrario retorna uma mensagem de erro e redireciona para pag de login
@@ -121,6 +121,36 @@ def editar_obj(request, modelo, modelo_formulario, mensagem, retorno_pag, id):
 
     return formulario_edit
 
+# funçao global de editar usuario com 2 formulario (user, perfil)
+def editar_user(request, id, modelo_bd, modelo_form_1, modelo_form_2, mensagem_1, retorno):
+
+    perfil = get_object_or_404(modelo_bd, id=id)
+    usuario_p = perfil.usuario
+
+    if request.method == 'POST':
+        formulario_edit_1 = modelo_form_1(request.POST, instance=usuario_p)
+        formulario_edit_2 = modelo_form_2(request.POST, instance=perfil)
+
+        if formulario_edit_1.is_valid() and formulario_edit_2.is_valid():
+            formulario_edit_1.save()
+            perfil_user = formulario_edit_2.save(commit=False)
+            perfil_user.instituicao = perfil_user.campus.instituicao_campus
+            perfil_user.save()
+            messages.success(request, mensagem_1)
+            return redirect(retorno)
+        
+        elif 'email' in formulario_edit_1.errors:
+            messages.error(request, 'Erro ao editar usuário: E-mail inválido')
+
+        else:
+            messages.error(request, 'Erro ao editar usuário: Matrícula já existente')
+        
+    else:
+        formulario_edit_1 = modelo_form_1(instance=usuario_p)
+        formulario_edit_2 = modelo_form_2(instance=perfil)
+
+    return formulario_edit_1, formulario_edit_2
+
 # funçao global de editar foto de perfil do usuario
 def editar_foto(request, modelo, modelo_formulario, mensagem, retorno_pag):
     usuario = infor_perfis(request, modelo)
@@ -138,6 +168,22 @@ def editar_foto(request, modelo, modelo_formulario, mensagem, retorno_pag):
         formulario = modelo_formulario()
 
     return formulario
+
+def deletar_foto_perfil(request, id, modelo, mensagem_1, mensagem_2):
+    # procura um perfil pelo id a partir do model PerfilAdmin e que esteja logado ou 404
+    perfil = get_object_or_404(modelo, id=id, usuario=request.user)
+    
+    # se o perfil tiver foto
+    if perfil.foto_perfil:
+        # sera deletado e salvo as alterações
+        perfil.foto_perfil.delete()
+        perfil.save()
+        messages.success(request, mensagem_1)
+
+    else:
+        messages.error(request, mensagem_2)
+
+    return perfil
 
 # funçao global de redefinir senha do usuario
 def redefinir_senha(request, modelo_formulario, nova_senha, confirm_senha, mensagem_1, mensagem_2, mensagem_3, retorno_pag):
@@ -158,7 +204,8 @@ def redefinir_senha(request, modelo_formulario, nova_senha, confirm_senha, mensa
                 messages.error(request, mensagem_1)
                 return redirect (retorno_pag)
             
-            usuario = request.user  # ou defina qual usuário será alterado
+            # define qual usuário será alterado
+            usuario = request.user
 
             # Atualizando a senha com segurança
             senha = formulario.cleaned_data[nova_senha]

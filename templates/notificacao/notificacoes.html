@@ -1,0 +1,48 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IF_Lib Perfil - {{ infor_admin.usuario.first_name }}</title>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="{% static '/styles/style_notificacoes.css'%}">
+</head>
+<body class="body_perfil_adm">
+        
+    {% include 'bases_templates/partials/cabecalho.html' %}
+    
+    <!-- inclui o messages do py para aparecer nos templates -->
+    {% for message in messages %}
+    <div>
+        <p id="messages" class="menssage_py">{{message}}</p>
+    </div>
+    {% endfor %}
+
+    <section class="meus_conteudos_validar">
+        <h1 class="titulo_pag_caixa">Notificações</h1>
+    </section>
+
+    <main class="mensagens">
+        {% if notificacoes %}
+            {% for i in notificacoes %}
+                <div class="mensagem">
+                    <h1 class="motivo_msg">{{ i.titulo_notificacao }}</h1>
+                    <hr class="linha_msg">
+                    <h2 class="infor_msg">{{ i.descricao_notificacao }}</h2>
+                    <div class="opcoes_mensagens">
+                        <a href="{% url 'home' %}" class="botao_msg">Ver mais</a>
+                        <a href="#" class="botao_msg delete_msg">Marcar como lida</a>
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <h1 class="infor_geral" style="font-size: 2em;">Nenhuma Notificação</h1>
+        {% endif %}
+
+    </main>
+
+</body>
+</html>

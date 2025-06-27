@@ -36,7 +36,7 @@
     text-decoration: none;
     color: var(--cinza1);
     background-color: rgb(22, 131, 40);
-    padding: 6px;
+    padding: 5px;
     border-radius: 3px;
 }
 
@@ -51,8 +51,9 @@
 }
 
 .opcoes_mensagens{
-    padding: 12px;
-    margin-left: 70%;
+    margin-top: 15px;
+    padding: 10px;
+    margin-left: 58%;
 }
 
 .botao_msg:hover{

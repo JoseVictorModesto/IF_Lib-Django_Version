@@ -1,0 +1,44 @@
+{% extends 'bases_templates/base/base_perfil.html' %}
+{% load static %}
+{% block content %}
+
+        <div class="opcoes_user_adm">
+            <hr class="linha_opcoes_user">
+        </div>
+
+        <form class="form_cad" action="{% url 'editar_professor' id %}" method="POST">
+
+            {% csrf_token %}
+
+            <h1 class="titulo_form">Editar Professor</h1>
+            <!-- Formulario de editar professores -->
+
+            <div class="inputs_cad">
+                {% for field in formulario_edit_1  %}
+                <div class="div_input">
+                    <label for="{{ field.id_for_label }}">{{field.label}}</label>
+                    {{ field }}
+                </div>
+                {% endfor %}
+
+                {% for field in formulario_edit_2  %}
+                <div class="div_input">
+                    <label for="{{ field.id_for_label }}">{{field.label}}</label>
+                    {{ field }}
+                </div>
+                {% endfor %}
+            </div>
+
+            <div class="botoes_form">
+                <button type="submit" class="botao_cad" onclick="return confirmar()">Salvar</button>
+                <a href="{% url 'cad_professor' %}" class="botao_can">Retornar</a>
+            </div>
+        </form>
+
+    </main>
+
+    {% include 'bases_templates/partials/footer_pag.html' %}
+
+    <script src="{% static '/scripts.js/app.js' %}"> </script>
+
+{% endblock %}

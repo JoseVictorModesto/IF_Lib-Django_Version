@@ -14,49 +14,84 @@
                 <li class="opcao_menu_lateral">
                     <h1 class="filter_conteudo">Filtros<i class="bi bi-funnel"></i></h1>
                 </li>
+
+                <!-- menu lateral categorias -->
                 <li class="opcao_menu_lateral"><a href="#" class="link_menu_lateral" id="opcao_menu_lateral">Categorias <i class="bi bi-caret-right"></i></a>
                     <ul class="filtros_menu_lateral">
                         <hr class="linha_menu_lateral">
-                        <li><a href="/templates/filtros/categorias.html" class="filtro_menu">Tecnologia</a></li>
-                        <li><a href="#" class="filtro_menu">Saúde</a></li>
-                        <li><a href="#" class="filtro_menu">Agro</a></li>
-                        <li><a href="#" class="filtro_menu">Educação</a></li>
+                        <!-- se houver alguma categoria -->
+                        {% if categorias %}
+                        {% for i in categorias %}
+                            <li><a href="{% url 'filtro_categoria' i.id %}" class="filtro_menu">{{ i.nome_categoria }}</a></li>
+                        {% endfor %}
+                        <!-- se não houver nenhuma -->
+                        {% else %}
+                            <h1 class="filtro_menu" > Nenhuma categoria disponivel</h1>
+                        {% endif %}
                     </ul>
                 </li>
+
+                <!-- menu lateral tipos -->
                 <li class="opcao_menu_lateral"><a href="#" class="link_menu_lateral" id="opcao_menu_lateral">Tipos <i class="bi bi-caret-right"></i></a>
                     <ul class="filtros_menu_lateral">
                         <hr class="linha_menu_lateral">
-                        <li><a href="/templates/filtros/tipos.html" class="filtro_menu">Artigo Cientifíco</a></li>
-                        <li><a href="#" class="filtro_menu">Projeto de Pesquisa</a></li>
-                        <li><a href="#" class="filtro_menu">Monográfia</a></li>
-                        <li><a href="#" class="filtro_menu">Conteúdo Externo</a></li>
+                        <!-- se houver algum tipo -->
+                        {% if tipos %}
+                        {% for i in tipos %}
+                            <li><a href="{% url 'filtro_tipos' i.id %}" class="filtro_menu">{{ i.nome_tipo }}</a></li>
+                        {% endfor %}
+                        <!-- se não houver nenhum -->
+                        {% else %}
+                            <h1 class="filtro_menu" > Nenhum Tipo disponivel</h1>
+                        {% endif %}
                     </ul>
                 </li>
+                
+                <!-- menu lateral instituicoes -->
                 <li class="opcao_menu_lateral"><a href="#" class="link_menu_lateral" id="opcao_menu_lateral">Instituições <i class="bi bi-caret-right"></i></a>
                     <ul class="filtros_menu_lateral">
                         <hr class="linha_menu_lateral">
-                        <li><a href="/templates/filtros/instituicoes.html" class="filtro_menu">IFTO</a></li>
-                        <li><a href="#" class="filtro_menu">IFPA</a></li>
-                        <li><a href="#" class="filtro_menu">IFGO</a></li>
-                        <li><a href="#" class="filtro_menu">IFSC</a></li>
+                        <!-- se houver alguma instituicao -->
+                        {% if instituicoes %}
+                        {% for i in instituicoes %}
+                            <li><a href="{% url 'filtro_instituicao' i.id %}" class="filtro_menu">{{ i.nome_instituicao }}</a></li>
+                        {% endfor %}
+                        <!-- se não houver nenhuma -->
+                        {% else %}
+                            <h1 class="filtro_menu" > Nenhuma Instituição disponivel</h1>
+                        {% endif %}
                     </ul>
                 </li>
+                
+                <!-- menu lateral campus -->
                 <li class="opcao_menu_lateral"><a href="#" class="link_menu_lateral" id="opcao_menu_lateral">Campus <i class="bi bi-caret-right"></i></a>
                     <ul class="filtros_menu_lateral">
                         <hr class="linha_menu_lateral">
-                        <li><a href="/templates/filtros/campus.html" class="filtro_menu">Campus 1 Colinas TO</a></li>
-                        <li><a href="#" class="filtro_menu">Campus 1 Araguaina TO</a></li>
-                        <li><a href="#" class="filtro_menu">Campus 1 Goiania GO</a></li>
-                        <li><a href="#" class="filtro_menu">Campus 1 Belém PA</a></li>
+                        <!-- se houver algum campus -->
+                        {% if campus %}
+                        {% for i in campus %}
+                            <li><a href="{% url 'filtro_campus' i.id %}" class="filtro_menu">{{ i.nome_campus }}</a></li>
+                        {% endfor %}
+                        <!-- se não houver nenhum -->
+                        {% else %}
+                            <h1 class="filtro_menu" > Nenhum Campus disponivel</h1>
+                        {% endif %}
                     </ul>
                 </li>
+                
+                <!-- menu lateral cursos -->
                 <li class="opcao_menu_lateral"><a href="#" class="link_menu_lateral" id="opcao_menu_lateral">Cursos <i class="bi bi-caret-right"></i></a>
                     <ul class="filtros_menu_lateral">
                         <hr class="linha_menu_lateral">
-                        <li><a href="/templates/filtros/cursos.html" class="filtro_menu">ADS</a></li>
-                        <li><a href="#" class="filtro_menu">Pedagogia</a></li>
-                        <li><a href="#" class="filtro_menu">Agronomia</a></li>
-                        <li><a href="#" class="filtro_menu">Direito</a></li>
+                        <!-- se houver algum curso -->
+                        {% if cursos %}
+                        {% for i in cursos %}
+                            <li><a href="{% url 'filtro_cursos' i.id %}" class="filtro_menu">{{ i.nome_curso }}</a></li>
+                        {% endfor %}
+                        <!-- se não houver nenhum -->
+                        {% else %}
+                            <h1 class="filtro_menu" > Nenhum Curso disponivel</h1>
+                        {% endif %}
                     </ul>
                 </li>
             </ul>
@@ -86,19 +121,31 @@
 
         <!-- se o usuario estiver logado -->
         {% if user.is_authenticated %}
-            <a href="/templates/notificacoes/notificacao.html">
+            <a href="{% url 'lista_notificacao' %}">
                 <li class="botao_cabecalho botao_verde" style="--cor1: #005112; --cor2: #06EA37;">
                     <span class="icones"><i class="bi bi-envelope"></i></span>
                     <span class="texto">Notificações</span>
                 </li>
             </a>
+            <!-- caso o usuario seja um super user (ADMIN) -->
+            {% if user.is_superuser %}
+                <a href="{% url 'perfil_admin' %}">
+                    <li class="botao_cabecalho botao_verde" style="--cor1: #005112; --cor2: #06EA37;">
+                        <span class="icones"><i class="bi bi-person"></i></span>
+                        <span class="texto">Meu Perfil</span>
+                    </li>
+                </a>
+            {% endif %}
 
-            <a href="{% url 'perfil_admin' %}">
-                <li class="botao_cabecalho botao_verde" style="--cor1: #005112; --cor2: #06EA37;">
-                    <span class="icones"><i class="bi bi-person"></i></span>
-                    <span class="texto">Meu Perfil</span>
-                </li>
-            </a>
+            {% if user_bibliotecario and user_bibliotecario.tipo_user == 'bibliotecario' %}
+                <a href="{% url 'informacoes_bibliotecario' %}">
+                    <li class="botao_cabecalho botao_verde" style="--cor1: #005112; --cor2: #06EA37;">
+                        <span class="icones"><i class="bi bi-person"></i></span>
+                        <span class="texto">Meu Perfil</span>
+                    </li>
+                </a>
+            {% endif %}
+            
         {% endif %}
         
         </ul>

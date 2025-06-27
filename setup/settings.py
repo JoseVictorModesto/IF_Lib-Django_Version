@@ -28,16 +28,22 @@ ALLOWED_HOSTS = []
 # instalar sempre o novo app criado
 # 1- home
 INSTALLED_APPS = [
+    # apps do django
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    # apps
+
+    # apps do lib
     'apps.home.apps.HomeConfig',
     'apps.user_admin.apps.UserAdminConfig',
     'apps.login_perfil.apps.LoginPerfilConfig',
+    'apps.filtros_buscas.apps.FiltrosBuscasConfig',
+    'apps.user_bibliotecario.apps.UserBibliotecarioConfig',
+    'apps.notificacao.apps.NotificacaoConfig',
+
 ]
 
 MIDDLEWARE = [
@@ -62,6 +68,9 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+
+                'apps.filtros_buscas.context_processors.menu_filtro',
+                'apps.user_bibliotecario.context_processors.perfil_bibliotecario',
             ],
         },
     },

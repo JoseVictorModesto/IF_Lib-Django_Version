@@ -1,5 +1,9 @@
 from django import forms
-from apps.user_admin.models import User, PerfilAdmin, Instituicao, Curso, Campus, Categoria, Tipos
+
+
+from django.contrib.auth.models import User
+
+from apps.user_admin.models import PerfilAdmin, Instituicao, Curso, Campus, Categoria, Tipos, PerfilBibliotecario
 
 # formulario de cadastro Admin   
 
@@ -44,7 +48,7 @@ class senhaAdminForms(forms.Form):
         required=True,
         widget=forms.PasswordInput(
             attrs={
-                'class': 'input_form_login',
+                'class': 'input_cad',
                 'placeholder': 'Digite sua senha:'
             }
         )
@@ -56,13 +60,12 @@ class senhaAdminForms(forms.Form):
         required=True,
         widget=forms.PasswordInput(
             attrs={
-                'class': 'input_form_login',
-                'placeholder': 'Repita a senha digitada acima sua senha:'
+                'class': 'input_cad',
+                'placeholder': 'Repita a senha digitada acima:'
             }
         )
     )
 
-    
 # --------------------------------------------------------------------------------------------------------------------------
 
 # formularios de cadastro de Instituições
@@ -83,6 +86,8 @@ class instituicaoForms(forms.ModelForm):
             'estado': forms.TextInput(attrs={'class':'input_cad', 'placeholder': 'Digite o estado da instituição:'}),
         }
 
+# --------------------------------------------------------------------------------------------------------------------------
+
 # formularios de cadastro de cursos
 
 class cursoForms(forms.ModelForm):
@@ -96,10 +101,12 @@ class cursoForms(forms.ModelForm):
 
         widgets = {
             'nome_curso': forms.TextInput(attrs={'class':'input_cad', 'placeholder': 'Digite o nome do Curso:'}),
-            'descricao_curso': forms.Textarea(attrs={'class':'input_cad', 'placeholder': 'Digite a descrição do Curso:'}),
+            'descricao_curso': forms.Textarea(attrs={'class':'descr_input', 'placeholder': 'Digite a descrição do Curso:'}),
         }
 
-# formularios de cadastro de cursos
+# --------------------------------------------------------------------------------------------------------------------------
+
+# formularios de cadastro de campus
 
 class campusForms(forms.ModelForm):
     class Meta:
@@ -123,6 +130,12 @@ class campusForms(forms.ModelForm):
             'cursos_campus': forms.CheckboxSelectMultiple(),
         }
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['instituicao_campus'].empty_label = "Selecione a instituição que o campus pertence"
+
+# --------------------------------------------------------------------------------------------------------------------------
+
 # formularios de cadastro de categoria
 
 class categoriaForms(forms.ModelForm):
@@ -136,8 +149,10 @@ class categoriaForms(forms.ModelForm):
 
         widgets = {
             'nome_categoria': forms.TextInput(attrs={'class':'input_cad', 'placeholder': 'Digite o nome da Categoria:'}),
-            'descricao_categoria': forms.Textarea(attrs={'class':'input_cad', 'placeholder': 'Digite a descrição da Categoria:'}),
+            'descricao_categoria': forms.Textarea(attrs={'class':'descr_input', 'placeholder': 'Digite a descrição da Categoria:'}),
         }
+
+# --------------------------------------------------------------------------------------------------------------------------
 
 # formularios de cadastro de tipo
 
@@ -152,5 +167,45 @@ class tipoForms(forms.ModelForm):
 
         widgets = {
             'nome_tipo': forms.TextInput(attrs={'class':'input_cad', 'placeholder': 'Digite o nome do Tipo de conteudo:'}),
-            'descricao_tipo': forms.Textarea(attrs={'class':'input_cad', 'placeholder': 'Digite a descrição do Tipo de conteudo:'}),
+            'descricao_tipo': forms.Textarea(attrs={'class':'descr_input', 'placeholder': 'Digite a descrição do Tipo de conteudo:'}),
         }
+
+# --------------------------------------------------------------------------------------------------------------------------
+
+# formularios bibliotecario
+
+# formularios de cadastro de usuario bibliotecario
+class cadastroBibliotecarioForms(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ['username', 'first_name', 'email']
+
+        labels = {
+            'username':'Matrícula:',
+            'first_name':'Nome:',
+            'email':'E-mail:',
+        }
+
+        widgets = {
+            'username': forms.NumberInput(attrs={'class':'input_cad', 'placeholder': 'Digite a matrícula do Bibliotecario:'}),
+            'first_name': forms.TextInput(attrs={'class':'input_cad', 'placeholder': 'Digite o nome do Bibliotecario:'}),
+            'email': forms.EmailInput(attrs={'class':'input_cad', 'placeholder': 'Digite o e-mail do Bibliotecario:'}),
+        }
+    
+# formularios de cadastro de perfil de bibliotecario
+class perfilBibliotecarioForms(forms.ModelForm):
+    class Meta:
+        model = PerfilBibliotecario
+        exclude = ['usuario', 'tipo_user', 'foto_perfil', 'criador', 'instituicao']
+
+        labels = {
+            'campus':'Campus:',
+        }
+
+        widgets = {
+            'campus': forms.Select(attrs={'class':'input_cad'}),
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['campus'].empty_label = "Selecione o campus que o bibliotecário irá gerenciar"

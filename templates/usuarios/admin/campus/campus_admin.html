@@ -12,7 +12,7 @@
                     <a href="{% url 'cad_campus' %}" class="opcao selecionado">Campus</a>
                     <a href="{% url 'cad_categoria' %}" class="opcao">Categorias</a>
                     <a href="{% url 'cad_tipo' %}" class="opcao">Tipos</a>
-                    <a href="#" class="opcao opcao_cad_perfil">Bibliotecário</a>
+                    <a href="{% url 'cad_bibliotecario' %}" class="opcao opcao_cad_perfil">Bibliotecário</a>
                     <a href="{% url 'cadastro_admin' %}" class="opcao opcao_cad_perfil">ADMIN</a>
                 </div>
             </div>
@@ -23,7 +23,7 @@
             {% csrf_token %}
 
             <h1 class="titulo_form">Cadastrar Campus</h1>
-
+            <!-- formularios de cadastro de Campus -->
             <div class="inputs_cad">
                 {% for field in formulario %}
                 <div class="div_input">
@@ -47,6 +47,10 @@
             </form>
         </div>
 
+        <!-- tabela de Campus -->
+
+        <!-- verifica se a algum Campus cadastrado -->
+        {% if campus_tab %}
         <table class="tablela_ob">
             <thead class="cabecalho_tabela">
                 <th class="nome_atributo">ID</th>
@@ -60,9 +64,6 @@
                 <th class="nome_atributo">Deletar</th>
             </thead>
             <tbody class="infor_tabela">
-
-        <!-- tabela de Cursos -->
-                {% if campus_tab %}
 
                 {% for i in campus_tab %}
                 <tr>
@@ -82,8 +83,10 @@
                 </tr>
                 {% endfor %}
 
-                {% else %}
-                {% endif %}
+            <!-- se não houver exibe a mensagem -->
+            {% else %}
+                <h1 class="nome_atributo" style="margin-top: 30px; font-size: 1.5em; font-weight: 300;" >Nenhum Campus cadastrado</h1>
+            {% endif %}
 
         </table>
 

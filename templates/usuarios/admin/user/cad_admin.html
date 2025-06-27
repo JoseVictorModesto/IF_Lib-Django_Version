@@ -12,7 +12,7 @@
                     <a href="{% url 'cad_campus' %}" class="opcao">Campus</a>
                     <a href="{% url 'cad_categoria' %}" class="opcao">Categorias</a>
                     <a href="{% url 'cad_tipo' %}" class="opcao">Tipos</a>
-                    <a href="#" class="opcao opcao_cad_perfil">Bibliotecário</a>
+                    <a href="{% url 'cad_bibliotecario' %}" class="opcao opcao_cad_perfil">Bibliotecário</a>
                     <a href="{% url 'cadastro_admin' %}" class="opcao opcao_cad_perfil selecionado_vermelho">ADMIN</a>
                 </div>
             </div>
@@ -48,6 +48,11 @@
             </form>
         </div>
 
+        <!-- tabela de ADMIN -->
+
+        <!-- verifica se a algum ADMIN cadastrado -->
+        {% if admin_tab %}
+
         <table class="tablela_ob">
             <thead class="cabecalho_tabela">
                 <th class="nome_atributo">ID</th>
@@ -58,9 +63,6 @@
                 <th class="nome_atributo">Deletar</th>
             </thead>
             <tbody class="infor_tabela">
-
-                <!-- tabela de usuarios admin -->
-                {% if admin_tab %}
 
                 {% for i in admin_tab %}
                 <tr>
@@ -73,8 +75,10 @@
                 </tr>
                 {% endfor %}
 
-                {% else %}
-                {% endif %}
+            <!-- se não houver exibe a mensagem -->
+            {% else %}
+                <h1 class="nome_atributo" style="margin-top: 30px; font-size: 1.5em; font-weight: 300;" >Nenhum ADMIN cadastrado</h1>
+            {% endif %}
 
         </table>
 

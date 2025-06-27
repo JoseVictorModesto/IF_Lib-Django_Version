@@ -6,7 +6,7 @@
             <hr class="linha_opcoes_user">
             <div class="Lista_opcoes_adm">
                 <div class="opcoes">
-                    <a href="{% url 'editar_perfil_admin' %}" class="opcao selecionado"><i class="bi bi-image"></i>  Editar Foto</a>
+                    <a href="{% url 'editar_perfil_admin' %}" class="opcao selecionado"><i class="bi bi-card-image"></i>  Editar Foto</a>
                     <a href="{% url 'redefinir_senha_admin' %}" class="opcao"><i class="bi bi-file-lock2"></i>  Redefinir Senha</a>
                     <a href="{% url 'perfil_admin' %}" class="opcao opcao_cad_perfil"><i class="bi bi-arrow-left-circle"></i>  Retornar</a>
                 </div>
@@ -30,7 +30,8 @@
 
             <div class="botoes_form">
                 <button type="submit" class="botao_cad" onclick="return confirmar()">Salvar</button>
-                <a href="{% url 'deletar_foto_perfil' infor_admin.id %}" class="botao_can" style="font-size: 0.8em;" onclick="return confirmar()">Remover foto</a>
+                <!-- Botao de deleter foto do perfil -->
+                <a href="{% url 'deletar_foto_admin' infor_admin.id %}" class="botao_can" style="font-size: 0.8em;" onclick="return confirmar()">Remover foto</a>
             </div>
         </form>
 

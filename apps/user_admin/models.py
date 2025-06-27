@@ -1,3 +1,4 @@
+
 from django.db import models
 from django.contrib.auth.models import User
 
@@ -58,4 +59,14 @@ class Tipos(models.Model):
 
     def __str__(self):
         return self.nome_tipo
-    
+
+class PerfilBibliotecario(models.Model):
+    usuario = models.OneToOneField(to=User, on_delete=models.CASCADE, related_name='usuario_bibliotecario')
+    tipo_user = models.CharField(max_length=50, default='bibliotecario')
+    campus = models.ForeignKey(to=Campus, on_delete=models.SET_NULL, null=True, blank=False, related_name='bibliotecario_campus')
+    instituicao = models.ForeignKey(to=Instituicao, on_delete=models.SET_NULL, null=True, blank=False, related_name='bibliotecario_instituicao')
+    foto_perfil = models.ImageField(upload_to='img_lib/%Y/%m/%d/', blank=True, null=True)
+    criador = models.ForeignKey(to=User, on_delete=models.SET_NULL, null=True, blank=False, related_name='bibliotecario_criador')
+
+    def __str__(self):
+        return self.usuario.username

@@ -1,0 +1,235 @@
+from django.shortcuts import render, HttpResponseRedirect, redirect
+from django.contrib import messages
+from django.contrib.auth.models import User
+
+from apps.login_perfil.views import infor_perfis, deletar_obj, editar_user
+
+from apps.user_admin.models import PerfilBibliotecario
+from apps.user_bibliotecario.models import PerfilProfessor, PerfilAluno
+
+from apps.notificacao.models import Notificacao
+
+from apps.user_bibliotecario.forms import fotoBibliotecarioForms, senhaBibliotecarioForms, editarBibliotecarioForms
+from apps.user_bibliotecario.forms import cadastroProfessorForm, cadastroAlunoForm, perfilProfessorForm, perfilAlunoForm, editarProfessorForm, editarAlunoForm
+
+
+from apps.login_perfil.views import editar_foto, deletar_foto_perfil, redefinir_senha, editar_obj
+
+
+def verificar_auth(request):
+    if not request.user.is_authenticated:
+        messages.error(request, 'Faça login para acssar essa página!')
+        return redirect('login')
+
+    if not hasattr(request.user, 'usuario_bibliotecario') or request.user.usuario_bibliotecario.tipo_user != 'bibliotecario':
+        messages.error(request, 'Você não tem permição para acessar essa página!')
+        return redirect('home')
+    
+# --------------------------------------------------------------------------------------------------------------------------
+
+# FUNÇÕES BIBLIOTECARIO: PERFIL
+
+def informacoes_bibliotecario(request):
+    usuario_auth = verificar_auth(request)
+    if usuario_auth:
+        return usuario_auth
+    
+    infor_bibliotecario = infor_perfis(request, PerfilBibliotecario)
+
+    return render(request, 'usuarios/bibliotecarios/informacao/informacoes_bibliotecario.html', {'infor_bibliotecario':infor_bibliotecario})
+
+def editar_perfil_bibliotecario(request):
+    usuario_auth = verificar_auth(request)
+    if usuario_auth:
+        return usuario_auth
+    
+    infor_bibliotecario = infor_perfis(request, PerfilBibliotecario)
+    id = infor_bibliotecario.usuario.id
+
+    formulario_edit = editar_obj(request, User, editarBibliotecarioForms, 'Perfil editado com sucesso!', 'informacoes_bibliotecario', id)
+
+    if isinstance(formulario_edit, HttpResponseRedirect):
+        return formulario_edit
+    
+    elif 'email' in formulario_edit.errors:
+            messages.error(request, 'E-mail inválido')
+
+    return render(request, 'usuarios/bibliotecarios/user/editar_perfil_biblioitecario.html', {'infor_bibliotecario':infor_bibliotecario, 'id':id, 'formulario_edit':formulario_edit})
+
+def editar_foto_bibliotecario(request):
+    usuario_auth = verificar_auth(request)
+    if usuario_auth:
+        return usuario_auth
+    
+    infor_bibliotecario = infor_perfis(request, PerfilBibliotecario)
+
+    formulario = editar_foto(request, PerfilBibliotecario, fotoBibliotecarioForms, 'Perfil alterado com sucesso!', 'editar_user_bibliotecario')
+
+    if isinstance(formulario, HttpResponseRedirect):
+        return formulario
+
+    return render(request, 'usuarios/bibliotecarios/user/editar_foto_bibliotecario.html', {'infor_bibliotecario': infor_bibliotecario, 'formulario': formulario})
+
+def deletar_foto_bibliotecario(request, id):
+    deletar_foto_perfil(request, id, PerfilBibliotecario, 'Foto de perfil deletada', 'Nenhuma foto!')
+
+    return redirect('editar_foto_bibliotecario')
+
+def redefinir_senha_bibliotecario(request):
+    usuario_auth = verificar_auth(request)
+    if usuario_auth:
+        return usuario_auth
+    
+    infor_bibliotecario = infor_perfis(request, PerfilBibliotecario)
+
+    formulario = redefinir_senha(request, senhaBibliotecarioForms, 'senha', 'confirmar_senha', 'As senhas não são iguais', 'Senha alterada com sucesso', 'Erro ao tentar alterar a senha:', 'redefinir_senha_bibliotecario')
+
+    if isinstance(formulario, HttpResponseRedirect):
+        return formulario   
+
+    return render(request, 'usuarios/bibliotecarios/user/redefinir_senha_bibliotecario.html', {'infor_bibliotecario': infor_bibliotecario, 'formulario':formulario})
+
+# --------------------------------------------------------------------------------------------------------------------------
+
+# FUNÇÕES BIBLIOTECARIO: PROFESSOR
+
+def cad_professor(request):
+    usuario_auth = verificar_auth(request)
+    if usuario_auth:
+        return usuario_auth
+    
+    infor_bibliotecario = infor_perfis(request, PerfilBibliotecario)
+
+    if request.method == 'POST':
+        formulario_cadastro_professor = cadastroProfessorForm(request.POST)
+        formulario_perfil_professor = perfilProfessorForm(request.POST)
+
+        if formulario_cadastro_professor.is_valid() and formulario_perfil_professor.is_valid():
+
+            user_professor = formulario_cadastro_professor.save(commit=False)
+            user_professor.set_password('0000')
+            user_professor.save()
+
+            perfil_professor = formulario_perfil_professor.save(commit=False)
+            perfil_professor.usuario = user_professor
+            perfil_professor.criador = request.user
+            perfil_professor.campus = request.user.usuario_bibliotecario.campus
+            perfil_professor.instituicao = perfil_professor.campus.instituicao_campus
+            perfil_professor.save()
+
+            notificao = Notificacao(
+                remetente = request.user,
+                destinatario = user_professor,
+                titulo_notificacao = 'Bem vindo ao IF_Lib',
+                descricao_notificacao = 'Olá seja muito bem vindo ao IF_Lib, venha conosco descobrir um universo de conhecimento. Estamos felizes em ter você com a gente. Boa jornada!!',
+            )
+            notificao.save()
+
+            messages.success(request, 'Usuário cadastrado com sucesso')
+            return redirect('cad_professor')
+            
+        elif 'email' in formulario_cadastro_professor.errors:
+            messages.error(request, 'Erro ao cadastrar usuário: E-mail inválido')
+
+        else:
+            messages.error(request, 'Erro ao cadastrar usuário: Username já existe')
+
+    else:
+        formulario_cadastro_professor = cadastroProfessorForm()
+        formulario_perfil_professor = perfilProfessorForm()
+
+    professor_tab = PerfilProfessor.objects.filter(campus = request.user.usuario_bibliotecario.campus)
+
+    return render(request, 'usuarios/bibliotecarios/professores/cad_professor.html', {'formulario_cadastro_professor':formulario_cadastro_professor, 'formulario_perfil_professor':formulario_perfil_professor, 'infor_bibliotecario':infor_bibliotecario, 'professor_tab':professor_tab})
+
+def deletar_professor(request, id):
+    deletar_obj(request, User, 'Professor deletado com sucesso!', id)
+    return redirect('cad_professor')
+
+def editar_professor(request, id):
+    usuario_auth = verificar_auth(request)
+    if usuario_auth:
+        return usuario_auth
+    
+    infor_bibliotecario = infor_perfis(request, PerfilBibliotecario)
+
+    formulario_edit = editar_user(request, id, PerfilProfessor, cadastroProfessorForm, editarProfessorForm, 'Professor editado com sucesso', 'cad_professor')
+
+    if isinstance(formulario_edit, HttpResponseRedirect):
+        return formulario_edit
+    
+    formulario_edit_1, formulario_edit_2 = formulario_edit
+
+    return render(request, 'usuarios/bibliotecarios/professores/editar_professor.html', {'infor_bibliotecario':infor_bibliotecario, 'formulario_edit_1':formulario_edit_1, 'formulario_edit_2':formulario_edit_2, 'id':id})
+
+# --------------------------------------------------------------------------------------------------------------------------
+
+# FUNÇÕES BIBLIOTECARIO: ALUNO
+
+def cad_aluno(request):
+    usuario_auth = verificar_auth(request)
+    if usuario_auth:
+        return usuario_auth
+    
+    infor_bibliotecario = infor_perfis(request, PerfilBibliotecario)
+    
+    if request.method == 'POST':
+        formulario_cadastro_aluno = cadastroAlunoForm(request.POST)
+        formulario_perfil_aluno = perfilAlunoForm(request.POST)
+
+        if formulario_cadastro_aluno.is_valid() and formulario_perfil_aluno.is_valid():
+            user_aluno = formulario_cadastro_aluno.save(commit=False)
+            user_aluno.set_password('0000')
+            user_aluno.save()
+
+            perfil_aluno = formulario_perfil_aluno.save(commit=False)
+            perfil_aluno.usuario = user_aluno
+            perfil_aluno.criador = request.user
+            perfil_aluno.campus = request.user.usuario_bibliotecario.campus
+            perfil_aluno.instituicao = perfil_aluno.campus.instituicao_campus
+            perfil_aluno.save()
+
+            notificao = Notificacao(
+                remetente = request.user,
+                destinatario = user_aluno,
+                titulo_notificacao = 'Bem vindo ao IF_Lib',
+                descricao_notificacao = 'Olá seja muito bem vindo ao IF_Lib, venha conosco descobrir um universo de conhecimento. Estamos felizes em ter você com a gente. Boa jornada!!',
+            )
+            notificao.save()
+            
+            messages.success(request, 'Usuário cadastrado com sucesso')
+            return redirect('cad_aluno')
+            
+        elif 'email' in formulario_cadastro_aluno.errors:
+            messages.error(request, 'Erro ao cadastrar usuário: E-mail inválido')
+
+        else:
+            messages.error(request, 'Erro ao cadastrar usuário: Username já existe')
+
+    else:
+        formulario_cadastro_aluno = cadastroAlunoForm()
+        formulario_perfil_aluno = perfilAlunoForm()
+
+    aluno_tab = PerfilAluno.objects.filter(campus = request.user.usuario_bibliotecario.campus)
+
+    return render(request, 'usuarios/bibliotecarios/alunos/cad_aluno.html', {'infor_bibliotecario':infor_bibliotecario, 'formulario_cadastro_aluno':formulario_cadastro_aluno, 'formulario_perfil_aluno':formulario_perfil_aluno, 'aluno_tab':aluno_tab})
+
+def deletar_aluno(request, id):
+    deletar_obj(request, User, 'Aluno deletado com sucesso!', id)
+    return redirect('cad_aluno')
+
+def editar_aluno(request, id):
+    usuario_auth = verificar_auth(request)
+    if usuario_auth:
+        return usuario_auth
+    
+    infor_bibliotecario = infor_perfis(request, PerfilBibliotecario)
+
+    formulario_edit = editar_user(request, id, PerfilAluno, cadastroAlunoForm, editarAlunoForm, 'Aluno editado com sucesso', 'cad_aluno')
+
+    if isinstance(formulario_edit, HttpResponseRedirect):
+        return formulario_edit
+    
+    formulario_edit_1, formulario_edit_2 = formulario_edit
+
+    return render(request, 'usuarios/bibliotecarios/alunos/editar_aluno.html', {'infor_bibliotecario':infor_bibliotecario, 'formulario_edit_1':formulario_edit_1, 'formulario_edit_2':formulario_edit_2, 'id':id})
