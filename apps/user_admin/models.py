@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 
 class PerfilAdmin(models.Model):
     # cada usuario possui um perfil
-    usuario = models.OneToOneField(to=User, on_delete=models.CASCADE)
+    usuario = models.OneToOneField(to=User, blank=False, null=False, on_delete=models.CASCADE)
     foto_perfil = models.ImageField(upload_to='img_lib/%Y/%m/%d/', blank=True, null=True)
 
 class Instituicao(models.Model):
@@ -61,7 +61,7 @@ class Tipos(models.Model):
         return self.nome_tipo
 
 class PerfilBibliotecario(models.Model):
-    usuario = models.OneToOneField(to=User, on_delete=models.CASCADE, related_name='usuario_bibliotecario')
+    usuario = models.OneToOneField(to=User, on_delete=models.CASCADE, blank=False, null=False, related_name='usuario_bibliotecario')
     tipo_user = models.CharField(max_length=50, default='bibliotecario')
     campus = models.ForeignKey(to=Campus, on_delete=models.SET_NULL, null=True, blank=False, related_name='bibliotecario_campus')
     instituicao = models.ForeignKey(to=Instituicao, on_delete=models.SET_NULL, null=True, blank=False, related_name='bibliotecario_instituicao')

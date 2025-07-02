@@ -102,8 +102,15 @@
                     {% endif %}
 
                     <td class="atributo"><a href="{% url 'editar_aluno' i.id %}" class="funcao_tabela"> <i class="bi bi-pencil-square"></i> </a></td>
-                    <td class="atributo"><a href="{% url 'deletar_aluno' i.usuario.id %}" class="funcao_tabela" onclick="return confirmar()"> <i class="bi bi-trash"></i> </a></td>
-                    <td class="atributo"><a href="{% url 'deletar_aluno' i.usuario.id %}" class="funcao_tabela" onclick="return confirmar()"> <i class="bi bi-person-circle"></i> </a></td>
+                    
+                    <td class="atributo">
+                        <form method="POST" action="{% url 'deletar_aluno' i.usuario.id %}">
+                            {% csrf_token %}
+                            <button type="submit" class="funcao_tabela" onclick="return confirmar()"><i class="bi bi-trash"></i></button>
+                        </form>
+                    </td>
+                    
+                    <td class="atributo"><a href="#" class="funcao_tabela"> <i class="bi bi-person-circle"></i> </a></td>
                 </tr>
                 {% endfor %}
             <!-- se não houver exibe a mensagem -->

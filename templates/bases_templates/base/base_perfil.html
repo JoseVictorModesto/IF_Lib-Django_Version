@@ -5,15 +5,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IF_Lib Perfil - {{ infor_admin.usuario.first_name }}</title>
+    <title>IF_Lib Perfil - {{ user.first_name }}</title>
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    <link rel="stylesheet" href="{% static '/styles/style_user_adm.css'%}">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
+
+    <link rel="stylesheet" href="{% static '/styles/style_user_adm.css' %}">
+    <link rel="stylesheet" href="{% static '/styles/style_user_padrao.css' %}">
+
 </head>
 <body class="body_perfil_adm">
-        <!-- inclui o messages do py para aparecer nos templates -->
+        <!-- inclui o cabecalho nos templates dos perfis -->
         {% include 'bases_templates/partials/cabecalho.html' %}
 
+        <!-- inclui o messages do py para aparecer nos templates -->
         {% for message in messages %}
         <div>
             <p id="messages" class="menssage_py">{{message}}</p>
@@ -24,6 +30,7 @@
         <div class="user_perfil">
             
             <div class="edit_perfil">
+
                 <!-- ADMIN -->
                 {% if user.is_superuser %}
                 <!-- caso o usuario tenha uma foto de perfil salva no bd -->
@@ -37,7 +44,10 @@
 
                     <div class="div_botoes_perfilx">
                         <a href="{% url 'editar_perfil_admin' %}" class="botoes_perfilx"><i class="bi bi-gear"></i>Configurações</a>
-                        <a href="{% url 'logout' %}" class="botoes_perfilx" onclick="return confirmar()"><i class="bi bi-box-arrow-left"></i>Sair</a>
+                        <form method="POST" action="{% url 'logout' %}"> 
+                            {% csrf_token %}
+                            <button type="submit" class="botoes_perfilx botao_logout" onclick="return confirmar()"><i class="bi bi-box-arrow-left"></i>Sair</button>
+                        </form>
                     </div>
                 {% endif %}
 
@@ -54,10 +64,32 @@
 
                     <div class="div_botoes_perfilx">
                         <a href="{% url 'editar_perfil_bibliotecario' %}" class="botoes_perfilx"><i class="bi bi-gear"></i>Configurações</a>
-                        <a href="{% url 'logout' %}" class="botoes_perfilx" onclick="return confirmar()"><i class="bi bi-box-arrow-left"></i>Sair</a>
+                        <form method="POST" action="{% url 'logout' %}"> 
+                            {% csrf_token %}
+                            <button type="submit" class="botoes_perfilx botao_logout" onclick="return confirmar()"><i class="bi bi-box-arrow-left"></i>Sair</button>
+                        </form>
                     </div>
                 {% endif %}
 
+                <!-- PROFESSOR -->
+                {% if infor_professor.tipo_user == 'professor' %}
+                <!-- caso o usuario tenha uma foto de perfil salva no bd -->
+                    {% if infor_professor.foto_perfil %}
+                        <img src="{{ infor_professor.foto_perfil.url }}" alt="perfil" class="foto_perfil">
+                    
+                    <!-- caso o usuario não tenha -->
+                    {% else %}
+                        <img src="{% static 'styles/imagens/Design sem nome.png' %}" alt="perfil" class="foto_perfil">
+                    {% endif %}
+
+                    <div class="div_botoes_perfilx">
+                        <a href="{% url 'editar_perfil_professor' %}" class="botoes_perfilx"><i class="bi bi-gear"></i>Configurações</a>
+                        <form method="POST" action="{% url 'logout' %}"> 
+                            {% csrf_token %}
+                            <button type="submit" class="botoes_perfilx botao_logout" onclick="return confirmar()"><i class="bi bi-box-arrow-left"></i>Sair</button>
+                        </form>                    
+                   </div>
+                {% endif %}
             </div>
 
             <hr class="linha_user">
@@ -71,9 +103,9 @@
                     <h1 class="nome" >{{ infor_admin.usuario.first_name }}</h1>
                 </div>
                 <div class="infor_geral_user">
-                    <h2 class="infor_geral"><strong class="infor_geral_desk">ADMIN:</strong>{{ infor_admin.usuario.id }}</h2>
-                    <h2 class="infor_geral"><strong class="infor_geral_desk">E-mail:</strong>{{ infor_admin.usuario.email }}</h2>
-                    <h2 class="infor_geral"><strong class="infor_geral_desk">Matrícula:</strong>{{ infor_admin.usuario.username }}</h2>
+                    <h2 class="infor_geral"><strong class="infor_geral_desk">ADMIN: </strong>{{ infor_admin.usuario.id }}</h2>
+                    <h2 class="infor_geral"><strong class="infor_geral_desk">Matrícula: </strong>{{ infor_admin.usuario.username }}</h2>
+                    <h2 class="infor_geral"><strong class="infor_geral_desk">E-mail: </strong>{{ infor_admin.usuario.email }}</h2>
                 </div>
             </div>
             {% endif %}
@@ -87,15 +119,32 @@
                     <h1 class="nome" >{{ infor_bibliotecario.usuario.first_name }}</h1>
                 </div>
                 <div class="infor_geral_user">
-                    <h2 class="infor_geral"><strong class="infor_geral_desk">Bibliotecário:</strong>  {{ infor_bibliotecario.usuario.id }}</h2>
-                    <h2 class="infor_geral"><strong class="infor_geral_desk">Matrícula:</strong> {{ infor_bibliotecario.usuario.username }}</h2>
-                    <h2 class="infor_geral"><strong class="infor_geral_desk">Instituição:</strong> {{ infor_bibliotecario.instituicao }}</h2>
-                    <h2 class="infor_geral"><strong class="infor_geral_desk">Campus:</strong> {{ infor_bibliotecario.campus }}</h2>
-                    <h2 class="infor_geral"><strong class="infor_geral_desk">E-mail:</strong> {{ infor_bibliotecario.usuario.email }}</h2>
+                    <h2 class="infor_geral"><strong class="infor_geral_desk">Bibliotecário: </strong>  {{ infor_bibliotecario.usuario.id }}</h2>
+                    <h2 class="infor_geral"><strong class="infor_geral_desk">Matrícula: </strong> {{ infor_bibliotecario.usuario.username }}</h2>
+                    <h2 class="infor_geral"><strong class="infor_geral_desk">Instituição: </strong> {{ infor_bibliotecario.instituicao }}</h2>
+                    <h2 class="infor_geral"><strong class="infor_geral_desk">Campus: </strong> {{ infor_bibliotecario.campus }}</h2>
+                    <h2 class="infor_geral"><strong class="infor_geral_desk">E-mail: </strong> {{ infor_bibliotecario.usuario.email }}</h2>
                 </div>
             </div>
             {% endif %}
 
+            <!-- PROFESSOR -->
+            <!-- caso o usuario seja um professor -->
+            {% if infor_professor.tipo_user == 'professor' %}
+            <div class="infor_user">
+                <div class="nome_user">
+                    <!-- exibe as informaçoes do usuario -->
+                    <h1 class="nome" >{{ infor_professor.usuario.first_name }}</h1>
+                </div>
+                <div class="infor_geral_user">
+                    <h2 class="infor_geral"><strong class="infor_geral_desk">Matrícula: </strong> {{ infor_professor.usuario.username }}</h2>
+                    <h2 class="infor_geral"><strong class="infor_geral_desk">Instituição: </strong> {{ infor_professor.instituicao }}</h2>
+                    <h2 class="infor_geral"><strong class="infor_geral_desk">Campus: </strong> {{ infor_professor.campus }}</h2>
+                    <h2 class="infor_geral"><strong class="infor_geral_desk">E-mail: </strong> {{ infor_professor.usuario.email }}</h2>
+                    <h2 class="infor_geral"><strong class="infor_geral_desk">Formação: </strong> {{ infor_professor.formacao }}</h2>
+                </div>
+            </div>
+            {% endif %}
 
         </div>
 

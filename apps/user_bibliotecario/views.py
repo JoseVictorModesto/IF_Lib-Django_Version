@@ -1,19 +1,21 @@
 from django.shortcuts import render, HttpResponseRedirect, redirect
 from django.contrib import messages
 from django.contrib.auth.models import User
+from django.views.decorators.http import require_POST, require_GET, require_http_methods
 
 from apps.login_perfil.views import infor_perfis, deletar_obj, editar_user
 
 from apps.user_admin.models import PerfilBibliotecario
 from apps.user_bibliotecario.models import PerfilProfessor, PerfilAluno
 
-from apps.notificacao.models import Notificacao
+from apps.notificacao.views import notificacao_bemvindo
 
-from apps.user_bibliotecario.forms import fotoBibliotecarioForms, senhaBibliotecarioForms, editarBibliotecarioForms
+from apps.user_bibliotecario.forms import fotoBibliotecarioForms, editarBibliotecarioForms
 from apps.user_bibliotecario.forms import cadastroProfessorForm, cadastroAlunoForm, perfilProfessorForm, perfilAlunoForm, editarProfessorForm, editarAlunoForm
 
 
 from apps.login_perfil.views import editar_foto, deletar_foto_perfil, redefinir_senha, editar_obj
+from apps.login_perfil.forms import senhaUsuarioForms
 
 
 def verificar_auth(request):
@@ -28,7 +30,7 @@ def verificar_auth(request):
 # --------------------------------------------------------------------------------------------------------------------------
 
 # FUNÇÕES BIBLIOTECARIO: PERFIL
-
+@require_GET
 def informacoes_bibliotecario(request):
     usuario_auth = verificar_auth(request)
     if usuario_auth:
@@ -38,6 +40,7 @@ def informacoes_bibliotecario(request):
 
     return render(request, 'usuarios/bibliotecarios/informacao/informacoes_bibliotecario.html', {'infor_bibliotecario':infor_bibliotecario})
 
+@require_http_methods(["GET", "POST"])
 def editar_perfil_bibliotecario(request):
     usuario_auth = verificar_auth(request)
     if usuario_auth:
@@ -56,6 +59,7 @@ def editar_perfil_bibliotecario(request):
 
     return render(request, 'usuarios/bibliotecarios/user/editar_perfil_biblioitecario.html', {'infor_bibliotecario':infor_bibliotecario, 'id':id, 'formulario_edit':formulario_edit})
 
+@require_http_methods(["GET", "POST"])
 def editar_foto_bibliotecario(request):
     usuario_auth = verificar_auth(request)
     if usuario_auth:
@@ -63,18 +67,20 @@ def editar_foto_bibliotecario(request):
     
     infor_bibliotecario = infor_perfis(request, PerfilBibliotecario)
 
-    formulario = editar_foto(request, PerfilBibliotecario, fotoBibliotecarioForms, 'Perfil alterado com sucesso!', 'editar_user_bibliotecario')
+    formulario = editar_foto(request, PerfilBibliotecario, fotoBibliotecarioForms, 'Perfil alterado com sucesso!', 'editar_foto_bibliotecario')
 
     if isinstance(formulario, HttpResponseRedirect):
         return formulario
 
     return render(request, 'usuarios/bibliotecarios/user/editar_foto_bibliotecario.html', {'infor_bibliotecario': infor_bibliotecario, 'formulario': formulario})
 
+@require_POST
 def deletar_foto_bibliotecario(request, id):
     deletar_foto_perfil(request, id, PerfilBibliotecario, 'Foto de perfil deletada', 'Nenhuma foto!')
 
     return redirect('editar_foto_bibliotecario')
 
+@require_http_methods(["GET", "POST"])
 def redefinir_senha_bibliotecario(request):
     usuario_auth = verificar_auth(request)
     if usuario_auth:
@@ -82,7 +88,7 @@ def redefinir_senha_bibliotecario(request):
     
     infor_bibliotecario = infor_perfis(request, PerfilBibliotecario)
 
-    formulario = redefinir_senha(request, senhaBibliotecarioForms, 'senha', 'confirmar_senha', 'As senhas não são iguais', 'Senha alterada com sucesso', 'Erro ao tentar alterar a senha:', 'redefinir_senha_bibliotecario')
+    formulario = redefinir_senha(request, senhaUsuarioForms, 'senha', 'confirmar_senha', 'As senhas não são iguais', 'Senha alterada com sucesso', 'Erro ao tentar alterar a senha:', 'redefinir_senha_bibliotecario')
 
     if isinstance(formulario, HttpResponseRedirect):
         return formulario   
@@ -93,6 +99,7 @@ def redefinir_senha_bibliotecario(request):
 
 # FUNÇÕES BIBLIOTECARIO: PROFESSOR
 
+@require_http_methods(["GET", "POST"])
 def cad_professor(request):
     usuario_auth = verificar_auth(request)
     if usuario_auth:
@@ -117,13 +124,7 @@ def cad_professor(request):
             perfil_professor.instituicao = perfil_professor.campus.instituicao_campus
             perfil_professor.save()
 
-            notificao = Notificacao(
-                remetente = request.user,
-                destinatario = user_professor,
-                titulo_notificacao = 'Bem vindo ao IF_Lib',
-                descricao_notificacao = 'Olá seja muito bem vindo ao IF_Lib, venha conosco descobrir um universo de conhecimento. Estamos felizes em ter você com a gente. Boa jornada!!',
-            )
-            notificao.save()
+            notificacao_cad = notificacao_bemvindo(request, user_professor)
 
             messages.success(request, 'Usuário cadastrado com sucesso')
             return redirect('cad_professor')
@@ -142,10 +143,12 @@ def cad_professor(request):
 
     return render(request, 'usuarios/bibliotecarios/professores/cad_professor.html', {'formulario_cadastro_professor':formulario_cadastro_professor, 'formulario_perfil_professor':formulario_perfil_professor, 'infor_bibliotecario':infor_bibliotecario, 'professor_tab':professor_tab})
 
+@require_POST
 def deletar_professor(request, id):
     deletar_obj(request, User, 'Professor deletado com sucesso!', id)
     return redirect('cad_professor')
 
+@require_http_methods(["GET", "POST"])
 def editar_professor(request, id):
     usuario_auth = verificar_auth(request)
     if usuario_auth:
@@ -166,6 +169,7 @@ def editar_professor(request, id):
 
 # FUNÇÕES BIBLIOTECARIO: ALUNO
 
+@require_http_methods(["GET", "POST"])
 def cad_aluno(request):
     usuario_auth = verificar_auth(request)
     if usuario_auth:
@@ -189,13 +193,7 @@ def cad_aluno(request):
             perfil_aluno.instituicao = perfil_aluno.campus.instituicao_campus
             perfil_aluno.save()
 
-            notificao = Notificacao(
-                remetente = request.user,
-                destinatario = user_aluno,
-                titulo_notificacao = 'Bem vindo ao IF_Lib',
-                descricao_notificacao = 'Olá seja muito bem vindo ao IF_Lib, venha conosco descobrir um universo de conhecimento. Estamos felizes em ter você com a gente. Boa jornada!!',
-            )
-            notificao.save()
+            notificacao_cad = notificacao_bemvindo(request, user_aluno)
             
             messages.success(request, 'Usuário cadastrado com sucesso')
             return redirect('cad_aluno')
@@ -214,10 +212,12 @@ def cad_aluno(request):
 
     return render(request, 'usuarios/bibliotecarios/alunos/cad_aluno.html', {'infor_bibliotecario':infor_bibliotecario, 'formulario_cadastro_aluno':formulario_cadastro_aluno, 'formulario_perfil_aluno':formulario_perfil_aluno, 'aluno_tab':aluno_tab})
 
+@require_POST
 def deletar_aluno(request, id):
     deletar_obj(request, User, 'Aluno deletado com sucesso!', id)
     return redirect('cad_aluno')
 
+@require_http_methods(["GET", "POST"])
 def editar_aluno(request, id):
     usuario_auth = verificar_auth(request)
     if usuario_auth:

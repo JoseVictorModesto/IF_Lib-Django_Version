@@ -7,7 +7,7 @@ from apps.user_bibliotecario.models import PerfilProfessor, PerfilAluno
 
 # formularios Perfil bibliotecario
 
-# formularios de editar perfil informacoes do bibliotecario
+# formularios de editar informacoes do bibliotecario
 class editarBibliotecarioForms(forms.ModelForm):
     class Meta:
         model = User
@@ -18,7 +18,7 @@ class editarBibliotecarioForms(forms.ModelForm):
         }
 
         widgets = {
-            'email': forms.EmailInput(attrs={'class':'input_cad', 'placeholder': 'Digite o e-mail do Bibliotecario:'}),
+            'email': forms.EmailInput(attrs={'class':'input_cad', 'placeholder': 'Digite seu e-mail:'}),
         }
     
 # formularios de editar a foto de perfil do bibliotecario
@@ -34,32 +34,6 @@ class fotoBibliotecarioForms(forms.ModelForm):
         widgets = {
             'foto_perfil': forms.FileInput(attrs={'class':'img_edit'}),
         }
-
-# formularios de redefinir a senha do bibliotecario
-class senhaBibliotecarioForms(forms.Form):
-    # Senha
-    senha=forms.CharField(
-        label="Senha:",
-        required=True,
-        widget=forms.PasswordInput(
-            attrs={
-                'class': 'input_cad',
-                'placeholder': 'Digite sua senha:'
-            }
-        )
-    )
-
-    # Confirmar senha
-    confirmar_senha=forms.CharField(
-        label="Confirme a senha:",
-        required=True,
-        widget=forms.PasswordInput(
-            attrs={
-                'class': 'input_cad',
-                'placeholder': 'Repita a senha digitada acima:'
-            }
-        )
-    )
 
 # --------------------------------------------------------------------------------------------------------------------------
 
@@ -82,6 +56,11 @@ class cadastroProfessorForm(forms.ModelForm):
             'first_name': forms.TextInput(attrs={'class':'input_cad', 'placeholder': 'Digite o nome do Professor:'}),
             'email': forms.EmailInput(attrs={'class':'input_cad', 'placeholder': 'Digite o e-mail do Professor:'}),
             }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['first_name'].required = True
+        self.fields['email'].required = True
 
 # formularios de cadastro do perfil professor
 class perfilProfessorForm(forms.ModelForm):
@@ -138,6 +117,11 @@ class cadastroAlunoForm(forms.ModelForm):
             'first_name': forms.TextInput(attrs={'class':'input_cad', 'placeholder': 'Digite o nome do Aluno:'}),
             'email': forms.EmailInput(attrs={'class':'input_cad', 'placeholder': 'Digite o e-mail do Aluno:'}),
         }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['first_name'].required = True
+        self.fields['email'].required = True
 
 # formularios de cadastro do usuario aluno
 class perfilAlunoForm(forms.ModelForm):

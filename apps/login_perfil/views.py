@@ -7,6 +7,8 @@ from apps.login_perfil.forms import LoginForms
 
 from django.contrib import messages
 
+from django.views.decorators.http import require_POST
+
 # --------------------------------------------------------------------------------------------------------------------------
 
 # FUNÇÕES LOGIN + LOGOUT
@@ -54,11 +56,11 @@ def login(request):
     return render(request, 'login/login.html', {'formulario_login':formulario_login})
 
 # logout usuario
+@require_POST
 def logout(request):
-
     # logout (sair) da sessão de login
     auth.logout(request)
-    
+
     #mensagem sucesso
     messages.success(request, f'Logout efetuado!')
 
@@ -169,6 +171,7 @@ def editar_foto(request, modelo, modelo_formulario, mensagem, retorno_pag):
 
     return formulario
 
+# funçao global de deletar foto de perfil do usuario
 def deletar_foto_perfil(request, id, modelo, mensagem_1, mensagem_2):
     # procura um perfil pelo id a partir do model PerfilAdmin e que esteja logado ou 404
     perfil = get_object_or_404(modelo, id=id, usuario=request.user)
@@ -187,8 +190,6 @@ def deletar_foto_perfil(request, id, modelo, mensagem_1, mensagem_2):
 
 # funçao global de redefinir senha do usuario
 def redefinir_senha(request, modelo_formulario, nova_senha, confirm_senha, mensagem_1, mensagem_2, mensagem_3, retorno_pag):
-
-    formulario = modelo_formulario()
 
     # se a requisição do formulario de cadastro for post crie 
     # uma instância do formulário senhaAdminForms com os dados enviados pelo usuário.
@@ -217,7 +218,8 @@ def redefinir_senha(request, modelo_formulario, nova_senha, confirm_senha, mensa
             messages.success(request, mensagem_2)
             return redirect(retorno_pag)
         
-        else:
-            messages.error(request, mensagem_3)
+    else:
+        formulario = modelo_formulario()
 
     return formulario
+

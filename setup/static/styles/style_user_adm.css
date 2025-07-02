@@ -186,6 +186,31 @@
     margin-top: 60px;
 }
 
+.forms_perfil{
+    display: contents;
+    align-items: center;
+}
+
+.del_foto{ 
+    margin-top: 20px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    text-decoration: underline;
+    color: var(--cinza1);
+    font-size: 0.95em;
+    font-family: var(--fonte2);
+    font-weight: 300;
+}
+
+.del_foto:hover{
+    color: var(--branco);
+}
+
+.botao_logout{
+    border: none;
+}
+
 .titulo_form{
     font-family: var(--fonte1);
     color: var(--cinza2);
@@ -336,6 +361,9 @@
 
 .funcao_tabela{
     color: var(--cinza2);
+    background: none;
+    border: none;
+    cursor: pointer;
 }
 
 .funcao_tabela:hover{

@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'apps.login_perfil.apps.LoginPerfilConfig',
     'apps.filtros_buscas.apps.FiltrosBuscasConfig',
     'apps.user_bibliotecario.apps.UserBibliotecarioConfig',
+    'apps.user_professor.apps.UserProfessorConfig',
     'apps.notificacao.apps.NotificacaoConfig',
 
 ]
@@ -70,7 +71,8 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
 
                 'apps.filtros_buscas.context_processors.menu_filtro',
-                'apps.user_bibliotecario.context_processors.perfil_bibliotecario',
+                'apps.user_bibliotecario.context_processors.perfil_bibliotecario_cp',
+                'apps.user_professor.context_processors.perfil_professor_cp',
             ],
         },
     },

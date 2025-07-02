@@ -13,28 +13,33 @@
                 </div>
             </div>
         </div>
+        <div class="forms_perfil" ></div>
+            <form class="form_cad" action="{% url 'editar_foto_bibliotecario' %}" method="POST" enctype="multipart/form-data">
 
-        <form class="form_cad" action="{% url 'editar_foto_bibliotecario' %}" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
 
-            {% csrf_token %}
-
-            <h1 class="titulo_form">Editar Foto</h1>
-            <!-- Formulario de editar a foto do bibliotecario -->
-            <div class="inputs_cad">
-                {% for field in formulario %}
-                <div class="div_input">
-                    <label for="{{ field.id_for_label }}">{{field.label}}</label>
-                    {{ field }}
+                <h1 class="titulo_form">Editar foto de perfil</h1>
+                <!-- Formulario de editar a foto do bibliotecario -->
+                <div class="inputs_cad">
+                    {% for field in formulario %}
+                    <div class="div_input">
+                        <label for="{{ field.id_for_label }}">{{field.label}}</label>
+                        {{ field }}
+                    </div>
+                    {% endfor %}
                 </div>
-                {% endfor %}
-            </div>
 
-            <div class="botoes_form">
-                <button type="submit" class="botao_cad" onclick="return confirmar()">Salvar</button>
-                <!-- Botao de deleter foto do perfil -->
-                <a href="{% url 'deletar_foto_bibliotecario' infor_bibliotecario.id %}" class="botao_can" style="font-size: 0.8em;" onclick="return confirmar()">Remover foto</a>
-            </div>
-        </form>
+                <div class="botoes_form">
+                    <button type="submit" class="botao_cad" onclick="return confirmar()">Salvar</button>
+                </div>
+            </form>
+
+            <!-- Botao de deleter foto do perfil -->
+            <form method="POST" action="{% url 'deletar_foto_bibliotecario' infor_bibliotecario.id %}">
+                {% csrf_token %}
+                <button type="submit" class="del_foto" onclick="return confirmar()">Remover foto de perfil</button>
+            </form>
+        </div>
 
     </main>
 

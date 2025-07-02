@@ -74,7 +74,13 @@
                         <td class="atributo">Usúario Deletado</td>
                     {% endif %}
                     <td class="atributo"><a href="{% url 'editar_curso' i.id %}" class="funcao_tabela"> <i class="bi bi-pencil-square"></i> </a></td>
-                    <td class="atributo"><a href="{% url 'deletar_curso' i.id %}" class="funcao_tabela" onclick="return confirmar()" onclick="return deletarTexto()"> <i class="bi bi-trash"></i> </a></td>
+                
+                    <td class="atributo">
+                        <form method="POST" action="{% url 'deletar_curso' i.id %}">
+                            {% csrf_token %}
+                            <button type="submit" class="funcao_tabela" onclick="return confirmar()"><i class="bi bi-trash"></i></button>
+                        </form>
+                    </td>
                 </tr>
                 {% endfor %}
 

@@ -41,9 +41,9 @@
         </form>
 
         <div class="consultas_ob">
-            <h1 class="titulo_consulta_ob">Administradores</h1>
+            <h1 class="titulo_consulta_ob">ADMIN</h1>
             <form class="busca busca_consulta_ob">
-                <input type="search" class="input_busca input_busca_consulta" placeholder="   Digite o nome de um Adiministrador">
+                <input type="search" class="input_busca input_busca_consulta" placeholder="   Digite o nome de um ADMIN">
                 <button type="submit" class="botao_busca"><i class="bi bi-search"></i></button>
             </form>
         </div>
@@ -71,7 +71,13 @@
                     <td class="atributo">{{ i.username }}</td>
                     <td class="atributo">{{ i.email }}</td>
                     <td class="atributo"><a href="{% url 'editar_user_admin' i.id %}" class="funcao_tabela"> <i class="bi bi-pencil-square"></i> </a></td>
-                    <td class="atributo"><a href="{% url 'deletar_user_admin' i.id %}" class="funcao_tabela" onclick="return confirmar()" onclick="return deletarTexto()"> <i class="bi bi-trash"></i> </a></td>
+                
+                    <td class="atributo">
+                        <form method="POST" action="{% url 'deletar_user_admin' i.id %}">
+                            {% csrf_token %}
+                            <button type="submit" class="funcao_tabela" onclick="return confirmar()"><i class="bi bi-trash"></i></button>
+                        </form>
+                    </td>
                 </tr>
                 {% endfor %}
 

@@ -26,3 +26,29 @@ class LoginForms(forms.Form):
             }
         )
     )
+
+# formularios de redefinir a senha do usuario
+class senhaUsuarioForms(forms.Form):
+    # Senha
+    senha=forms.CharField(
+        label="Senha:",
+        required=True,
+        widget=forms.PasswordInput(
+            attrs={
+                'class': 'input_cad',
+                'placeholder': 'Digite sua senha:'
+            }
+        )
+    )
+
+    # Confirmar senha
+    confirmar_senha=forms.CharField(
+        label="Confirme a senha:",
+        required=True,
+        widget=forms.PasswordInput(
+            attrs={
+                'class': 'input_cad',
+                'placeholder': 'Repita a senha digitada acima:'
+            }
+        )
+    )

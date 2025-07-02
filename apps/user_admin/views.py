@@ -1,16 +1,18 @@
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, redirect
 
 from django.contrib import messages
 from django.contrib.auth.models import User
+from django.views.decorators.http import require_POST, require_GET, require_http_methods
 
 from django.http import HttpResponseRedirect
 
-from apps.notificacao.models import Notificacao
+from apps.notificacao.views import notificacao_bemvindo
 
-from apps.user_admin.forms import cadastroAdminForms, perfilAdminForm, instituicaoForms, cursoForms, campusForms, categoriaForms, tipoForms, senhaAdminForms, cadastroBibliotecarioForms, perfilBibliotecarioForms
+from apps.user_admin.forms import cadastroAdminForms, perfilAdminForm, instituicaoForms, cursoForms, campusForms, categoriaForms, tipoForms, cadastroBibliotecarioForms, perfilBibliotecarioForms
 from apps.user_admin.models import PerfilAdmin, Instituicao, Curso, Campus, Categoria, Tipos, PerfilBibliotecario
 
 from apps.login_perfil.views import infor_perfis, deletar_obj, cadastrar_obj, editar_obj, editar_foto, redefinir_senha, deletar_foto_perfil, editar_user
+from apps.login_perfil.forms import senhaUsuarioForms
 
 def verificar_auth_admin(request):
     if not request.user.is_authenticated:
@@ -26,6 +28,7 @@ def verificar_auth_admin(request):
 # FUNÇÕES ADMIN: USER + PERFIL
 
 # pagina inicial do perfil
+@require_GET
 def perfil_admin(request):
     usuario_auth = verificar_auth_admin(request)
     if usuario_auth:
@@ -36,6 +39,7 @@ def perfil_admin(request):
     return render(request, 'usuarios/admin/informacao/informacoes_admin.html', {'infor_admin':infor_admin})
 
 # editar o proprio perfil do usuario
+@require_http_methods(["GET", "POST"])
 def editar_perfil_admin(request):
     usuario_auth = verificar_auth_admin(request)
     if usuario_auth:
@@ -51,12 +55,14 @@ def editar_perfil_admin(request):
     return render(request, 'usuarios/admin/user/editar_perfil_adm.html', {'infor_admin': infor_admin, 'formulario': formulario})
 
 # deletar a foto de perfil do usuario
+@require_POST
 def deletar_foto_admin(request, id):
     deletar_foto_perfil(request, id, PerfilAdmin, 'Foto de perfil deletada', 'Nenhuma foto!')
 
     return redirect('editar_perfil_admin')
 
 # Função cadastrar novo user Admin e exibi-los
+@require_http_methods(["GET", "POST"])
 def cadastro_admin(request):
     usuario_auth = verificar_auth_admin(request)
     if usuario_auth:
@@ -77,22 +83,15 @@ def cadastro_admin(request):
             # Salva o Ususario
             usuario.save()
 
-            notificao = Notificacao(
-                remetente = request.user,
-                destinatario = usuario,
-                titulo_notificacao = 'Bem vindo ao IF_Lib',
-                descricao_notificacao = 'Olá seja muito bem vindo ao IF_Lib, venha conosco descobrir um universo de conhecimento. Estamos felizes em ter você com a gente. Boa jornada!!',
-            )
-            notificao.save()
+            notificacao_cad = notificacao_bemvindo(request, usuario)
 
             messages.success(request, 'Usuário cadastrado com sucesso')
             return redirect('cadastro_admin')
-        
-        elif 'email' in formulario_cadastro_admin.errors:
-            messages.error(request, 'E-mail inválido')
 
-        else:
-            messages.error(request, 'Erro ao editar usuário: Username já existe')
+        # Exibe todos os erros de forma automatica        
+        for field, errors in formulario_cadastro_admin.errors.items():
+            for i in errors:
+                messages.error(request, f'{field}: {i}')
         
     else:
         formulario_cadastro_admin = cadastroAdminForms()
@@ -104,12 +103,14 @@ def cadastro_admin(request):
     return render(request, 'usuarios/admin/user/cad_admin.html', {'formulario_cadastro_admin':formulario_cadastro_admin, 'admin_tab': admin_tab, 'infor_admin':infor_admin})
 
 # deletar algum usuario admin
+@require_POST
 def deletar_user_admin(request, id):
     deletar_obj(request, User, 'Admin deletado com sucesso!', id)
 
     return redirect('cadastro_admin')
 
 # editar algum usuario admin
+@require_http_methods(["GET", "POST"])
 def editar_user_admin(request, id):
     usuario_auth = verificar_auth_admin(request)
     if usuario_auth:
@@ -122,15 +123,15 @@ def editar_user_admin(request, id):
     if isinstance(formulario_edit, HttpResponseRedirect):
         return formulario_edit
     
-    elif 'email' in formulario_edit.errors:
-            messages.error(request, 'E-mail inválido')
-
-    else:
-        messages.error(request, 'Erro ao editar usuário: Username já existe')
+    # Exibe todos os erros de forma automatica        
+    for field, errors in formulario_edit.errors.items():
+        for i in errors:
+            messages.error(request, f'{field}: {i}')
         
     return render(request, 'usuarios/admin/user/editar_admin.html', {'formulario_edit_admin':formulario_edit, 'id':id, 'infor_admin':infor_admin})
 
 # redefinir senha admin
+@require_http_methods(["GET", "POST"])
 def redefinir_senha_admin(request):
     usuario_auth = verificar_auth_admin(request)
     if usuario_auth:
@@ -138,7 +139,7 @@ def redefinir_senha_admin(request):
     
     infor_admin = infor_perfis(request, PerfilAdmin)
 
-    formulario = redefinir_senha(request, senhaAdminForms, 'senha', 'confirmar_senha', 'As senhas não são iguais', 'Senha alterada com sucesso', 'Erro ao tentar alterar a senha:', 'redefinir_senha_admin')
+    formulario = redefinir_senha(request, senhaUsuarioForms, 'senha', 'confirmar_senha', 'As senhas não são iguais', 'Senha alterada com sucesso', 'Erro ao tentar alterar a senha:', 'redefinir_senha_admin')
 
     if isinstance(formulario, HttpResponseRedirect):
         return formulario
@@ -150,6 +151,7 @@ def redefinir_senha_admin(request):
 # FUNÇÕES ADMIN: INSTITUIÇÃO
 
 # cadastrar nova instituição
+@require_http_methods(["GET", "POST"])
 def cad_instituicao(request):
     usuario_auth = verificar_auth_admin(request)
     if usuario_auth:
@@ -167,11 +169,13 @@ def cad_instituicao(request):
     return render(request, 'usuarios/admin/instituicao/instituições_admin.html', {'infor_admin':infor_admin, 'formulario':formulario, 'instituicao_tab':instituicao_tab})
 
 # deletar instituição
+@require_POST
 def deletar_instituicao(request, id):
     deletar_obj(request, Instituicao, 'Instituição deletada com sucesso!', id)
     return redirect('cad_instituicao')
 
 # editar instituição
+@require_http_methods(["GET", "POST"])
 def editar_instituicao(request, id):
     usuario_auth = verificar_auth_admin(request)
     if usuario_auth:
@@ -179,7 +183,7 @@ def editar_instituicao(request, id):
     
     infor_admin = infor_perfis(request, PerfilAdmin)
 
-    formulario_edit = editar_obj(request, Instituicao, instituicaoForms, 'Intituição editada com sucesso!', 'cad_instituicao', id)
+    formulario_edit = editar_obj(request, Instituicao, instituicaoForms, 'Instituição editada com sucesso!', 'cad_instituicao', id)
 
     if isinstance(formulario_edit, HttpResponseRedirect):
         return formulario_edit
@@ -191,6 +195,7 @@ def editar_instituicao(request, id):
 # FUNÇÕES ADMIN: CURSO
 
 # cadastrar novo curso
+@require_http_methods(["GET", "POST"])
 def cad_curso(request):
     usuario_auth = verificar_auth_admin(request)
     if usuario_auth:
@@ -208,11 +213,13 @@ def cad_curso(request):
     return render(request, 'usuarios/admin/curso/cursos_admin.html', {'infor_admin':infor_admin, 'formulario':formulario, 'curso_tab':curso_tab})
 
 # deletar curso
+@require_POST
 def deletar_curso(request, id):
     deletar_obj(request, Curso, 'Curso deletado com sucesso!', id)
     return redirect('cad_curso')
 
 # editar curso
+@require_http_methods(["GET", "POST"])
 def editar_curso(request, id):
     usuario_auth = verificar_auth_admin(request)
     if usuario_auth:
@@ -232,6 +239,7 @@ def editar_curso(request, id):
 # FUNÇÕES ADMIN: CAMPUS
 
 # cadastrar novo campus
+@require_http_methods(["GET", "POST"])
 def cad_campus(request):
     usuario_auth = verificar_auth_admin(request)
     if usuario_auth:
@@ -249,11 +257,13 @@ def cad_campus(request):
     return render(request, 'usuarios/admin/campus/campus_admin.html', {'infor_admin':infor_admin, 'formulario':formulario, 'campus_tab':campus_tab})
 
 # deletar campus
+@require_POST
 def deletar_campus(request, id):
     deletar_obj(request, Campus, 'Campus deletado com sucesso!', id)
     return redirect('cad_campus')
 
 # editar campus
+@require_http_methods(["GET", "POST"])
 def editar_campus(request, id):
     usuario_auth = verificar_auth_admin(request)
     if usuario_auth:
@@ -273,6 +283,7 @@ def editar_campus(request, id):
 # FUNÇÕES ADMIN: CATEGORIAS
 
 # cadastrar nova categoria
+@require_http_methods(["GET", "POST"])
 def cad_categoria(request):
     usuario_auth = verificar_auth_admin(request)
     if usuario_auth:
@@ -287,14 +298,16 @@ def cad_categoria(request):
     
     categoria_tab = Categoria.objects.all()
 
-    return render(request, 'usuarios/admin/categoria/categoria_admin.htm', {'infor_admin':infor_admin, 'formulario':formulario, 'categoria_tab':categoria_tab})
+    return render(request, 'usuarios/admin/categoria/categoria_admin.html', {'infor_admin':infor_admin, 'formulario':formulario, 'categoria_tab':categoria_tab})
 
 # deletar categoria
+@require_POST
 def deletar_categoria(request, id):
     deletar_obj(request, Categoria, 'Categoria deletada com sucesso!', id)
     return redirect('cad_categoria')
 
 # editar categoria
+@require_http_methods(["GET", "POST"])
 def editar_categoria(request, id):
     usuario_auth = verificar_auth_admin(request)
     if usuario_auth:
@@ -314,6 +327,7 @@ def editar_categoria(request, id):
 # FUNÇÕES ADMIN: TIPOS
 
 # cadastrar novo tipo
+@require_http_methods(["GET", "POST"])
 def cad_tipo(request):
     usuario_auth = verificar_auth_admin(request)
     if usuario_auth:
@@ -331,11 +345,13 @@ def cad_tipo(request):
     return render(request, 'usuarios/admin/tipo/tipo_admin.html', {'infor_admin':infor_admin, 'formulario':formulario, 'tipo_tab':tipo_tab})
 
 # deletar tipo
+@require_POST
 def deletar_tipo(request, id):
     deletar_obj(request, Tipos, 'Tipo deletado com sucesso!', id)
     return redirect('cad_tipo')
 
 # editar tipo
+@require_http_methods(["GET", "POST"])
 def editar_tipo(request, id):
     usuario_auth = verificar_auth_admin(request)
     if usuario_auth:
@@ -355,6 +371,7 @@ def editar_tipo(request, id):
 # FUNÇÕES ADMIN: BIBLIOTECARIOS
 
 # cadastro de bibliotecario
+@require_http_methods(["GET", "POST"])
 def cad_bibliotecario(request):
     usuario_auth = verificar_auth_admin(request)
     if usuario_auth:
@@ -368,7 +385,7 @@ def cad_bibliotecario(request):
         
         
         if formulario_cadastro_bibliotecario.is_valid() and formulario_perfil_bibliotecario.is_valid():
-            print("Formulários válidos")
+
             user_bibliotecario = formulario_cadastro_bibliotecario.save(commit=False)
             user_bibliotecario.set_password("0000")
             user_bibliotecario.save()
@@ -379,22 +396,15 @@ def cad_bibliotecario(request):
             perfil_bibliotecario.instituicao = perfil_bibliotecario.campus.instituicao_campus
             perfil_bibliotecario.save()
 
-            notificao = Notificacao(
-                remetente = request.user,
-                destinatario = user_bibliotecario,
-                titulo_notificacao = 'Bem vindo ao IF_Lib',
-                descricao_notificacao = 'Olá seja muito bem vindo ao IF_Lib, venha conosco descobrir um universo de conhecimento. Estamos felizes em ter você com a gente. Boa jornada!!',
-            )
-            notificao.save()
+            notificacao_cad = notificacao_bemvindo(request, user_bibliotecario)
 
             messages.success(request, 'Usuário cadastrado com sucesso')
             return redirect('cad_bibliotecario')
             
-        elif 'email' in formulario_cadastro_bibliotecario.errors:
-            messages.error(request, 'E-mail inválido')
-
-        else:
-            messages.error(request, 'Erro ao cadastrar usuário: Username já existe')
+        # Exibe todos os erros de forma automatica
+        for field, errors in formulario_cadastro_bibliotecario.errors.items():
+            for i in errors:
+                messages.error(request, f'{field}: {i}')
         
     else:
         formulario_cadastro_bibliotecario = cadastroBibliotecarioForms()
@@ -405,11 +415,13 @@ def cad_bibliotecario(request):
     return render(request, 'usuarios/admin/bibliotecario/bibliotecario_admin.html', {'formulario_cadastro_bibliotecario':formulario_cadastro_bibliotecario, 'formulario_perfil_bibliotecario':formulario_perfil_bibliotecario, 'infor_admin':infor_admin, 'bibliotecario_tab':bibliotecario_tab})
 
 # deletar bibliotecario
+@require_POST
 def deletar_bibliotecario(request, id):
     deletar_obj(request, User, 'Bibliotecário deletado com sucesso!', id)
     return redirect('cad_bibliotecario')
 
 # editar algum usuario bibliotecario
+@require_http_methods(["GET", "POST"])
 def editar_user_bibliotecario(request, id):
     usuario_auth = verificar_auth_admin(request)
     if usuario_auth:
@@ -417,11 +429,11 @@ def editar_user_bibliotecario(request, id):
     
     infor_admin = infor_perfis(request, PerfilAdmin)
 
-    formulario_edit = editar_user(request, id, PerfilBibliotecario, cadastroBibliotecarioForms, perfilBibliotecarioForms, 'Bibliotecario editado com sucesso', 'cad_bibliotecario')
+    formulario_edit = editar_user(request, id, PerfilBibliotecario, cadastroBibliotecarioForms, perfilBibliotecarioForms, 'Bibliotecário editado com sucesso', 'cad_bibliotecario')
         
     if isinstance(formulario_edit, HttpResponseRedirect):
         return formulario_edit
 
     formulario_edit_1, formulario_edit_2 = formulario_edit
 
-    return render(request, 'usuarios/admin/bibliotecario/editar_biblioteacrio.html', {'formulario_edit_1':formulario_edit_1, 'formulario_edit_2':formulario_edit_2, 'id':id, 'infor_admin':infor_admin})
+    return render(request, 'usuarios/admin/bibliotecario/editar_bibliotecario.html', {'formulario_edit_1':formulario_edit_1, 'formulario_edit_2':formulario_edit_2, 'id':id, 'infor_admin':infor_admin})

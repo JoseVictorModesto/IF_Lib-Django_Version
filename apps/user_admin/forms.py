@@ -22,8 +22,12 @@ class cadastroAdminForms(forms.ModelForm):
             'first_name': forms.TextInput(attrs={'class':'input_cad', 'placeholder': 'Digite o nome do ADMIN:'}),
             'email': forms.EmailInput(attrs={'class':'input_cad', 'placeholder': 'Digite o e-mail do ADMIN:'}),
         }
-    
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['first_name'].required = True
+        self.fields['email'].required = True
+    
 # --------------------------------------------------------------------------------------------------------------------------
 
 # formulario de perfil Admin
@@ -39,32 +43,6 @@ class perfilAdminForm(forms.ModelForm):
         widgets = {
             'foto_perfil': forms.FileInput(attrs={'class':'img_edit'})
         }
-
-
-class senhaAdminForms(forms.Form):
-    # Senha
-    senha=forms.CharField(
-        label="Senha:",
-        required=True,
-        widget=forms.PasswordInput(
-            attrs={
-                'class': 'input_cad',
-                'placeholder': 'Digite sua senha:'
-            }
-        )
-    )
-
-    # Confirmar senha
-    confirmar_senha=forms.CharField(
-        label="Confirme a senha:",
-        required=True,
-        widget=forms.PasswordInput(
-            attrs={
-                'class': 'input_cad',
-                'placeholder': 'Repita a senha digitada acima:'
-            }
-        )
-    )
 
 # --------------------------------------------------------------------------------------------------------------------------
 
@@ -191,6 +169,11 @@ class cadastroBibliotecarioForms(forms.ModelForm):
             'first_name': forms.TextInput(attrs={'class':'input_cad', 'placeholder': 'Digite o nome do Bibliotecario:'}),
             'email': forms.EmailInput(attrs={'class':'input_cad', 'placeholder': 'Digite o e-mail do Bibliotecario:'}),
         }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['first_name'].required = True
+        self.fields['email'].required = True
     
 # formularios de cadastro de perfil de bibliotecario
 class perfilBibliotecarioForms(forms.ModelForm):
