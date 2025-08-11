@@ -1,0 +1,43 @@
+{% extends 'bases_templates/base/base_caixas.html' %}
+{% load static %}
+{% block content %}
+
+    <section class="meus_conteudos_validar">
+        <h1 class="titulo_pag_caixa">Meus Conteúdos Externos</h1>
+    </section>
+
+    <hr class="linha_cont">
+    <section class="validados">
+        {% if conteudos_ce %}
+            {% for i in conteudos_ce %}
+            <div class="card card_ex">
+                {% if i.img_capa %}
+                    <div>
+                        <img src="{{ i.img_capa.url }}" class="img_card">
+                    </div>
+                {% else %}
+                    <div>
+                        <img src="{% static '/styles/imagens/img_not_found_lib_ex.png' %}" class="img_card">
+                    </div>
+                {% endif %}
+                <div class="base_card">
+                    <a href="{% url 'vizualizar_ce' i.id %}" class="titulo_card titulo_card_ex">{{ i.titulo|slice:":35" }}{% if i.titulo|length > 35 %}...{% endif %}</a>
+                    <div class="infor_card infor_card_ex"> 
+                        <h2 class="inst_card">EXT</h2>
+                        <button class="descricao_card descricao_card_ex">Descrição...</button>
+                    </div>
+                </div>
+                <div class="detalhes_card detalhes_card_ex">
+                    <h2 class="tipo_card"><strong class="card_strong">Tipo</strong> {{ i.tipo_conteudo }}</h2>
+                    <h3 class="tipo_card"><strong class="card_strong">Postado em</strong> {{ i.data_envio|date:'d/m/Y' }}</h3>
+                    <p class="paragrafo_card"><strong class="card_strong">Descrição</strong> {{ i.descricao_conteudo|slice:":260" }}{% if i.descricao_conteudo|length > 260 %}...{% endif %}</p>
+                    <button class="retornar_card retornar_card_ex">Voltar</button>
+                </div>
+            </div>
+        {% endfor %}
+        {% else %}
+            <h1 class="msg_caixa_vazia">Nenhum conteúdo disponível</h1>
+        {% endif %}
+    </section>
+
+{% endblock %}

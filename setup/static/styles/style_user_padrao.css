@@ -119,10 +119,10 @@
     flex-direction: column;
     gap: 10px;
     background: var(--fundo_form_d);
-    border-radius: 40px;
-    width: 98%;
-    margin-left: 1%;
+    width: 96%;
+    margin-left: 2%;
     box-shadow: 1px 2px 5px 3px rgba(0, 0, 0, 0.329);
+    border-radius: 10px;
 }
 
 .validar{
@@ -171,3 +171,61 @@
     font-weight: 300;
     font-size: 1.5em;
 }
+
+.msg_caixa_vazia{
+    font-family: var(--fonte2);
+    color: var(--cinza1);
+    font-weight: 300;
+    font-size: 1.2em;
+}
+
+.caixa_perfil_vazia{
+    margin-left: 5%;
+    margin-top: 1%;
+}
+
+.op_box{
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    font-size: 0.9em;
+    font-family: var(--fonte1);
+    margin-top: 15px;
+}
+
+.btn_box{
+    text-decoration: none;
+    padding: 6px;
+    border: solid 2px #1f6f45;
+    color: #1f6f45;
+}
+
+.red{
+    border: solid 2px #6f1f24;
+    color: #6f1f24;
+}
+
+.btn_box:hover{
+    color: white;
+    border: solid 2px #1f6f45;
+    background-color: #1f6f45;
+}
+
+.red:hover{
+    color: white;
+    border: solid 2px #6f1f24;
+    background-color: #6f1f24;
+}
+
+.op_select{
+    color: white;
+    border: solid 2px #1f6f45;
+    background-color: #1f6f45;
+}
+
+.op_select_red{
+    color: white;
+    border: solid 2px #6f1f24;
+    background-color: #6f1f24;
+}
+

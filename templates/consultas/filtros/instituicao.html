@@ -1,22 +1,7 @@
+{% extends 'bases_templates/base/base_consultas.html' %}
 {% load static %}
+{% block content %}
 
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IF_Lib</title>
-
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
-    <link rel="stylesheet" href="{% static '/styles/style_filtros.css' %}">
-</head>
-
-<body class="body_index">
-    
-    {% include 'bases_templates/partials/cabecalho.html' %}
-
-    <main class="conteudo_filtros">
         <h1 class="titulo_pag_caixa">Instituições</h1>
         <div class="infor_filtro">
             <h1 class="titulo_filtro">{{ instituicao_id.sigla }}</h1>
@@ -38,45 +23,56 @@
         <hr class="linha_categoria">
 
         <div class="opcoes_sub_filtros">
-            <h2 class="titulo_ordem">Ordenados por:</h2>
-            <a href="#" class="ordem_filtros ordem_selecionada">Favoritos</a>
-            <a href="#" class="ordem_filtros">Mais recentes</a>
-            <a href="#" class="ordem_filtros">Mais antigos</a>
-            <a href="#" class="ordem_filtros">A/Z</a>
-            <a href="#" class="ordem_filtros">Z/A</a>
+            <a href="?ordenados_por=-qtd_favoritos" class="ordem_filtros {% if ordenados_por == '-qtd_favoritos' %}ordem_selecionada{% endif %}">Favoritos</a>
+            <a href="?ordenados_por=-id" class="ordem_filtros {% if ordenados_por == '-id' %}ordem_selecionada{% endif %}">Mais recentes</a>
+            <a href="?ordenados_por=id" class="ordem_filtros {% if ordenados_por == 'id' %}ordem_selecionada{% endif %}">Mais antigos</a>
+            <a href="?ordenados_por=titulo" class="ordem_filtros {% if ordenados_por == 'titulo' %}ordem_selecionada{% endif %}">A/Z</a>
+            <a href="?ordenados_por=-titulo" class="ordem_filtros {% if ordenados_por == '-titulo' %}ordem_selecionada{% endif %}">Z/A</a>
         </div>
 
+        {% if page.object_list %}
         <div class="lista_conteudo">
-            <div href="#" class="card">
-                <div>
-                    <img src="{% static '/styles/imagens/tecnologia-da-informacao-890x500-1-1.jpg' %}" class="img_card">
-                </div>
+        {% for i in page.object_list %}
+            <div class="card">
+                {% if i.img_capa_conteudo %}
+                    <div>
+                        <img src="{{ i.img_capa_conteudo.url }}" class="img_card">
+                    </div>
+                {% else %}
+                    <div>
+                        <img src="{% static '/styles/imagens/img_not_found_lib.png' %}" class="img_card">
+                    </div>
+                {% endif %}
                 <div class="base_card">
-                    <a href="#" class="titulo_card">Servidores e Microchips</a> 
-                    <div class="infor_card">  
-                        <h2 class="inst_card">IFTO</h2>
+                    {% if i.validado %}
+                        <a href="{% url 'vizualizar_cai' i.id %}" class="titulo_card">{{ i.titulo|slice:":35" }}{% if i.titulo|length > 35 %}...{% endif %}</a>
+                    {% endif %}
+                        <div class="infor_card">
+                        <h2 class="inst_card">{{ i.instituicao_conteudo }}</h2>
                         <button class="descricao_card">Descrição...</button>
                     </div>
                 </div>
                 <div class="detalhes_card">
-                    <h2 class="tipo_card"><strong class="card_strong">Tipo</strong> Projeto de Pesquisa</h2>
-                    <h3 class="tipo_card"><strong class="card_strong">Postado em</strong> 25/04/2025</h3>
-                    <p class="paragrafo_card"><strong class="card_strong">Descrição</strong> A expressão "servidores e microchips" não tem um significado direto ou específico no contexto que você pode estar procurando. No entanto, podemos analisar separadamente cada termo e como eles podem estar relacionados:</p>
+                    <h2 class="tipo_card"><strong class="card_strong">Tipo</strong> {{ i.tipos_conteudo }}</h2>
+                    <h3 class="tipo_card"><strong class="card_strong">Postado em</strong> {{ i.data_envio|date:'d/m/Y' }}</h3>
+                    <p class="paragrafo_card"><strong class="card_strong">Descrição</strong>{{ i.descricao_conteudo|slice:":260" }}{% if i.descricao_conteudo|length > 260 %}...{% endif %}</p>
                     <button class="retornar_card">Voltar</button>
                 </div>
             </div>
+        {% endfor %}
         </div>
+        {% else %}
+            <h1 class="pesquisa not_cont">Nenhum conteúdo disponivel</h1>
+        {% endif %}
 
         <div class="mais_conteudos" style="margin-bottom: 40px;">
-            <button class="mais_conteudos_botao">< Voltar</button>
-            <h1 style="font-weight: 400;">1 / 100</h1>
-            <button class="mais_conteudos_botao">Proximo ></button>
+            {% if page.has_previous %}
+                <a href="{% url 'filtro_instituicao' instituicao_id.id %}?page={{page.previous_page_number}}&ordenados_por={{ ordenados_por }}" class="mais_conteudos_botao">< Voltar</a>
+            {% endif %}
+            <h1 style="font-weight: 400;">{{ page.number }} / {{ page.paginator.num_pages }}</h1>
+            {% if page.has_next %}
+                <a href="{% url 'filtro_instituicao' instituicao_id.id %}?page={{page.next_page_number}}&ordenados_por={{ ordenados_por }}" class="mais_conteudos_botao">Proximo ></a>
+            {% endif %}
         </div> 
-    </main>
 
-    {% include 'bases_templates/partials/footer_pag.html' %}
-
-    <script src="{% static '/scripts.js/app.js' %}"> </script>
-    
-</body>
-</html>
+{% endblock %}

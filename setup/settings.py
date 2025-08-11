@@ -26,7 +26,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 # instalar sempre o novo app criado
-# 1- home
+
 INSTALLED_APPS = [
     # apps do django
     'django.contrib.admin',
@@ -37,15 +37,27 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     # apps do lib
-    'apps.home.apps.HomeConfig',
-    'apps.user_admin.apps.UserAdminConfig',
-    'apps.login_perfil.apps.LoginPerfilConfig',
-    'apps.filtros_buscas.apps.FiltrosBuscasConfig',
-    'apps.user_bibliotecario.apps.UserBibliotecarioConfig',
-    'apps.user_professor.apps.UserProfessorConfig',
-    'apps.notificacao.apps.NotificacaoConfig',
 
+    # home
+    'apps.home.apps.HomeConfig',
+    # admin
+    'apps.user_admin.apps.UserAdminConfig',
+    # bibliotecario
+    'apps.user_bibliotecario.apps.UserBibliotecarioConfig',
+    # professor
+    'apps.user_professor.apps.UserProfessorConfig',
+    # aluno
+    'apps.user_aluno.apps.UserAlunoConfig',
+    # login e funcoes de perfis
+    'apps.login_perfil.apps.LoginPerfilConfig',
+    # filtros e buscas
+    'apps.filtros_buscas.apps.FiltrosBuscasConfig',
+    # notificações
+    'apps.notificacao.apps.NotificacaoConfig',
+    # conteudos academicos
+    'apps.conteudos.apps.ConteudosConfig',
 ]
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -73,6 +85,7 @@ TEMPLATES = [
                 'apps.filtros_buscas.context_processors.menu_filtro',
                 'apps.user_bibliotecario.context_processors.perfil_bibliotecario_cp',
                 'apps.user_professor.context_processors.perfil_professor_cp',
+                'apps.user_aluno.context_processors.perfil_aluno_cp',
             ],
         },
     },

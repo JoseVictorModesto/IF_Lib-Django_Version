@@ -77,6 +77,16 @@
     height: 400px;
 }
 
+.desc_ext{
+    height: 150px;
+    width: 18cm;
+    font-family: var(--fonte2);
+}
+
+.input_text_ex{
+    width: 18cm;
+}
+
 .img_cad_cont{
     height: 120px;
 }
@@ -97,23 +107,32 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 6em;
-    color: var(--verde1);
-    background-color: var(--cinza1);
+    font-size: 1em;
+    background-color: #668f6f;
+    color: #171717;
     border-radius: 10px;
-    height: 120px;
-    width: 120px;
-}
-
-.cont_extra{
-    background-color: #0a884700;
-    color: var(--verde1);
-    border: 2px solid var(--verde1);
+    height: 100px;
+    width: 159px;
+    cursor: pointer;
+    white-space: normal !important; /* quebra a linha de texto muito longos */
+    word-break: break-word; /* força a quebra de palavras muito longas dentro do espaço disponivel */
 }
 
 .adc_mais:hover{
-    background-color: var(--cinza2);
-    color: var(--verde2);
+    background-color: #72a67d;
+}
+
+.adc_mais_cont{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 6em;
+    color: var(--verde1);
+    background-color: rgb(161, 161, 161);
+    border-radius: 10px;
+    height: 120px;
+    width: 120px;
+    border: 4px, solid, var(--verde1);
 }
 
 .cont_extra:hover{
@@ -142,9 +161,24 @@
     font-weight: 500;
 }
 
+.editar_cont{
+    background-color: #0a6d88;
+    width: 180px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.editar_cont:hover{
+    scale: 1.1;
+}
+
 .cancelar_cont{
     background-color: #852222;
     font-weight: 500;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .enviar_cont:hover{
@@ -158,9 +192,9 @@
 .folha_conteudo{
     width: 21cm;
     height: 100%;
-    background-color: rgb(48, 48, 48);
+    background-color: rgb(161, 161, 161);
     font-family: Arial, Helvetica, sans-serif;
-    color: var(--cinza1);
+    color: rgb(20, 20, 20);
 }
 
 .conteudo_part_capa{
@@ -170,29 +204,69 @@
     margin-top: 50px;
 }
 
+.capa_ex{
+    margin-top: 50px;
+}
+
 .logo_if{
     height: 60px;
     width: 45px;
     margin-bottom: 20px;
-    margin-top: 40px;
+    margin-top: 50px;
+    background-color: #171717;
+    padding: 12px;
+    border-radius: 15px;
 }
 
 .fonte_conteudo{
     font-size: 16px;
-    font-weight: 200;
 }
 
 .infor_conteudo{
-    color: var(--verde1);
-    font-weight: 300;
+    color: rgb(20, 20, 20);
 }
 
 .capa_part{
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 7px;
+    gap: 10px;
     margin-bottom: 50px;
+}
+
+.desc_ex{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin: 60px 2cm 70px 3cm;
+}
+
+.link_ex{
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    margin-bottom: 60px;
+}
+
+.ex_link{
+    margin-bottom: 30px;
+    background-color: #0a8847;
+    text-decoration: none;
+    padding: 10px;
+    color: var(--cinza1);
+    border-radius: 15px 0 15px 0;
+}
+
+.ex_link:hover{
+    background-color: #0b7e42;
+}
+
+.edit_ce{
+    color: #171717;
+}
+
+.edit_ce:hover{
+    color: #3b3b3b;
 }
 
 .titulo_conteudo{
@@ -206,13 +280,11 @@
     background-color: rgb(20, 20, 20);
     height: 10px;
     display: flex;
-    
 }
 
 .conteudo_part_texto{
     display: flex;
     flex-direction: column;
-    gap: 30px;
     margin: 50px 2cm 50px 3cm;
 }
 
@@ -227,6 +299,7 @@
 .conteudo_part_galeria{
     display: flex;
     text-align: center;
+    align-items: center;
     flex-direction: column;
     gap: 50px;
 }
@@ -235,8 +308,11 @@
     margin-top: 50px;
     font-size: 2em;
     font-family: var(--fonte1);
-    font-weight: 300;
-    color: var(--verde1);
+    font-weight: 400;
+    color: var(--verde2);
+    background-color: rgb(194, 194, 194);
+    padding: 5px;
+    border-radius: 20px;
 }
 
 .img_galeria{
@@ -278,13 +354,13 @@
 
 .ref{
     text-decoration: none;
-    color: var(--cinza1);
+    color: rgb(20, 20, 20);
     font-weight: 300;
     font-size: 18px;
 }
 
 .ref:hover{
-    color: var(--branco);
+    color: var(--verde1);
 }
 
 .caixa_de_pr{
@@ -414,13 +490,12 @@
 .favoritar{
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 5px;
     position: fixed;
     margin-top: 90px;
     font-size: 1em;
     font-family: var(--fonte1);
     color: var(--cinza1);
-    font-weight: 300;
     margin-left: 13cm;
     background: linear-gradient(#053e2152, #384c41e9, #053e2152);
     padding: 5px 15px 5px 5px;
@@ -428,9 +503,9 @@
 }
 
 .botao_favoritar{
-    height: 60px;
-    width: 60px;
-    font-size: 45px;
+    height: 55px;
+    width: 55px;
+    font-size: 40px;
     background-color: rgba(48, 48, 48, 0);
     border: none;
     cursor: pointer;
@@ -441,6 +516,101 @@
     font-weight: 300;
 }
 
-.fav:hover{
-    color: goldenrod;
+.msg_erro{
+    padding: 5px;
+    background-color: rgb(43, 21, 21);
+    border-radius: 5px;
+    list-style: none;
+    text-align: center;
+    max-width: 21cm;
+    height: auto;
+    word-wrap: break-word;
+    white-space: normal;
+}
+
+.label_editor{
+    font-family: var(--fonte2);
+    padding: 10px;
+    font-size: 0.8em;
+}
+
+.editor_texto{
+    margin-top: 20px;
+    background-color: var(--cinza2);
+    width: 21cm;
+    color: black;
+    border-radius: 10px;
+}
+
+#editor {
+    border: none;
+}
+
+#editor .ql-editor {
+    height: 300px;     /* altura da área de texto */
+    overflow-y: auto;      /* permite rolar ao atingir o limite */
+}
+
+/* adiciona novas fontes para o editor */
+.ql-font-arial {
+  font-family: Arial, sans-serif;
+}
+
+.ql-font-times-new-roman {
+  font-family: 'Times New Roman', serif;
+}
+
+.ql-font-courier-new {
+  font-family: 'Courier New', monospace;
+}
+
+.ql-font-georgia {
+  font-family: Georgia, serif;
+}
+
+.ql-font-tahoma {
+  font-family: Tahoma, Geneva, sans-serif;
+}
+
+.ql-font-verdana {
+  font-family: Verdana, Geneva, sans-serif;
+}
+
+/* nomes visíveis e aplicáveis da fontes no menu dropdown */
+/* faz com que o nome da fonte fique fixo no dropdown ao ser selecionado */
+.ql-snow .ql-picker.ql-font .ql-picker-label[data-value="arial"]::before,
+/* faz com que o nome da fonte apareça como opçao no dropdown */
+.ql-snow .ql-picker.ql-font .ql-picker-item[data-value="arial"]::before {
+  content: "Arial";
+  font-family: Arial, sans-serif;
+}
+
+.ql-snow .ql-picker.ql-font .ql-picker-label[data-value="times-new-roman"]::before,
+.ql-snow .ql-picker.ql-font .ql-picker-item[data-value="times-new-roman"]::before {
+  content: "Times New Roman";
+  font-family: "Times New Roman", serif;
+}
+
+.ql-snow .ql-picker.ql-font .ql-picker-label[data-value="courier-new"]::before,
+.ql-snow .ql-picker.ql-font .ql-picker-item[data-value="courier-new"]::before {
+  content: "Courier New";
+  font-family: "Courier New", monospace;
+}
+
+.ql-snow .ql-picker.ql-font .ql-picker-label[data-value="georgia"]::before,
+.ql-snow .ql-picker.ql-font .ql-picker-item[data-value="georgia"]::before {
+  content: "Georgia";
+  font-family: Georgia, serif;
+}
+
+.ql-snow .ql-picker.ql-font .ql-picker-label[data-value="tahoma"]::before,
+.ql-snow .ql-picker.ql-font .ql-picker-item[data-value="tahoma"]::before {
+  content: "Tahoma";
+  font-family: Tahoma, sans-serif;
+}
+
+.ql-snow .ql-picker.ql-font .ql-picker-label[data-value="verdana"]::before,
+.ql-snow .ql-picker.ql-font .ql-picker-item[data-value="verdana"]::before {
+  content: "Verdana";
+  font-family: Verdana, sans-serif;
 }

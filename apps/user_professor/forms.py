@@ -34,7 +34,7 @@ class editarPerfilProfessorForms(forms.ModelForm):
             'formacao': forms.TextInput(attrs={'class':'input_cad', 'placeholder': 'Digite sua formação:'}),
         }
 
-# formularios de editar foto de perfil do professor
+# formulario de editar foto de perfil do professor
 class fotoProfessorForms(forms.ModelForm):
     class Meta:
         model = PerfilProfessor

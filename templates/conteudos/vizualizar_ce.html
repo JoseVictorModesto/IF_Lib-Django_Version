@@ -1,0 +1,58 @@
+{% extends 'bases_templates/base/base_vizualizar_cai.html' %}
+{% load static %}
+{% block content %}
+
+    {% if conteudo_externo %}
+
+        <section class="folha_conteudo">
+            <div class="capa_ex">
+                <!-- informações de conteudo externo -->
+                <div class="capa_part">
+                    <img class="logo_if" src="{% static 'styles/imagens/Logotipo_IFET.svg.png' %}">
+                    <h1 class="fonte_conteudo" style="font-weight: 400;"><strong class="infor_conteudo">TÍTULO:</strong> {{ conteudo_externo.titulo }}</h1>
+                    <h1 class="fonte_conteudo" style="font-weight: 400;"><strong class="infor_conteudo">POSTADO POR:</strong> {{ conteudo_externo.criador.first_name }}</h1>
+                    <h1 class="fonte_conteudo" style="font-weight: 400;"><strong class="infor_conteudo">TIPO:</strong> {{ conteudo_externo.tipo_conteudo }}</h1>
+                    <h1 class="fonte_conteudo" style="font-weight: 400;"><strong class="infor_conteudo">POSTADO EM:</strong> {{ conteudo_externo.data_envio|date:'d/m/Y' }}</h1>
+                </div>
+
+                <!-- cidade e data de envio do conteúdo -->
+                <div class="desc_ex">
+                    <h1 class="fonte_conteudo" style="font-weight: 600;">DESCRIÇÃO:</h1>
+                    <h1 class="fonte_conteudo" style="font-weight: 400;">{{ conteudo_externo.descricao_conteudo }}</h1>
+                </div>
+
+                <div class="link_ex">
+                    <a href="{{ conteudo_externo.link_conteudo }}" class="ex_link" style="font-weight: 400;">LINK DO CONTEÚDO</a>
+                    {% if professor_ce %}
+                        <a href="{% url 'editar_externo' conteudo_externo.id %}" class="edit_ce" style="font-weight: 400;">EDITAR</a>
+                    {% else %}
+                    {% endif %}
+                </div>
+
+            </div>
+
+        <hr class="linha_conteudo">
+        </section>
+        {% if not favorito %}
+            {% if aluno or professor %}
+                    <form class="favoritar" action="{% url 'salvar_favorito_ex' conteudo_externo.id %}" method="post">
+                        {% csrf_token %}
+                        <button class="botao_favoritar"><i class="bi bi-star-fill "></i></button>
+                        <h1 class="favor">{{ conteudo_externo.qtd_favoritos }}</h1>
+                    </form>
+                {% else %}
+            {% endif %}
+        {% else %}
+            {% if aluno or professor %}
+                <form class="favoritar" action="{% url 'remover_favorito_ex' conteudo_externo.id %}" method="post">
+                    {% csrf_token %}
+                    <button class="botao_favoritar"><i class="bi bi-star-fill" style="color: goldenrod; font-weight: 600;"></i></button>
+                    <h1 class="favor">{{ conteudo_externo.qtd_favoritos }}</h1>
+                </form>
+            {% else %}
+            {% endif %}
+        {% endif %}
+
+    {% endif %}
+
+{% endblock %}

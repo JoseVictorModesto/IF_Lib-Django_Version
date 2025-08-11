@@ -17,31 +17,35 @@
     border: 2px solid var(--verde1);
     background-color: #7373733d;
     width: 700px;
-    padding: 20px;
+    padding: 15px;
     margin-bottom: 20px;
 }
 
 .motivo_msg{
-    font-size: 1.5em;
+    font-size: 1.2em;
     font-weight: 300;
     text-align: center;
 }
 
 .infor_msg{
-    font-size: 1em;
+    font-size: 0.9em;
     font-weight: 300;
+    max-width: 100%;
+    overflow-x: hidden;
 }
 
 .botao_msg{
     text-decoration: none;
     color: var(--cinza1);
-    background-color: rgb(22, 131, 40);
     padding: 5px;
     border-radius: 3px;
+    border: none;
+    cursor: pointer;
+    background-color: rgb(19, 114, 35);
 }
 
 .delete_msg{
-    background-color: rgb(193, 35, 35);
+    background-color: rgb(166, 29, 29);
 }
 
 .linha_msg{
@@ -51,15 +55,22 @@
 }
 
 .opcoes_mensagens{
-    margin-top: 15px;
     padding: 10px;
-    margin-left: 58%;
 }
 
 .botao_msg:hover{
-    background-color: rgb(26, 164, 49);
+    background-color: rgb(22, 140, 41);
 }
 
 .delete_msg:hover{
-    background-color: rgb(218, 56, 56)
+    background-color: rgb(183, 46, 46)
+}
+
+.bototes_notificacao_lida{
+    display: flex;
+    margin-left: 65%;
+}
+
+.bototes_notificacao{
+    margin-left: 79%;
 }

@@ -6,7 +6,7 @@ from django.views.decorators.http import require_POST, require_GET, require_http
 
 from django.http import HttpResponseRedirect
 
-from apps.notificacao.views import notificacao_bemvindo
+from apps.notificacao.views import notificacao
 
 from apps.user_admin.forms import cadastroAdminForms, perfilAdminForm, instituicaoForms, cursoForms, campusForms, categoriaForms, tipoForms, cadastroBibliotecarioForms, perfilBibliotecarioForms
 from apps.user_admin.models import PerfilAdmin, Instituicao, Curso, Campus, Categoria, Tipos, PerfilBibliotecario
@@ -16,7 +16,7 @@ from apps.login_perfil.forms import senhaUsuarioForms
 
 def verificar_auth_admin(request):
     if not request.user.is_authenticated:
-        messages.error(request, 'Faça login para acssar essa página!')
+        messages.error(request, 'Faça login para acessar essa página!')
         return redirect('login')
     
     if not request.user.is_superuser:
@@ -57,6 +57,10 @@ def editar_perfil_admin(request):
 # deletar a foto de perfil do usuario
 @require_POST
 def deletar_foto_admin(request, id):
+    usuario_auth = verificar_auth_admin(request)
+    if usuario_auth:
+        return usuario_auth
+    
     deletar_foto_perfil(request, id, PerfilAdmin, 'Foto de perfil deletada', 'Nenhuma foto!')
 
     return redirect('editar_perfil_admin')
@@ -74,6 +78,7 @@ def cadastro_admin(request):
         formulario_cadastro_admin = cadastroAdminForms(request.POST)
         if formulario_cadastro_admin.is_valid():
             usuario = formulario_cadastro_admin.save(commit=False)
+            usuario.first_name = usuario.first_name.title()
             # set_password Criptografa e define a senha, nesse caso "0000"
             usuario.set_password("0000")
             # Permite acesso ao admin
@@ -83,7 +88,7 @@ def cadastro_admin(request):
             # Salva o Ususario
             usuario.save()
 
-            notificacao_cad = notificacao_bemvindo(request, usuario)
+            notificacao_cad = notificacao(request, usuario, None, 'Bem vindo ao IF_Lib', f'  Olá {usuario.first_name}, seja muito bem vindo(a) ao IF_Lib, venha conosco descobrir um universo de conhecimento. Estamos felizes em ter você com a gente. Boa jornada!!')
 
             messages.success(request, 'Usuário cadastrado com sucesso')
             return redirect('cadastro_admin')
@@ -98,13 +103,17 @@ def cadastro_admin(request):
 
     # dados da tabela de cadastro de admin
     # filtra somente os super usuarios ou seja os admins
-    admin_tab = User.objects.filter(is_superuser=True)
+    admin_tab = User.objects.filter(is_superuser=True).order_by('first_name')
 
     return render(request, 'usuarios/admin/user/cad_admin.html', {'formulario_cadastro_admin':formulario_cadastro_admin, 'admin_tab': admin_tab, 'infor_admin':infor_admin})
 
 # deletar algum usuario admin
 @require_POST
 def deletar_user_admin(request, id):
+    usuario_auth = verificar_auth_admin(request)
+    if usuario_auth:
+        return usuario_auth
+    
     deletar_obj(request, User, 'Admin deletado com sucesso!', id)
 
     return redirect('cadastro_admin')
@@ -171,6 +180,10 @@ def cad_instituicao(request):
 # deletar instituição
 @require_POST
 def deletar_instituicao(request, id):
+    usuario_auth = verificar_auth_admin(request)
+    if usuario_auth:
+        return usuario_auth
+    
     deletar_obj(request, Instituicao, 'Instituição deletada com sucesso!', id)
     return redirect('cad_instituicao')
 
@@ -215,6 +228,10 @@ def cad_curso(request):
 # deletar curso
 @require_POST
 def deletar_curso(request, id):
+    usuario_auth = verificar_auth_admin(request)
+    if usuario_auth:
+        return usuario_auth
+    
     deletar_obj(request, Curso, 'Curso deletado com sucesso!', id)
     return redirect('cad_curso')
 
@@ -259,6 +276,10 @@ def cad_campus(request):
 # deletar campus
 @require_POST
 def deletar_campus(request, id):
+    usuario_auth = verificar_auth_admin(request)
+    if usuario_auth:
+        return usuario_auth
+    
     deletar_obj(request, Campus, 'Campus deletado com sucesso!', id)
     return redirect('cad_campus')
 
@@ -303,6 +324,10 @@ def cad_categoria(request):
 # deletar categoria
 @require_POST
 def deletar_categoria(request, id):
+    usuario_auth = verificar_auth_admin(request)
+    if usuario_auth:
+        return usuario_auth
+    
     deletar_obj(request, Categoria, 'Categoria deletada com sucesso!', id)
     return redirect('cad_categoria')
 
@@ -347,6 +372,10 @@ def cad_tipo(request):
 # deletar tipo
 @require_POST
 def deletar_tipo(request, id):
+    usuario_auth = verificar_auth_admin(request)
+    if usuario_auth:
+        return usuario_auth
+    
     deletar_obj(request, Tipos, 'Tipo deletado com sucesso!', id)
     return redirect('cad_tipo')
 
@@ -387,6 +416,7 @@ def cad_bibliotecario(request):
         if formulario_cadastro_bibliotecario.is_valid() and formulario_perfil_bibliotecario.is_valid():
 
             user_bibliotecario = formulario_cadastro_bibliotecario.save(commit=False)
+            user_bibliotecario.first_name = user_bibliotecario.first_name.title()
             user_bibliotecario.set_password("0000")
             user_bibliotecario.save()
 
@@ -396,7 +426,7 @@ def cad_bibliotecario(request):
             perfil_bibliotecario.instituicao = perfil_bibliotecario.campus.instituicao_campus
             perfil_bibliotecario.save()
 
-            notificacao_cad = notificacao_bemvindo(request, user_bibliotecario)
+            notificacao_cad = notificacao(request, user_bibliotecario, None, 'Bem vindo ao IF_Lib', f'  Olá {user_bibliotecario.first_name}, seja muito bem vindo(a) ao IF_Lib, venha conosco descobrir um universo de conhecimento. Estamos felizes em ter você com a gente. Boa jornada!!')
 
             messages.success(request, 'Usuário cadastrado com sucesso')
             return redirect('cad_bibliotecario')
@@ -410,13 +440,17 @@ def cad_bibliotecario(request):
         formulario_cadastro_bibliotecario = cadastroBibliotecarioForms()
         formulario_perfil_bibliotecario = perfilBibliotecarioForms()
 
-    bibliotecario_tab = PerfilBibliotecario.objects.all()
+    bibliotecario_tab = PerfilBibliotecario.objects.all().order_by('usuario__first_name')
 
     return render(request, 'usuarios/admin/bibliotecario/bibliotecario_admin.html', {'formulario_cadastro_bibliotecario':formulario_cadastro_bibliotecario, 'formulario_perfil_bibliotecario':formulario_perfil_bibliotecario, 'infor_admin':infor_admin, 'bibliotecario_tab':bibliotecario_tab})
 
 # deletar bibliotecario
 @require_POST
 def deletar_bibliotecario(request, id):
+    usuario_auth = verificar_auth_admin(request)
+    if usuario_auth:
+        return usuario_auth
+    
     deletar_obj(request, User, 'Bibliotecário deletado com sucesso!', id)
     return redirect('cad_bibliotecario')
 

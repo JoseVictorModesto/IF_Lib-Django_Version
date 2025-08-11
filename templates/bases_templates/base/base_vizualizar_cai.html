@@ -1,0 +1,37 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IF_Lib - {{ conteudo_academico.titulo }}</title>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="{% static 'styles/style_conteudo.css' %}">
+</head>
+<body class="body_conteudo">
+    <!-- inclui o cabecalho nos templates -->
+    {% include 'bases_templates/partials/cabecalho.html' %}
+
+    <!-- inclui o messages do py para aparecer nos templates -->
+    {% for message in messages %}
+    <div>
+        <p id="messages" class="menssage_py">{{message}}</p>
+    </div>
+    {% endfor %}
+
+    <main class="main_conteudo">
+
+        {% block content %}
+        
+        {% endblock %}
+
+    </main>
+
+    {% include 'bases_templates/partials/footer_pag.html' %}
+
+    <script src="{% static '/scripts.js/app.js' %}"></script>
+
+</body>
+</html>

@@ -1,0 +1,38 @@
+{% extends 'bases_templates/base/base_conteudo.html' %}
+{% load static %}
+{% block content %}
+
+    <main class="main_user">
+        <h1 class="titulo_pag_caixa">Novo conteúdo externo</h1>
+        <form class="form_cad_cont" action="{% url 'cad_externo' %}" method="POST" enctype="multipart/form-data">
+
+            {% csrf_token %}
+
+            <div class="form_cad_cont_part">
+                <div class="infor_cad_part">
+                    <h1 class="titulo_form num_ti"><i class="bi bi-box-arrow-up-left"></i></h1>
+                    <h1 class="titulo_form">Formulario de cadastrado de conteúdo externo</h1>
+                </div>
+
+                <!-- formulario de conteudo externo -->
+                <div class="div_input">
+                    {% for field in formulario_ce %}
+                        <div class="div_input">
+                            <label for="{{ field.id_for_label }}">{{field.label}}</label>
+                            {{ field }}
+                        </div>
+                    {% endfor %}
+                </div>
+
+                <h2 style="color: #D9D9D9; font-size: 0.8em; font-family: Inter, sans-serif; font-weight: 300; margin-top: 10px;">( * Campo obrigatório no formulário. )</h2>
+            </div>
+
+            <div class="form_confirm">
+                <button class="bota_cad_cont enviar_cont" type="submit" onclick="return salvar_texto()">Enviar</button>
+                <a href="{% url 'perfil_professor' %}" class="bota_cad_cont cancelar_cont" style="text-decoration: none;">Retornar</a>
+            </div>
+        </form>
+
+    </main>
+    
+{% endblock %}

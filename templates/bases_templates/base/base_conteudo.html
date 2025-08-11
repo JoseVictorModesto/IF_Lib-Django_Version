@@ -1,0 +1,39 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="{% static '/styles/imagens/Logotipo_IFET.svg.png' %}">
+    <title>IF_Lib</title>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="{% static 'styles/style_conteudo.css' %}">
+
+    <!-- css do editor -->
+    <link href="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.snow.css" rel="stylesheet" />
+
+</head>
+<body class="body_perfil_adm">
+
+    <!-- inclui o cabecalho nos templates -->
+    {% include 'bases_templates/partials/cabecalho.html' %}
+
+    <!-- inclui o messages do py para aparecer nos templates -->
+    {% for message in messages %}
+    <div>
+        <p id="messages" class="menssage_py">{{message}}</p>
+    </div>
+    {% endfor %}
+
+    {% block content %}
+
+    {% endblock %}
+
+    {% include 'bases_templates/partials/footer_pag.html' %}
+
+    <script src="{% static '/scripts.js/app.js' %}"></script>
+
+</body>
+</html>

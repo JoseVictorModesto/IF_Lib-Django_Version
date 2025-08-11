@@ -41,7 +41,7 @@
     height: 220px;
     width: auto;
     border: solid var(--verde1) 3px;
-    border-radius: 40px;
+    border-radius: 30px;
 }
 
 .linha_user{
@@ -404,11 +404,23 @@
 .img_edit{
     cursor: pointer;
     padding: 5px;
-    background-color: #668f6f;
+    background-color: var(--cinza1);
     border-radius: 10px;
     color: #171717;
     font-family: var(--fonte2);
     font-size: 1em;
+}
+
+.img_edit:hover{
+    background-color: var(--cinza2);
+}
+
+.img_capa{
+    background-color: #668f6f;
+}
+
+.img_capa:hover{
+    background-color: #72a67d;
 }
 
 .btn_foto{
@@ -419,4 +431,23 @@
 
 .btn_foto:active{
     background: linear-gradient(#00421c51, #00421c51);
+}
+
+.form_doc{
+    cursor: pointer;
+    padding: 5px;
+    background-color: var(--cinza1);
+    border-radius: 10px;
+    color: #171717;
+    font-family: var(--fonte2);
+    font-size: 1em;
+    width: 650px;
+}
+
+.form_doc:hover{
+    background-color: var(--cinza2);
+}
+
+.ref_input{
+    font-weight: 600;
 }

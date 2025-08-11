@@ -9,7 +9,7 @@
                     <a href="{% url 'informacoes_bibliotecario' %}" class="opcao">Informações</a>
                     <a href="{% url 'cad_professor' %}" class="opcao selecionado">Professor</a>
                     <a href="{% url 'cad_aluno' %}" class="opcao">Aluno</a>
-                    <a href="#" class="opcao">C. Academicos</a>
+                    <a href="{% url 'conteudos_cai_bibliotecario' %}" class="opcao">C. Academicos</a>
                     <a href="#" class="opcao">C. Externo</a>
                     <a href="#" class="opcao opcao_cad_perfil">Solicitações</a>
             </div>
@@ -23,7 +23,7 @@
 
             <!-- Formulario de cadastro de novo professor -->
             <div class="inputs_cad">
-                {% for field in formulario_cadastro_professor  %}
+                {% for field in formulario_cadastro_professor %}
                 <div class="div_input">
                     <label for="{{ field.id_for_label }}">{{field.label}}</label>
                     {{ field }}

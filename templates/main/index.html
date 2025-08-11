@@ -5,6 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="{% static '/styles/imagens/Logotipo_IFET.svg.png' %}">
     <title>IF_Lib</title>
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
@@ -23,122 +24,68 @@
     {% endfor %} 
 
     <main class="main_pag_principal">
-        <h1 class="categoria">Tecnologia</h1>
-        <div class="swiper swiper-index swiper-tecnologia">
-            
-            <div class="swiper-wrapper">
-
-              <div class="swiper-slide">
-                <div href="#" class="card">
-                    <div>
-                        <img src="{% static '/styles/imagens/tecnologia-da-informacao-890x500-1-1.jpg' %}" class="img_card">
-                    </div>
-                    <div class="base_card">
-                        <a href="/templates/conteudos/conteudo_academico.html" class="titulo_card">Servidores e Microchips</a> 
-                        <div class="infor_card">  
-                            <h2 class="inst_card">IFTO</h2>
-                            <button class="descricao_card">Descrição <i class="bi bi-arrow-bar-right"></i></button>
-                        </div>
-                    </div>
-                    <div class="detalhes_card">
-                        <h2 class="tipo_card"><strong class="card_strong">Tipo</strong> Projeto de Pesquisa</h2>
-                        <h3 class="tipo_card"><strong class="card_strong">Postado em</strong> 25/04/2025</h3>
-                        <p class="paragrafo_card"><strong class="card_strong">Descrição</strong> A expressão "servidores e microchips" não tem um significado direto ou específico no contexto que você pode estar procurando. No entanto, podemos analisar separadamente cada termo e como eles podem estar relacionados:</p>
-                        <button class="retornar_card">Voltar</button>
-                    </div>
+        {% if categorias_com_conteudos %}
+            {% for categoria, conteudos in categorias_com_conteudos %}
+                <div>
+                    <h1 class="categoria">{{ categoria }}</h1>
                 </div>
-              </div>
-
-            </div>
-
-            <div class="swiper-pagination"></div>
-          
-            <div class="swiper-button-prev tecnologia-prev"></div>
-            <div class="swiper-button-next tecnologia-next"></div>
-          
-            <div class="swiper-scrollbar"></div>
-        </div>
-
-        <h1 class="categoria">Saude</h1>
-        <div class="swiper swiper-index swiper-saude">
-            
-            <div class="swiper-wrapper">
-              
-             <div class="swiper-slide">
-                <div href="#" class="card">
-                    <div>
-                        <img src="{% static '/styles/imagens/tecnologia-da-informacao-890x500-1-1.jpg' %}" class="img_card">
+                <div class="swiper swiper-index swiper-cont">
+                    <div class="swiper-wrapper">
+                        {% if conteudos %}
+                        {% for i in conteudos %}
+                            <div class="swiper-slide">
+                                <div class="card card_perfil">
+                                    {% if i.img_capa_conteudo %}
+                                        <div>
+                                            <img src="{{ i.img_capa_conteudo.url }}" class="img_card">
+                                        </div>
+                                    {% else %}
+                                        <div>
+                                            <img src="{% static '/styles/imagens/img_not_found_lib.png' %}" class="img_card">
+                                        </div>
+                                    {% endif %}
+                                    <div class="base_card">
+                                        {% if i.validado %}
+                                            <a href="{% url 'vizualizar_cai' i.id %}" class="titulo_card">{{ i.titulo|slice:":35" }}{% if i.titulo|length > 35 %}...{% endif %}</a>
+                                        {% endif %}
+                                        <div class="infor_card">
+                                            <h2 class="inst_card">{{ i.instituicao_conteudo }}</h2>
+                                            <button class="descricao_card">Descrição...</button>
+                                        </div>
+                                    </div>
+                                    <div class="detalhes_card">
+                                        <h2 class="tipo_card"><strong class="card_strong">Tipo</strong> {{ i.tipos_conteudo }}</h2>
+                                        <h3 class="tipo_card"><strong class="card_strong">Postado em</strong> {{ i.data_envio|date:'d/m/Y' }}</h3>
+                                        <p class="paragrafo_card"><strong class="card_strong">Descrição</strong> {{ i.descricao_conteudo|slice:":260" }}{% if i.descricao_conteudo|length > 260 %}...{% endif %}</p>
+                                        <button class="retornar_card">Voltar</button>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                        {% else %}
+                            <h1 style="font-family: Arial, Helvetica, sans-serif; color: rgb(168, 168, 168); font-weight: 100; margin-left: 1%;">Nenhum conteúdo disponível</h1>
+                        {% endif %}
                     </div>
-                    <div class="base_card">
-                        <a href="/templates/conteudos/conteudo_academico.html" class="titulo_card">Servidores e Microchips</a> 
-                        <div class="infor_card">  
-                            <h2 class="inst_card">IFTO</h2>
-                            <button class="descricao_card">Descrição...</button>
-                        </div>
-                    </div>
-                    <div class="detalhes_card">
-                        <h2 class="tipo_card"><strong class="card_strong">Tipo</strong> Projeto de Pesquisa</h2>
-                        <h3 class="tipo_card"><strong class="card_strong">Postado em</strong> 25/04/2025</h3>
-                        <p class="paragrafo_card"><strong class="card_strong">Descrição</strong> A expressão "servidores e microchips" não tem um significado direto ou específico no contexto que você pode estar procurando. No entanto, podemos analisar separadamente cada termo e como eles podem estar relacionados:</p>
-                        <button class="retornar_card">Voltar</button>
-                    </div>
+
+                    <div class="swiper-pagination"></div>
+                    <div class="swiper-button-prev swiper-prev"></div>
+                    <div class="swiper-button-next swiper-next"></div>
+                    <div class="swiper-scrollbar"></div>
                 </div>
-              </div>
+            {% endfor %}
+        {% else %}
+            <h1 style="font-family: Arial, Helvetica, sans-serif; color: rgb(212, 212, 212);">Nenhuma categoria disponível</h1>
+        {% endif %}
 
-            </div>
-            <div class="swiper-pagination"></div>
-          
-            <div class="swiper-button-prev saude-prev"></div>
-            <div class="swiper-button-next saude-next"></div>
-          
-            <div class="swiper-scrollbar"></div>
-        </div>
-
-        <h1 class="categoria">Conteúdos Externos</h1>
-        <div class="swiper swiper-index swiper-externos">
-            
-            <div class="swiper-wrapper">
-              
-              <div class="swiper-slide">
-                <div href="#" class="card">
-                    <div>
-                        <img src="{% static '/styles/imagens/tecnologia-da-informacao-890x500-1-1.jpg' %}" class="img_card">
-                    </div>
-                    <div class="base_card">
-                        <a href="/templates/conteudos/conteudo_academico.html" class="titulo_card">Servidores e Microchips</a> 
-                        <div class="infor_card">  
-                            <h2 class="inst_card">IFTO</h2>
-                            <button class="descricao_card">Descrição...</button>
-                        </div>
-                    </div>
-                    <div class="detalhes_card">
-                        <h2 class="tipo_card"><strong class="card_strong">Tipo</strong> Projeto de Pesquisa</h2>
-                        <h3 class="tipo_card"><strong class="card_strong">Postado em</strong> 25/04/2025</h3>
-                        <p class="paragrafo_card"><strong class="card_strong">Descrição</strong> A expressão "servidores e microchips" não tem um significado direto ou específico no contexto que você pode estar procurando. No entanto, podemos analisar separadamente cada termo e como eles podem estar relacionados:</p>
-                        <button class="retornar_card">Voltar</button>
-                    </div>
-                </div>
-              </div>
-
-            </div>
-
-            <div class="swiper-pagination"></div>
-          
-            <div class="swiper-button-prev externos-prev"></div>
-            <div class="swiper-button-next externos-next"></div>
-          
-            <div class="swiper-scrollbar"></div>
-        </div>
-
+        
     </main>
 
     {% include 'bases_templates/partials/footer_main.html' %}
 
     <script src="{% static '/scripts.js/app.js' %}"> </script>
-
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     <script>
-        const swipertecnologia = new Swiper('.swiper-tecnologia',{ navigation: { nextEl: '.tecnologia-next', prevEl: '.tecnologia-prev',}, slidesPerView: 6, 
+        const swiper = new Swiper('.swiper-cont',{ navigation: { nextEl: '.swiper-next', prevEl: '.swiper-prev',}, slidesPerView: 6, 
             breakpoints:{
                 1700: {
                     slidesPerView: 7,
@@ -178,84 +125,6 @@
             }    
         });
 
-        const swiperSaude = new Swiper('.swiper-saude',{ navigation: { nextEl: '.saude-next', prevEl: '.saude-prev',}, slidesPerView: 6,breakpoints:{
-                1700: {
-                    slidesPerView: 7,
-                    },
-                
-                1450: {
-                    slidesPerView: 6,
-                    },
-
-                1200: {
-                    slidesPerView: 5,
-                    },
-
-                950: {
-                    slidesPerView: 4,
-                    },
-
-                700: {
-                    slidesPerView: 3,
-                    },
-
-                650: {
-                    slidesPerView: 4,
-                    },
-                
-                500: {
-                    slidesPerView: 3,
-                    },
-
-                300: {
-                    slidesPerView: 2,
-                    },
-                
-                100: {
-                    slidesPerView: 1,
-                    },
-            }    
-        });
-
-        const swiperExternos = new Swiper('.swiper-externos',{ navigation: { nextEl: '.externos-next', prevEl: '.externos-prev',}, slidesPerView: 6,breakpoints:{
-                1700: {
-                    slidesPerView: 7,
-                    },
-                
-                1450: {
-                    slidesPerView: 6,
-                    },
-
-                1200: {
-                    slidesPerView: 5,
-                    },
-
-                950: {
-                    slidesPerView: 4,
-                    },
-
-                700: {
-                    slidesPerView: 3,
-                    },
-
-                650: {
-                    slidesPerView: 4,
-                    },
-                
-                500: {
-                    slidesPerView: 3,
-                    },
-
-                300: {
-                    slidesPerView: 2,
-                    },
-                
-                100: {
-                    slidesPerView: 1,
-                    },
-            }    
-        });
     </script>
-    
 </body>
 </html>

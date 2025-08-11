@@ -4,13 +4,13 @@ from django.contrib.auth.models import User
 
 class PerfilAdmin(models.Model):
     # cada usuario possui um perfil
-    usuario = models.OneToOneField(to=User, blank=False, null=False, on_delete=models.CASCADE)
+    usuario = models.OneToOneField(to=User, blank=False, null=False, on_delete=models.CASCADE, related_name='usuario_admin')
     foto_perfil = models.ImageField(upload_to='img_lib/%Y/%m/%d/', blank=True, null=True)
 
 class Instituicao(models.Model):
     # somente um admin é o criador da instituição, e mesmo que ele for deletado a instituição permanecerá
     criador = models.ForeignKey(to=User, on_delete=models.SET_NULL, blank=True, null=True, related_name='instituicao_criada')
-    nome_instituicao = models.CharField(max_length=50)
+    nome_instituicao = models.CharField(max_length=200)
     sigla = models.CharField(max_length=20)
     estado = models.CharField(max_length=50)
     
@@ -20,7 +20,7 @@ class Instituicao(models.Model):
 class Curso(models.Model):
     # somente um admin é o criador do curso, e mesmo que ele for deletado o curso permanecerá
     criador = models.ForeignKey(to=User, on_delete=models.SET_NULL, blank=True, null=True, related_name='curso_criado')
-    nome_curso = models.CharField(max_length=100)
+    nome_curso = models.CharField(max_length=200)
     descricao_curso = models.TextField()
 
     def __str__(self):
@@ -29,7 +29,7 @@ class Curso(models.Model):
 class Campus(models.Model):
     # somente um admin é o criador do campus, e mesmo que ele for deletado o campus permanecerá
     criador = models.ForeignKey(to=User, on_delete=models.SET_NULL, blank=True, null=True, related_name='campus_criado')
-    nome_campus = models.CharField(max_length=100)
+    nome_campus = models.CharField(max_length=200)
     email_campus = models.EmailField(max_length=100)
     endereco_campus = models.CharField(max_length=200)
     cidade_campus = models.CharField(max_length=100)
@@ -45,7 +45,7 @@ class Campus(models.Model):
 class Categoria(models.Model):
     # somente um admin é o criador da categoria, e mesmo que ele for deletado a instituição categoria
     criador = models.ForeignKey(to=User, on_delete=models.SET_NULL, blank=True, null=True, related_name='categoria_criado')
-    nome_categoria = models.CharField(max_length=100)
+    nome_categoria = models.CharField(max_length=200)
     descricao_categoria = models.TextField()
 
     def __str__(self):
@@ -54,7 +54,7 @@ class Categoria(models.Model):
 class Tipos(models.Model):
     # somente um admin é o criador do tipo, e mesmo que ele for deletado o tipo permanecerá
     criador = models.ForeignKey(to=User, on_delete=models.SET_NULL, blank=True, null=True, related_name='tipo_criado')
-    nome_tipo = models.CharField(max_length=100)
+    nome_tipo = models.CharField(max_length=200)
     descricao_tipo = models.TextField()
 
     def __str__(self):

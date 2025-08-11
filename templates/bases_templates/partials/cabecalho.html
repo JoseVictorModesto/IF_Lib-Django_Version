@@ -54,7 +54,7 @@
                         <!-- se houver alguma instituicao -->
                         {% if instituicoes %}
                         {% for i in instituicoes %}
-                            <li><a href="{% url 'filtro_instituicao' i.id %}" class="filtro_menu">{{ i.nome_instituicao }}</a></li>
+                            <li><a href="{% url 'filtro_instituicao' i.id %}" class="filtro_menu">{{ i.sigla }}</a></li>
                         {% endfor %}
                         <!-- se não houver nenhuma -->
                         {% else %}
@@ -94,6 +94,7 @@
                         {% endif %}
                     </ul>
                 </li>
+                <li class="opcao_menu_lateral"><a href="{% url 'filtro_externos' %}" class="link_menu_lateral">Conteúdos Externos</a></li>
             </ul>
         </nav>  
         
@@ -101,9 +102,9 @@
             <img src="{% static '/styles/icones/Logo IF_Lib.png' %}" class="img_home">
         </a>
 
-        <form class="busca">
-            <input type="search" class="input_busca" placeholder="   Oque você procura?">
-            <a href="/templates/pesquisa/pesquisa.html" class="botao_busca"><i class="bi bi-search"></i></a>
+        <form class="busca" action="{% url 'busca_principal' %}">
+            <input type="search" class="input_busca" placeholder="   Oque você procura?" name="busca_principal_name">
+            <button class="botao_busca" type="submit"><i class="bi bi-search"></i></button>
         </form>
 
 
@@ -119,16 +120,16 @@
             </a>
         {% endif %}
 
-        <!-- caso o usuario seja um Professor -->
-        {% if user_professor and user_professor.tipo_user == 'professor' %}
-            <a href="#">
+        <!-- caso o usuario seja um Professor ou aluno -->
+        {% if user_professor and user_professor.tipo_user == 'professor' or user_aluno and user_aluno.tipo_user == 'aluno' %}
+            <a href="{% url 'todos_favorito' %}">
                 <li class="botao_cabecalho botao_ver" style="--cor1: #5e0000; --cor2: #d40000; border-color: #af0a0a;">
                     <span class="icones icone_fav"><i class="bi bi-star"></i></span>
                     <span class="texto">Favoritos</span>
                 </li>
             </a>
         {% endif %}
-
+        
         <!-- se o usuario estiver logado -->
         {% if user.is_authenticated %}
             <a href="{% url 'lista_notificacao' %}">
@@ -161,6 +162,16 @@
             <!-- caso o usuario seja um Professor -->
             {% if user_professor and user_professor.tipo_user == 'professor' %}
                 <a href="{% url 'perfil_professor' %}">
+                    <li class="botao_cabecalho botao_verde" style="--cor1: #005112; --cor2: #06EA37;">
+                        <span class="icones"><i class="bi bi-person"></i></span>
+                        <span class="texto">Meu Perfil</span>
+                    </li>
+                </a>
+            {% endif %}
+
+            <!-- caso o usuario seja um Aluno -->
+            {% if user_aluno and user_aluno.tipo_user == 'aluno' %}
+                <a href="{% url 'perfil_aluno' %}">
                     <li class="botao_cabecalho botao_verde" style="--cor1: #005112; --cor2: #06EA37;">
                         <span class="icones"><i class="bi bi-person"></i></span>
                         <span class="texto">Meu Perfil</span>

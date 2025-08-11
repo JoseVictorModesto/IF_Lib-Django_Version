@@ -1,0 +1,253 @@
+{% extends 'bases_templates/base/base_conteudo.html' %}
+{% load static %}
+{% block content %}
+
+    <main class="main_user">
+        <h1 class="titulo_pag_caixa">Editar Conteúdo</h1>
+        <form class="form_cad_cont" action="{% url 'editar_cai' id %}" method="POST" enctype="multipart/form-data">
+
+            {% csrf_token %}
+
+            <div class="form_cad_part">
+                <div class="form_cad_cont_part">
+                    <div class="infor_cad_part">
+                        <h1 class="titulo_form num_ti">1</h1>
+                        <h1 class="titulo_form">Informações iniciais</h1>
+                    </div>
+                    
+                    <!-- formulario part 1 de cadastro do conteudo -->
+                    {% for field in formulario_conteudo_01 %}
+                        <div class="div_input">
+                            <label for="{{ field.id_for_label }}">{{field.label}}</label>
+                            {{ field }}
+                        </div>
+                    {% endfor %}
+                    <h2 style="color: #D9D9D9; font-size: 0.8em; font-family: Inter, sans-serif; font-weight: 300; margin-top: 10px;">( * Campos obrigatórios no formulário. )</h2>
+                </div>
+
+                <div class="form_cad_cont_part">
+                    <div class="infor_cad_part">
+                        <h1 class="titulo_form num_ti">2</h1>
+                        <h1 class="titulo_form">Autores e Tutor</h1>
+                    </div>
+
+                    <!-- formulario part 2 tutor do conteudo -->
+                    {% for field in formulario_conteudo_02_tutor %}
+                        <div class="div_input">
+                            <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                            {{ field }}
+
+                            {% if field.errors %}                           
+                                <ul class="msg_erro">
+                                    {% for i in field.errors %}
+                                        <li>{{ i }}</li>
+                                    {% endfor %}
+                                </ul>                           
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+
+                    <!-- datalist de tutores -->
+                    <datalist id="lista_tutores">
+                        {% for i in lista_tutores %}
+                            <option value="{{ i.usuario.username }} / {{ i.usuario.first_name }}"></option>
+                        {% endfor %}
+                    </datalist>
+
+                    <!-- formulario part 2 autores do conteudo -->
+                    {% for field in formulario_conteudo_02_autor %}
+                        <div class="div_input">
+                            <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                            {{ field }}
+
+                            {% if field.errors %}
+                                <ul class="msg_erro">
+                                    {% for i in field.errors %}
+                                        <li>{{ i }}</li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+
+                    <!-- datalist de tutores -->
+                    <datalist id="lista_autores">
+                        {% for i in lista_autores %}
+                            <option value="{{ i.usuario.username }} / {{ i.usuario.first_name }}"></option>
+                        {% endfor %}
+                    </datalist>
+                    <h2 style="color: #D9D9D9; font-size: 0.8em; font-family: Inter, sans-serif; font-weight: 300; margin-top: 10px;">( * Campos obrigatórios no formulário. )</h2>
+                </div>
+            </div>
+
+            <div class="form_cad_cont_part">
+                <div class="infor_cad_part">
+                    <h1 class="titulo_form num_ti">3</h1>
+                    <h1 class="titulo_form">Textos do Conteúdo</h1>
+                </div>
+
+                <!-- formulario part 3 descrição do conteudo -->
+                <div class="div_input">
+                    {% for field in formulario_conteudo_03_descricao %}
+                        <div class="div_input">
+                            <label for="{{ field.id_for_label }}">{{field.label}}</label>
+                            {{ field }}
+                        </div>
+                    {% endfor %}
+                </div>
+
+                <!-- formulario part 3 texto do conteudo -->
+                <div class="container editor_texto">
+                    <label class="label_editor">Texto do conteúdo *</label>
+                    <div id="editor"></div>
+                    <input type="hidden" name="texto_editor_editar_cont" id="texto_editor_editar_cont">
+                </div>
+                <h2 style="color: #D9D9D9; font-size: 0.8em; font-family: Inter, sans-serif; font-weight: 300; margin-top: 10px;">( * Campos obrigatórios no formulário. )</h2>
+            </div>
+
+            <div class="form_cad_cont_part form_adc">
+                <div class="infor_cad_part">
+                    <h1 class="titulo_form num_ti">4</h1>
+                    <h1 class="titulo_form">Imagens</h1>
+                </div>
+                <div class="imagens_cad_cont">
+                    {% for field in formulario_conteudo_04_igm_capa %}
+                        <div class="div_input">
+                            <label for="{{ field.id_for_label }}"><i class="bi bi-card-image"></i> {{field.label}}</label>
+                            {{ field }}
+                        </div>
+                    {% endfor %}
+                </div>
+                
+                <div class="imagens_cad_cont" style="margin-top: 30px;">
+                    {% for field in formulario_conteudo_04_igm_midias %}
+                        <div class="div_input">
+                            <label for="{{ field.id_for_label }}"><i class="bi bi-images"></i> {{field.label}}</label>
+                            {{ field }}
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="form_cad_cont_part form_adc">
+                <div class="infor_cad_part">
+                    <h1 class="titulo_form num_ti">5</h1>
+                    <h1 class="titulo_form">Conteúdos Adicionais</h1>
+                </div>
+                <div class="imagens_cad_cont">
+                    {% for field in formuçario_conteudo_05_adicionais %}
+                        <div class="div_input">
+                            <label for="{{ field.id_for_label }}"><i class="bi bi-file-earmark-check"></i> {{field.label}}</label>
+                            {{ field }}
+
+                            {% if field.errors %}
+                                <ul class="msg_erro">
+                                    {% for i in field.errors %}
+                                        <li>{{ i }}</li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                </div>
+                <h2 style="color: #D9D9D9; font-size: 0.8em; font-family: Inter, sans-serif; font-weight: 300; margin-top: 10px;">( Arquivos permitidos: PDF, Word, ODT, TXT )</h2>    
+            </div>
+
+            <div class="form_cad_cont_part form_adc">
+                <div class="infor_cad_part">
+                    <h1 class="titulo_form num_ti">6</h1>
+                    <h1 class="titulo_form">Referências</h1>
+                </div>
+                <div class="div_input">
+                    {% for field in formulario_conteudo_06_referencias %}
+                        <div class="div_input">
+                            <label for="{{ field.id_for_label }}">{{field.label}}</label>
+                            {{ field }}
+
+                            {% if field.errors %}
+                                <ul class="msg_erro">
+                                    {% for i in field.errors %}
+                                        <li>{{ i }}</li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+
+                        </div>
+                    {% endfor %}
+                </div>
+
+                <h2 style="color: #D9D9D9; font-size: 0.8em; font-family: Inter, sans-serif; font-weight: 300; margin-top: 10px;"> Obs: Cada link deve ser separado com uso de dois ponto e virgulas ( ;; )</h2>
+                <h2 style="color: #D9D9D9; font-size: 0.8em; font-family: Inter, sans-serif; font-weight: 300; margin-top: 5px;">( * Campo obrigatório no formulário. )</h2>   
+            </div>
+
+
+            <div class="form_confirm">
+                <button class="bota_cad_cont enviar_cont" type="submit" onclick="return salvar_texto()">Salvar</button>
+                <button class="bota_cad_cont cancelar_cont" type="reset" >Cancelar</button>
+            </div>
+        </form>
+
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.js"></script>
+
+    <!-- JS do editor quill -->
+    <script>
+        // importar fontes a serem usadas
+        var Font = Quill.import('formats/font');
+        Font.whitelist = ['arial', 'times-new-roman', 'courier-new', 'georgia', 'tahoma', 'verdana'];
+        Quill.register(Font, true);
+
+        // opcoes da toolbar
+        var toolbarOptions = [
+            ['bold', 'italic', 'underline'],
+            ['blockquote', 'code-block'],
+
+            [{'list': 'ordered' }],
+
+            [{'size': ['small', false, 'large', 'huge'] }],
+            [{'header': [1, 2, 3, 4, 5, 6, false] }],
+
+            [{'color': [] }, {'background': [] }],
+            [{'font': ['arial', 'times-new-roman', 'courier-new', 'georgia', 'tahoma', 'verdana'] }],
+            [{'align': [] }],
+
+            ['clean']
+        ];
+
+        // inicia um novo quill (editor)
+        var quill = new Quill('#editor', {
+
+            modules: {
+                toolbar: {
+                    container: toolbarOptions
+                }
+            },
+            placeholder: 'Digite o texto do conteúdo',
+            theme: 'snow'
+        });
+
+        function salvar_texto() {
+            // pega o conteudo digitado no editor e armazena na variavel conteudo_editor
+            var conteudo_editor_editar_cont = quill.root.innerHTML;
+
+            // esse trecho coloca o conteudo do editor Quill (conteudo_editor) no input com id=texto_editor do formulario, para que ele possa ser enviado ao Django
+            // (<input type="hidden" name="texto_editor" id="texto_editor">)
+            var hiddenInputEditar = document.getElementById('texto_editor_editar_cont');
+            
+            // verifica se este vazio
+            if (conteudo_editor_editar_cont === '<p><br></p>' || conteudo_editor_editar_cont === '') {
+                alert('Insira o "Texto do conteúdo" para prosseguir.');
+                return false;
+            }
+            
+            if (hiddenInputEditar) {
+                hiddenInputEditar.value = conteudo_editor_editar_cont;
+            }
+            // retorna true para permitir o envio normal do formulario
+            return true;
+        }
+
+    </script>
+
+{% endblock %}

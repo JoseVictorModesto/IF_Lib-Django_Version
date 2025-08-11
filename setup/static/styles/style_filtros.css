@@ -109,11 +109,23 @@
 
 .lista_conteudo{
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
     justify-content: center;
-    flex-wrap: wrap;
-    gap: 40px;
+    gap: 30px;
     padding: 20px;
+}
+
+.lista_pesquisa{
+    display: flex;
+    flex-direction: column;
+}
+
+.part_lista_pesquisa{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 30px;
 }
 
 .card{
@@ -151,6 +163,12 @@
     font-weight: 400;
 }
 
+.not_cont{
+    display: flex;
+    justify-content: center;
+    font-weight: 300;
+}
+
 .resul_pesquisa{
     font-weight: 400;
     color: var(--verde1);
@@ -169,6 +187,14 @@
     margin-left: 0;
     padding: 20px;
 }
+
+.aviso_busca{
+    display: flex;
+    justify-content: center;
+    font-weight: 400;
+    padding: 12vh;
+}
+
 
 @media (max-width: 600px) {
     /* reponsividade ordens */

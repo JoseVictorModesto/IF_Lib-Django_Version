@@ -72,7 +72,7 @@ def logout(request):
 
 # funçao global de informlções basicas dos perfis
 def infor_perfis(request, modelo_perfil):
-    # puxa as informações do usuario a partir do model PerfilAdmin que esteja logado
+    # puxa as informações do usuario a partir do model de perfil do usuario que esteja logado
     # caso o usuario recem criado nao tenha ainda uma tabela no bd o django cria uma para esse user
     perfil, perfil_creat = modelo_perfil.objects.get_or_create(usuario=request.user)
     return perfil
@@ -89,7 +89,7 @@ def deletar_obj(request, modelo, mensagem, id):
 # funçao global de cadastrar objetos
 def cadastrar_obj(request, modelo_formulario, mensagem_1, mensagem_2, retorno_pag):
     if request.method == 'POST':
-        formulario = modelo_formulario(request.POST)
+        formulario = modelo_formulario(request.POST, request.FILES)
         if formulario.is_valid():
             objeto = formulario.save(commit=False)
             objeto.criador = request.user
@@ -111,7 +111,7 @@ def editar_obj(request, modelo, modelo_formulario, mensagem, retorno_pag, id):
     objeto_edit = get_object_or_404(modelo, id=id)
 
     if request.method == 'POST':
-        formulario_edit = modelo_formulario(request.POST, instance=objeto_edit)
+        formulario_edit = modelo_formulario(request.POST, request.FILES, instance=objeto_edit)
 
         if formulario_edit.is_valid():
             formulario_edit.save()
@@ -123,7 +123,7 @@ def editar_obj(request, modelo, modelo_formulario, mensagem, retorno_pag, id):
 
     return formulario_edit
 
-# funçao global de editar usuario com 2 formulario (user, perfil)
+# funçao global de editar usuario com 2 formulario e modelos (user, perfil)
 def editar_user(request, id, modelo_bd, modelo_form_1, modelo_form_2, mensagem_1, retorno):
 
     perfil = get_object_or_404(modelo_bd, id=id)
@@ -141,11 +141,16 @@ def editar_user(request, id, modelo_bd, modelo_form_1, modelo_form_2, mensagem_1
             messages.success(request, mensagem_1)
             return redirect(retorno)
         
-        elif 'email' in formulario_edit_1.errors:
-            messages.error(request, 'Erro ao editar usuário: E-mail inválido')
+        # Exibe todos os erros de forma automatica        
+        for field, errors in formulario_edit_1.errors.items():
+            for i in errors:
+                messages.error(request, f'{field}: {i}')
 
-        else:
-            messages.error(request, 'Erro ao editar usuário: Matrícula já existente')
+        for field, errors in formulario_edit_2.errors.items():
+            for i in errors:
+                messages.error(request, f'{field}: {i}')
+
+        return formulario_edit_1, formulario_edit_2
         
     else:
         formulario_edit_1 = modelo_form_1(instance=usuario_p)

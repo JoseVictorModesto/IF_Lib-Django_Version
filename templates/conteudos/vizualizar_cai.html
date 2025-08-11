@@ -1,0 +1,177 @@
+{% extends 'bases_templates/base/base_vizualizar_cai.html' %}
+{% load static %}
+{% block content %}
+
+    {% if conteudo_academico %}
+
+        <section class="folha_conteudo">
+            <div class="conteudo_part_capa">
+                <!-- informações de capa do conteúdo -->
+                <div class="capa_part">
+                    <img class="logo_if" src="{% static 'styles/imagens/Logotipo_IFET.svg.png' %}">
+                    <h1 class="fonte_conteudo" style="font-weight: 400;"><strong class="infor_conteudo">{{ conteudo_academico.instituicao_conteudo }}</strong></h1>
+                    <h1 class="fonte_conteudo" style="font-weight: 400;"><strong class="infor_conteudo">{{ conteudo_academico.instituicao_conteudo.nome_instituicao }}</strong></h1>
+                    <h1 class="fonte_conteudo" style="font-weight: 400;"><strong class="infor_conteudo">CAMPUS:</strong> {{ conteudo_academico.campus_conteudo }}</h1>
+                    <h1 class="fonte_conteudo" style="font-weight: 400;"><strong class="infor_conteudo">CURSO SUPERIOR:</strong> {{ conteudo_academico.curso_conteudo }}</h1>
+                </div>
+                <!-- autores do conteúdo -->
+                <div>
+                    <h1 class="fonte_conteudo" style="margin-bottom: 10px; margin-top: 10px;">Autor(es):</h1>
+                    {% for i in autores_conteudo %}
+                        <h1 class="fonte_conteudo" style="margin-top: 5px; font-weight: 400;">{{ i.autor.first_name }}</h1>
+                    {% endfor %}
+                </div>
+                <!-- titulo do conteúdo -->
+                <div>
+                    <h1 class="fonte_conteudo titulo_conteudo">{{ conteudo_academico.titulo }}</h1>
+                </div>
+                <!-- cidade e data de envio do conteúdo -->
+                <div class="capa_part">
+                    <h1 class="fonte_conteudo" style="font-weight: 400;">{{ conteudo_academico.campus_conteudo.cidade_campus }}</h1>
+                    <h1 class="fonte_conteudo" style="font-weight: 400;">{{ conteudo_academico.data_envio|date:'d/m/Y' }}</h1>
+                </div>
+            </div>
+
+            <hr class="linha_conteudo">
+
+            <!-- texto do conteúdo -->
+            <div class="conteudo_part">
+                <div class="conteudo_part_texto">
+                    {{ conteudo_academico.texto_conteudo|safe }}
+                </div>
+
+            </div>
+
+            <hr class="linha_conteudo">
+
+            <!-- imagens do conteúdo -->
+            <div class="conteudo_part">
+                <div class="conteudo_part_galeria">
+                    <h1 class="fonte_conteudo titulo_galeria">Galeria de Imagens</h1>
+                    <div class="img_galeria">
+                    {% if midias_conteudo %}
+                        {% for i in midias_conteudo %}
+                            <a href="{{ i.imagem_conteudo.url }}"><img src="{{ i.imagem_conteudo.url }}" class="img_conteudo"></a>
+                        {% endfor %}
+
+                    {% else %}
+                        <h1 class="nome_atributo" style="font-size: 1.5em; font-weight: 300; color: black;" >Nenhuma mídia disponível</h1>
+                    {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <hr class="linha_conteudo">
+
+            <!-- arquivos adicionais do conteúdo -->
+            <div class="conteudo_part">
+                <div class="conteudo_part_galeria">
+                    <h1 class="fonte_conteudo titulo_galeria">Conteúdos Adicionais</h1>
+                    <div class="imagens_cad_cont conteudos_adicionais">
+                    {% if adicionais_conteudo %}
+                        {% for i in adicionais_conteudo %}
+                            <div>
+                                <a href="{{ i.arquivo.url }}" class="adc_mais_cont cont_extra cont_adic"><i class="bi bi-file-earmark-check"></i></a>
+                                <h1 class="fonte_conteudo titulo_texto" style="font-weight: 400;">Documento {{ forloop.counter }}</h1>
+                            </div>
+                        {% endfor %}
+                    
+                    {% else %}
+                        <h1 class="nome_atributo" style="font-size: 1.5em; font-weight: 300; color: black;" >Nenhum conteúdo adicional disponível</h1>
+                    {% endif %}
+                </div> 
+            </div>
+
+            <hr class="linha_conteudo">
+
+            <!-- links de referencia do conteúdo -->
+            <div class="conteudo_part">
+                <div class="conteudo_part_galeria">
+                    <h1 class="fonte_conteudo titulo_galeria">Referências</h1>
+                    <ul class="lista_ref">
+                    {% for i in referencias_conteudo %}
+                        <li><a href="{{ i.referencia_conteudo }}" class="ref">{{ i.referencia_conteudo|slice:":60" }}{% if i.referencia_conteudo|length > 60 %}...{% endif %}</a></li>
+                    {% endfor %}
+                    </ul>
+                </div> 
+            </div>
+        </section>
+
+        <section class="mais_conteudo">
+            <div class="autor_conteudo">
+                <!-- links de visita ao tutor do conteúdo -->
+                <h1 class="titulo_mais">Professor Tutor</h1>
+                <div class="div_infor_cont">
+                    <a href="/templates/usuarios/professor/professor_visita.html" class="infor_mais link_perfil">{{ conteudo_academico.tutor_conteudo.usuario.first_name }}</a>
+                </div>
+                <!-- links de visitas aos autores do conteúdo -->
+                <h1 class="titulo_mais">Autor(es)</h1>
+                <div class="div_infor_cont">
+                {% for i in autores_conteudo %}
+                    <a href="/templates/usuarios/aluno/aluno_visita.html" class="infor_mais link_perfil">{{ i.autor.first_name }}</a>
+                {% endfor %}
+                </div>
+            </div>
+            <div class="autor_conteudo">
+                <h1 class="titulo_mais">Descrição</h1>
+                <div class="div_infor_cont">
+                    <p class="infor_mais">
+                        {{ conteudo_academico.descricao_conteudo }}
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        {% if not favorito %}
+            {% if aluno or professor %}
+                <form class="favoritar" action="{% url 'salvar_favorito' conteudo_academico.id %}" method="post">
+                    {% csrf_token %}
+                    <button class="botao_favoritar"><i class="bi bi-star-fill "></i></button>
+                    <h1 class="favor">{{ conteudo_academico.qtd_favoritos }}</h1>
+                </form>
+            {% else %}
+            {% endif %}
+        {% else %}
+            {% if aluno or professor %}
+                <form class="favoritar" action="{% url 'remover_favorito' conteudo_academico.id %}" method="post">
+                    {% csrf_token %}
+                    <button class="botao_favoritar"><i class="bi bi-star-fill" style="color: goldenrod; font-weight: 600;"></i></button>
+                    <h1 class="favor">{{ conteudo_academico.qtd_favoritos }}</h1>
+                </form>
+            {% else %}
+            {% endif %}
+        {% endif %}
+        
+
+        <h1 class="caixa_de_pr_titulo">Perguntas e Respostas</h1>
+
+        <section class="caixa_de_pr">
+                <div>
+                    <h2 class="pergunta indent_user1">Pergunta / Nome_do_User</h2>
+                    <h2 class="pergunta">fulaiwubgfl ghliuasehgliushgli sgblhiuhfgl hflaerghi fulaiwubgfl ghliuasehgliushgli sgblhiuhfgl hflaerghi fulaiwubgfl ghliuasehgliushgli sgblhiuhfgl hflaerghi fulaiwubgfl ghliuasehgliushgli sgblhiuhfgl hflaerghi</h2>
+                </div>
+                <div>
+                    <h2 class="pergunta resposta indent_user2">Resposta / Nome_do_Autor</h2>
+                    <h2 class="pergunta resposta">fulaiwubgfl ghliuasehgliushgli sgblhiuhfgl hflaerghi fulaiwubgfl ghliuasehgliushgli sgblhiuhfgl hflaerghi fulaiwubgfl ghliuasehgliushgli sgblhiuhfgl hflaerghi</h2>
+                </div>
+                <div>
+                    <h2 class="pergunta resposta indent_user2">Resposta / Nome_do_Autor</h2>
+                    <h2 class="pergunta resposta">fulaiwubgfl ghliuasehgliushgli sgblhiuhfgl hflaerghi fulaiwubgfl ghliuasehgliushgli sgblhiuhfgl hflaerghi fulaiwubgfl ghliuasehgliushgli sgblhiuhfgl hflaerghi</h2>
+                </div>
+                <div>
+                    <h2 class="pergunta indent_user1">Pergunta / Nome_do_User</h2>
+                    <h2 class="pergunta">fulaiwubgfl ghliuasehgliushgli sgblhiuhfgl hflaerghi fulaiwubgfl ghliuasehgliushgli sgblhiuhfgl hflaerghi fulaiwubgfl ghliuasehgliushgli sgblhiuhfgl hflaerghi fulaiwubgfl ghliuasehgliushgli sgblhiuhfgl hflaerghi</h2>
+                </div>
+                <div>
+                    <h2 class="pergunta resposta indent_user2">Resposta / Nome_do_Autor</h2>
+                    <h2 class="pergunta resposta">fulaiwubgfl ghliuasehgliushgli sgblhiuhfgl hflaerghi fulaiwubgfl ghliuasehgliushgli sgblhiuhfgl hflaerghi fulaiwubgfl ghliuasehgliushgli sgblhiuhfgl hflaerghi</h2>
+                </div>
+            </section>
+            <form class="formulario_pergunta" style="margin-bottom: 40px;">
+                <input placeholder="Gostaria de fazer uma pergunta?" class="input_pergunta">
+                <button type="submit" class="enviar_pergunta">Enviar</button>
+            </form>
+
+    {% endif %}
+
+{% endblock %}

@@ -1,0 +1,40 @@
+{% extends 'bases_templates/base/base_notificacao.html' %}
+{% load static %}
+{% block content %}
+
+    <section class="meus_conteudos_validar">
+        <h1 class="titulo_pag_caixa">Notificações lidas</h1>
+    </section>
+
+    <div class="op_box" style="margin-bottom: 30px;">
+        <a href="{% url 'lista_notificacao' %}" class="btn_box">Notificações não lidas</a>
+        <a href="{% url 'lista_notificacao_lida' %}" class="btn_box red op_select_red">Notificações lidas</a>
+    </div>
+
+    <main class="mensagens">
+        {% if notificacoes %}
+            {% for i in notificacoes %}
+                <div class="mensagem">
+                    <h1 class="motivo_msg">{{ i.titulo_notificacao }}</h1>
+                    <hr class="linha_msg">
+                    <h2 class="infor_msg">  {{ i.descricao_notificacao }}</h2>
+                    <div class="bototes_notificacao_lida">
+                        <form method="POST" action="{% url 'marcar_nao_lida' i.id %}" class="opcoes_mensagens">
+                            {% csrf_token %}
+                            <button type="submit" class="botao_msg" style="font-size: 0.9em;">Marcar como não lida</button>
+                        </form>
+                        <form method="POST" action="{% url 'deletar_notificacao' i.id %}" class="opcoes_mensagens">
+                            {% csrf_token %}
+                            <button type="submit" class="botao_msg delete_msg" style="font-size: 0.9em;" onclick="return confirmar()">Deletar</button>
+                        </form>
+                    </div>
+                </div>
+            {% endfor %}
+
+        {% else %}
+            <h1 class="infor_geral" style="font-size: 2em;">Nenhuma notificação lida</h1>
+        {% endif %}
+
+    </main>
+
+{% endblock %}

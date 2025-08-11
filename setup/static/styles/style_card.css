@@ -10,6 +10,10 @@
     background-color: #255a18;
 }
 
+.card_ex{
+        background-color: #5a181e;
+}
+
 .img_card{
     width: 220px;
     height: 220px;
@@ -31,6 +35,10 @@
     height: 84px;
     background-color: #506e4b;
     text-decoration: none;
+}
+
+.titulo_card_ex{
+        background-color: #6e4b4b;
 }
 
 .titulo_card:hover{
@@ -56,6 +64,10 @@
     margin-left: 18px;
 }
 
+.infor_card_ex{
+    background-color: #5a181e;
+}
+
 .infor_card:hover{
     color: var(--branco);
 }
@@ -73,6 +85,10 @@
     margin-left: 18%;
 }
 
+.descricao_card_ex{
+    background-color: #3e1111c2;
+}
+
 .descricao_card:hover{
     color: var(--branco);
 }
@@ -82,7 +98,7 @@
 }
 
 .inst_card{
-    color: #011a07;
+    color: #101010;
     font-weight: 700;
 }
 
@@ -106,12 +122,16 @@
     color: rgb(228, 228, 228);
 }
 
+.detalhes_card_ex{
+    background: linear-gradient(#5a1823c2, #5a181e, #5a181e);
+}
+
 .detalhes_card.abrir{
     transform: translate(0);
 }   
 
 .card_strong{
-    color: #011a07;
+    color: #151515;
     font-weight: 800;
 }
 
@@ -125,6 +145,10 @@
     border-radius: 5px;
     color: rgb(216, 216, 216);
     text-decoration: underline;
+}
+
+.retornar_card_ex{
+    background-color: #3e1111c2;
 }
 
 .retornar_card:hover{
@@ -181,7 +205,7 @@
         height: 100%;
         border-radius: 20px;
         font-size: 0.9em;
-        gap: 3%;
+        gap: 2%;
     }
 
     .retornar_card{

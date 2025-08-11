@@ -1,0 +1,52 @@
+{% extends 'bases_templates/base/base_perfil.html' %}
+{% load static %}
+{% block content %}
+
+        <div class="opcoes_user_adm">
+            <hr class="linha_opcoes_user">
+            <div class="Lista_opcoes_adm">
+                <div class="opcoes">
+                    <a href="{% url 'editar_perfil_aluno' %}" class="opcao"><i class="bi bi-person-vcard"></i>  Editar Perfil</a>
+                    <a href="{% url 'editar_foto_aluno' %}" class="opcao selecionado"><i class="bi bi-card-image"></i>  Editar Foto</a>
+                    <a href="{% url 'redefinir_senha_aluno' %}" class="opcao"><i class="bi bi-file-lock2"></i>  Redefinir Senha</a>
+                    <a href="{% url 'perfil_aluno' %}" class="opcao opcao_cad_perfil"><i class="bi bi-arrow-left-circle"></i>  Retornar</a>
+                </div>
+            </div>
+        </div>
+
+    <div class="forms_perfil" >
+        <form class="form_cad" action="{% url 'editar_foto_aluno' %}" method="POST" enctype="multipart/form-data">
+
+            {% csrf_token %}
+
+            <h1 class="titulo_form">Editar foto de perfil</h1>
+            <!-- Formulario de editar a foto do professor -->
+            <div class="inputs_cad">
+                {% for field in formulario %}
+                <div class="div_input">
+                    <label for="{{ field.id_for_label }}">{{field.label}}</label>
+                    {{ field }}
+                </div>
+                {% endfor %}
+            </div>
+
+            <div class="botoes_form">
+                <button type="submit" class="botao_cad cad_foto" onclick="return confirmar()">Salvar</button>    
+            </div>    
+
+        </form> 
+
+        <!-- Botao de deleter foto do perfil -->
+        <form method="POST" action="{% url 'deletar_foto_aluno' infor_aluno.id %}">
+            {% csrf_token %}
+            <button type="submit" class="del_foto" onclick="return confirmar()">Remover foto de perfil</button>
+        </form>
+    </div>
+
+    </main>
+
+    {% include 'bases_templates/partials/footer_pag.html' %}
+
+    <script src="{% static '/scripts.js/app.js' %}"> </script>
+
+{% endblock %}

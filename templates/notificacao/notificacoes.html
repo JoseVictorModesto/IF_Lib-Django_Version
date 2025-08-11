@@ -1,29 +1,15 @@
+{% extends 'bases_templates/base/base_notificacao.html' %}
 {% load static %}
-
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IF_Lib Perfil - {{ infor_admin.usuario.first_name }}</title>
-
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    <link rel="stylesheet" href="{% static '/styles/style_notificacoes.css'%}">
-</head>
-<body class="body_perfil_adm">
-        
-    {% include 'bases_templates/partials/cabecalho.html' %}
-    
-    <!-- inclui o messages do py para aparecer nos templates -->
-    {% for message in messages %}
-    <div>
-        <p id="messages" class="menssage_py">{{message}}</p>
-    </div>
-    {% endfor %}
+{% block content %}
 
     <section class="meus_conteudos_validar">
-        <h1 class="titulo_pag_caixa">Notificações</h1>
+        <h1 class="titulo_pag_caixa">Notificações não lidas</h1>
     </section>
+
+        <div class="op_box" style="margin-bottom: 30px;">
+            <a href="{% url 'lista_notificacao' %}" class="btn_box op_select">Notificações não lidas</a>
+            <a href="{% url 'lista_notificacao_lida' %}" class="btn_box red">Notificações lidas</a>
+        </div>
 
     <main class="mensagens">
         {% if notificacoes %}
@@ -31,18 +17,18 @@
                 <div class="mensagem">
                     <h1 class="motivo_msg">{{ i.titulo_notificacao }}</h1>
                     <hr class="linha_msg">
-                    <h2 class="infor_msg">{{ i.descricao_notificacao }}</h2>
-                    <div class="opcoes_mensagens">
-                        <a href="{% url 'home' %}" class="botao_msg">Ver mais</a>
-                        <a href="#" class="botao_msg delete_msg">Marcar como lida</a>
-                    </div>
+                    <h2 class="infor_msg">{{ i.descricao_notificacao|safe }}</h2>
+                    <form method="POST" action="{% url 'marcar_lida' i.id %}" class="opcoes_mensagens bototes_notificacao">
+                        {% csrf_token %}
+                        <button type="submit" class="botao_msg delete_msg" style="font-size: 0.9em;">Marcar como lida</button>
+                    </form>
                 </div>
             {% endfor %}
+
         {% else %}
-            <h1 class="infor_geral" style="font-size: 2em;">Nenhuma Notificação</h1>
+            <h1 class="infor_geral" style="font-size: 2em;">Nenhuma notificação</h1>
         {% endif %}
 
     </main>
 
-</body>
-</html>
+{% endblock %}

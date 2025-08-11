@@ -7,58 +7,49 @@
         </div>
 
         <section class="caixa">
-
             <div class="caixas_perfil_padrao">
                 <div class="titulo_caixa_div">
                     <h1 class="titulo_caixa">Meus Conteúdos Academicos</h1>
                 </div>
                 <div>
                     <div class="swiper swiper-perfil swiper-conteudos-academicos">
-                        
                         <div class="swiper-wrapper">
-
-                        <div class="swiper-slide">
-                            <div href="#" class="card card_perfil">
-                                <div>
-                                    <img src="{% static '/styles/imagens/tecnologia-da-informacao-890x500-1-1.jpg' %}" class="img_card">
-                                </div>
-                                <div class="base_card">
-                                    <a href="#" class="titulo_card">Servidores e Microchips</a> 
-                                    <div class="infor_card">  
-                                        <h2 class="inst_card">IFTO</h2>
-                                        <button class="descricao_card">Descrição...</button>
+                        {% if conteudo_professor %}
+                        {% for i in conteudo_professor %}
+                            <div class="swiper-slide">
+                                <div class="card card_perfil">
+                                    {% if i.img_capa_conteudo %}
+                                        <div>
+                                            <img src="{{ i.img_capa_conteudo.url }}" class="img_card">
+                                        </div>
+                                    {% else %}
+                                        <div>
+                                            <img src="{% static '/styles/imagens/img_not_found_lib.png' %}" class="img_card">
+                                        </div>
+                                    {% endif %}
+                                    <div class="base_card">
+                                        {% if i.validado %}
+                                            <a href="{% url 'vizualizar_cai' i.id %}" class="titulo_card">{{ i.titulo|slice:":35" }}{% if i.titulo|length > 35 %}...{% endif %}</a>
+                                        {% else %}
+                                            <a href="{% url 'vizualizar_cai_nao_valid' i.id %}" class="titulo_card">{{ i.titulo|slice:":35" }}{% if i.titulo|length > 35 %}...{% endif %}</a>
+                                        {% endif %} 
+                                        <div class="infor_card">
+                                            <h2 class="inst_card">{{ i.instituicao_conteudo }}</h2>
+                                            <button class="descricao_card">Descrição...</button>
+                                        </div>
+                                    </div>
+                                    <div class="detalhes_card">
+                                        <h2 class="tipo_card"><strong class="card_strong">Tipo</strong> {{ i.tipos_conteudo }}</h2>
+                                        <h3 class="tipo_card"><strong class="card_strong">Postado em</strong> {{ i.data_envio|date:'d/m/Y' }}</h3>
+                                        <p class="paragrafo_card"><strong class="card_strong">Descrição</strong> {{ i.descricao_conteudo|slice:":260" }}{% if i.descricao_conteudo|length > 260 %}...{% endif %}</p>
+                                        <button class="retornar_card">Voltar</button>
                                     </div>
                                 </div>
-                                <div class="detalhes_card">
-                                    <h2 class="tipo_card"><strong class="card_strong">Tipo</strong> Projeto de Pesquisa</h2>
-                                    <h3 class="tipo_card"><strong class="card_strong">Postado em</strong> 25/04/2025</h3>
-                                    <p class="paragrafo_card"><strong class="card_strong">Descrição</strong> A expressão "servidores e microchips" não tem um significado direto ou específico no contexto que você pode estar procurando. No entanto, podemos analisar separadamente cada termo e como eles podem estar relacionados:</p>
-                                    <button class="retornar_card">Voltar</button>
-                                </div>
                             </div>
-                        </div>
-
-                        <div class="swiper-slide">
-                            <div href="#" class="card card_perfil">
-                                <div>
-                                    <img src="{% static '/styles/imagens/tecnologia-da-informacao-890x500-1-1.jpg' %}" class="img_card">
-                                </div>
-                                <div class="base_card">
-                                    <a href="#" class="titulo_card">Servidores e Microchips</a> 
-                                    <div class="infor_card">  
-                                        <h2 class="inst_card">IFTO</h2>
-                                        <button class="descricao_card">Descrição...</button>
-                                    </div>
-                                </div>
-                                <div class="detalhes_card">
-                                    <h2 class="tipo_card"><strong class="card_strong">Tipo</strong> Projeto de Pesquisa</h2>
-                                    <h3 class="tipo_card"><strong class="card_strong">Postado em</strong> 25/04/2025</h3>
-                                    <p class="paragrafo_card"><strong class="card_strong">Descrição</strong> A expressão "servidores e microchips" não tem um significado direto ou específico no contexto que você pode estar procurando. No entanto, podemos analisar separadamente cada termo e como eles podem estar relacionados:</p>
-                                    <button class="retornar_card">Voltar</button>
-                                </div>
-                            </div>
-                        </div>
-
+                        {% endfor %}
+                        {% else %}
+                            <h1 class="msg_caixa_vazia" style="margin-top: 50%;">Nenhum conteúdo disponível.</h1>
+                        {% endif %}
                         </div>
 
                         <div class="swiper-pagination"></div>
@@ -70,8 +61,10 @@
                     </div>
                 </div>
                 <div class="botoes_caixas">
-                    <a href="/templates/conteudos/cad_cai.html" class="opcao_caixa cad_cont"><i class="bi bi-file-earmark-plus"></i> Novo Conteúdo</a>
-                    <a href="/templates/usuarios/professor/professor_conteudo_aca.html" class="opcao_caixa"><i class="bi bi-files"></i> Ver Todos</a>
+                    <a href="{% url 'cad_cai' %}" class="opcao_caixa cad_cont"><i class="bi bi-file-earmark-plus"></i> Novo Conteúdo</a>
+                    {% if conteudo_professor %}
+                        <a href="{% url 'caixa_conteudos_professor' %}" class="opcao_caixa"><i class="bi bi-files"></i> Ver Todos</a>
+                    {% endif %}
                 </div>
             </div>
 
@@ -84,47 +77,38 @@
                         
                         <div class="swiper-wrapper">
                         
-                        <div class="swiper-slide">
-                            <div href="#" class="card card_perfil">
-                                <div>
-                                    <img src="{% static '/styles/imagens/tecnologia-da-informacao-890x500-1-1.jpg' %}" class="img_card">
-                                </div>
-                                <div class="base_card">
-                                    <a href="#" class="titulo_card">Servidores e Microchips</a> 
-                                    <div class="infor_card">  
-                                        <h2 class="inst_card">IFTO</h2>
-                                        <button class="descricao_card">Descrição...</button>
+                        {% if conteudo_externo %}
+                        {% for i in conteudo_externo %}
+                            <div class="swiper-slide">
+                                <div class="card card_perfil card_ex">
+                                    {% if i.img_capa %}
+                                        <div>
+                                            <img src="{{ i.img_capa.url }}" class="img_card">
+                                        </div>
+                                    {% else %}
+                                        <div>
+                                            <img src="{% static '/styles/imagens/img_not_found_lib_ex.png' %}" class="img_card">
+                                        </div>
+                                    {% endif %}
+                                    <div class="base_card">
+                                        <a href="{% url 'vizualizar_ce' i.id %}" class="titulo_card titulo_card_ex">{{ i.titulo|slice:":35" }}{% if i.titulo|length > 35 %}...{% endif %}</a>
+                                        <div class="infor_card infor_card_ex"> 
+                                            <h2 class="inst_card">EXT</h2>
+                                            <button class="descricao_card descricao_card_ex">Descrição...</button>
+                                        </div>
+                                    </div>
+                                    <div class="detalhes_card detalhes_card_ex">
+                                        <h2 class="tipo_card"><strong class="card_strong">Tipo</strong> {{ i.tipo_conteudo }}</h2>
+                                        <h3 class="tipo_card"><strong class="card_strong">Postado em</strong> {{ i.data_envio|date:'d/m/Y' }}</h3>
+                                        <p class="paragrafo_card"><strong class="card_strong">Descrição</strong> {{ i.descricao_conteudo|slice:":260" }}{% if i.descricao_conteudo|length > 260 %}...{% endif %}</p>
+                                        <button class="retornar_card retornar_card_ex">Voltar</button>
                                     </div>
                                 </div>
-                                <div class="detalhes_card">
-                                    <h2 class="tipo_card"><strong class="card_strong">Tipo</strong> Projeto de Pesquisa</h2>
-                                    <h3 class="tipo_card"><strong class="card_strong">Postado em</strong> 25/04/2025</h3>
-                                    <p class="paragrafo_card"><strong class="card_strong">Descrição</strong> A expressão "servidores e microchips" não tem um significado direto ou específico no contexto que você pode estar procurando. No entanto, podemos analisar separadamente cada termo e como eles podem estar relacionados:</p>
-                                    <button class="retornar_card">Voltar</button>
-                                </div>
                             </div>
-                        </div>
-
-                        <div class="swiper-slide">
-                            <div href="#" class="card card_perfil">
-                                <div>
-                                    <img src="{% static '/styles/imagens/tecnologia-da-informacao-890x500-1-1.jpg' %}" class="img_card">
-                                </div>
-                                <div class="base_card">
-                                    <a href="#" class="titulo_card">Servidores e Microchips</a> 
-                                    <div class="infor_card">  
-                                        <h2 class="inst_card">IFTO</h2>
-                                        <button class="descricao_card">Descrição...</button>
-                                    </div>
-                                </div>
-                                <div class="detalhes_card">
-                                    <h2 class="tipo_card"><strong class="card_strong">Tipo</strong> Projeto de Pesquisa</h2>
-                                    <h3 class="tipo_card"><strong class="card_strong">Postado em</strong> 25/04/2025</h3>
-                                    <p class="paragrafo_card"><strong class="card_strong">Descrição</strong> A expressão "servidores e microchips" não tem um significado direto ou específico no contexto que você pode estar procurando. No entanto, podemos analisar separadamente cada termo e como eles podem estar relacionados:</p>
-                                    <button class="retornar_card">Voltar</button>
-                                </div>
-                            </div>
-                        </div>
+                        {% endfor %}
+                        {% else %}
+                            <h1 class="msg_caixa_vazia" style="margin-top: 50%;">Nenhum conteúdo disponível.</h1>
+                        {% endif %}
 
                         </div>
 
@@ -136,8 +120,10 @@
                         <div class="swiper-scrollbar"></div>
                     </div>
                     <div class="botoes_caixas">
-                        <a href="#" class="opcao_caixa cad_cont"><i class="bi bi-file-earmark-plus"></i> Novo Conteúdo</a>
-                        <a href="/templates/usuarios/professor/professor_conteudo_ext.html" class="opcao_caixa"><i class="bi bi-files"></i> Ver Todos</a>
+                        <a href="{% url 'cad_externo' %}" class="opcao_caixa cad_cont"><i class="bi bi-file-earmark-plus"></i> Novo Conteúdo</a>
+                        {% if conteudo_externo %}
+                            <a href="{% url 'caixa_conteudos_externos' %}" class="opcao_caixa"><i class="bi bi-files"></i> Ver Todos</a>
+                        {% endif %}
                     </div>
                 </div>
             </div>
@@ -146,55 +132,48 @@
         <section class="caixa">
             <div class="caixas_perfil_padrao">
                 <div class="titulo_caixa_div">
-                    <h1 class="titulo_caixa">Validados</h1>
+                    <h1 class="titulo_caixa">Validados / Validar</h1>
                 </div>
                 <div>
                     <div class="swiper swiper-perfil swiper-validados">
                         
                         <div class="swiper-wrapper">
-
-                        <div class="swiper-slide">
-                            <div href="#" class="card card_perfil">
-                                <div>
-                                    <img src="{% static '/styles/imagens/tecnologia-da-informacao-890x500-1-1.jpg' %}" class="img_card">
-                                </div>
-                                <div class="base_card">
-                                    <a href="#" class="titulo_card">Servidores e Microchips</a> 
-                                    <div class="infor_card">  
-                                        <h2 class="inst_card">IFTO</h2>
-                                        <button class="descricao_card">Descrição...</button>
+                        {% if conteudo_professor_valid %}
+                        {% for i in conteudo_professor_valid %}
+                            <div class="swiper-slide">
+                                <div class="card card_perfil">
+                                    {% if i.img_capa_conteudo %}
+                                        <div>
+                                            <img src="{{ i.img_capa_conteudo.url }}" class="img_card">
+                                        </div>
+                                    {% else %}
+                                        <div>
+                                            <img src="{% static '/styles/imagens/img_not_found_lib.png' %}" class="img_card">
+                                        </div>
+                                    {% endif %}
+                                    <div class="base_card">
+                                        {% if i.validado %}
+                                            <a href="{% url 'vizualizar_cai' i.id %}" class="titulo_card">{{ i.titulo|slice:":35" }}{% if i.titulo|length > 35 %}...{% endif %}</a>
+                                        {% else %}
+                                            <a href="{% url 'vizualizar_cai_nao_valid' i.id %}" class="titulo_card">{{ i.titulo|slice:":35" }}{% if i.titulo|length > 35 %}...{% endif %}</a>
+                                        {% endif %} 
+                                        <div class="infor_card">
+                                            <h2 class="inst_card">{{ i.instituicao_conteudo }}</h2>
+                                            <button class="descricao_card">Descrição...</button>
+                                        </div>
+                                    </div>
+                                    <div class="detalhes_card">
+                                        <h2 class="tipo_card"><strong class="card_strong">Tipo</strong> {{ i.tipos_conteudo }}</h2>
+                                        <h3 class="tipo_card"><strong class="card_strong">Postado em</strong> {{ i.data_envio|date:'d/m/Y' }}</h3>
+                                        <p class="paragrafo_card"><strong class="card_strong">Descrição</strong> {{ i.descricao_conteudo|slice:":260" }}{% if i.descricao_conteudo|length > 260 %}...{% endif %}</p>
+                                        <button class="retornar_card">Voltar</button>
                                     </div>
                                 </div>
-                                <div class="detalhes_card">
-                                    <h2 class="tipo_card"><strong class="card_strong">Tipo</strong> Projeto de Pesquisa</h2>
-                                    <h3 class="tipo_card"><strong class="card_strong">Postado em</strong> 25/04/2025</h3>
-                                    <p class="paragrafo_card"><strong class="card_strong">Descrição</strong> A expressão "servidores e microchips" não tem um significado direto ou específico no contexto que você pode estar procurando. No entanto, podemos analisar separadamente cada termo e como eles podem estar relacionados:</p>
-                                    <button class="retornar_card">Voltar</button>
-                                </div>
                             </div>
-                        </div>
-
-                        <div class="swiper-slide">
-                            <div href="#" class="card card_perfil">
-                                <div>
-                                    <img src="{% static '/styles/imagens/tecnologia-da-informacao-890x500-1-1.jpg' %}" class="img_card">
-                                </div>
-                                <div class="base_card">
-                                    <a href="#" class="titulo_card">Servidores e Microchips</a> 
-                                    <div class="infor_card">  
-                                        <h2 class="inst_card">IFTO</h2>
-                                        <button class="descricao_card">Descrição...</button>
-                                    </div>
-                                </div>
-                                <div class="detalhes_card">
-                                    <h2 class="tipo_card"><strong class="card_strong">Tipo</strong> Projeto de Pesquisa</h2>
-                                    <h3 class="tipo_card"><strong class="card_strong">Postado em</strong> 25/04/2025</h3>
-                                    <p class="paragrafo_card"><strong class="card_strong">Descrição</strong> A expressão "servidores e microchips" não tem um significado direto ou específico no contexto que você pode estar procurando. No entanto, podemos analisar separadamente cada termo e como eles podem estar relacionados:</p>
-                                    <button class="retornar_card">Voltar</button>
-                                </div>
-                            </div>
-                        </div>
-
+                        {% endfor %}
+                        {% else %}
+                            <h1 class="msg_caixa_vazia" style="margin-top: 50%;">Nenhum conteúdo a ser validado.</h1>
+                        {% endif %}
                         </div>
 
                         <div class="swiper-pagination"></div>
@@ -206,7 +185,9 @@
                     </div>
                 </div>
                 <div class="botoes_caixas">
-                    <a href="/templates/usuarios/professor/professor_validados.html" class="opcao_caixa"><i class="bi bi-files"></i> Ver Todos</a>
+                    {% if conteudo_professor_valid %}
+                        <a href="{% url 'caixa_conteudos_validar_professor' %}" class="opcao_caixa"><i class="bi bi-files"></i> Ver Todos</a>
+                    {% endif %}
                 </div>
             </div>
 
@@ -219,47 +200,67 @@
                         
                         <div class="swiper-wrapper">
                         
-                        <div class="swiper-slide">
-                            <div href="#" class="card card_perfil">
-                                <div>
-                                    <img src="{% static '/styles/imagens/tecnologia-da-informacao-890x500-1-1.jpg' %}" class="img_card">
-                                </div>
-                                <div class="base_card">
-                                    <a href="#" class="titulo_card">Servidores e Microchips</a> 
-                                    <div class="infor_card">  
-                                        <h2 class="inst_card">IFTO</h2>
-                                        <button class="descricao_card">Descrição...</button>
+                        {% if favoritos or favoritos_ex %}
+                        {% for i in favoritos %}
+                            <div class="swiper-slide">
+                                <div class="card card_perfil">
+                                    {% if i.img_capa_conteudo %}
+                                        <div>
+                                            <img src="{{ i.img_capa_conteudo.url }}" class="img_card">
+                                        </div>
+                                    {% else %}
+                                        <div>
+                                            <img src="{% static '/styles/imagens/img_not_found_lib.png' %}" class="img_card">
+                                        </div>
+                                    {% endif %}
+                                    <div class="base_card">
+                                        <a href="{% url 'vizualizar_cai' i.id %}" class="titulo_card">{{ i.titulo|slice:":35" }}{% if i.titulo|length > 35 %}...{% endif %}</a> 
+                                        <div class="infor_card">
+                                            <h2 class="inst_card">{{ i.instituicao_conteudo }}</h2>
+                                            <button class="descricao_card">Descrição...</button>
+                                        </div>
+                                    </div>
+                                    <div class="detalhes_card">
+                                        <h2 class="tipo_card"><strong class="card_strong">Tipo</strong> {{ i.tipos_conteudo }}</h2>
+                                        <h3 class="tipo_card"><strong class="card_strong">Postado em</strong> {{ i.data_envio|date:'d/m/Y' }}</h3>
+                                        <p class="paragrafo_card"><strong class="card_strong">Descrição</strong> {{ i.descricao_conteudo|slice:":260" }}{% if i.descricao_conteudo|length > 260 %}...{% endif %}</p>
+                                        <button class="retornar_card">Voltar</button>
                                     </div>
                                 </div>
-                                <div class="detalhes_card">
-                                    <h2 class="tipo_card"><strong class="card_strong">Tipo</strong> Projeto de Pesquisa</h2>
-                                    <h3 class="tipo_card"><strong class="card_strong">Postado em</strong> 25/04/2025</h3>
-                                    <p class="paragrafo_card"><strong class="card_strong">Descrição</strong> A expressão "servidores e microchips" não tem um significado direto ou específico no contexto que você pode estar procurando. No entanto, podemos analisar separadamente cada termo e como eles podem estar relacionados:</p>
-                                    <button class="retornar_card">Voltar</button>
-                                </div>
                             </div>
-                        </div>
+                        {% endfor %}
 
-                        <div class="swiper-slide">
-                            <div href="#" class="card card_perfil">
-                                <div>
-                                    <img src="{% static '/styles/imagens/tecnologia-da-informacao-890x500-1-1.jpg' %}" class="img_card">
-                                </div>
-                                <div class="base_card">
-                                    <a href="#" class="titulo_card">Servidores e Microchips</a> 
-                                    <div class="infor_card">  
-                                        <h2 class="inst_card">IFTO</h2>
-                                        <button class="descricao_card">Descrição...</button>
+                        {% for i in favoritos_ex %}
+                            <div class="swiper-slide">
+                                <div class="card card_perfil card_ex">
+                                    {% if i.img_capa %}
+                                        <div>
+                                            <img src="{{ i.img_capa.url }}" class="img_card">
+                                        </div>
+                                    {% else %}
+                                        <div>
+                                            <img src="{% static '/styles/imagens/img_not_found_lib_ex.png' %}" class="img_card">
+                                        </div>
+                                    {% endif %}
+                                    <div class="base_card">
+                                        <a href="{% url 'vizualizar_ce' i.id %}" class="titulo_card titulo_card_ex">{{ i.titulo|slice:":35" }}{% if i.titulo|length > 35 %}...{% endif %}</a>
+                                        <div class="infor_card infor_card_ex"> 
+                                            <h2 class="inst_card">EXT</h2>
+                                            <button class="descricao_card descricao_card_ex">Descrição...</button>
+                                        </div>
+                                    </div>
+                                    <div class="detalhes_card detalhes_card_ex">
+                                        <h2 class="tipo_card"><strong class="card_strong">Tipo</strong> {{ i.tipo_conteudo }}</h2>
+                                        <h3 class="tipo_card"><strong class="card_strong">Postado em</strong> {{ i.data_envio|date:'d/m/Y' }}</h3>
+                                        <p class="paragrafo_card"><strong class="card_strong">Descrição</strong> {{ i.descricao_conteudo|slice:":260" }}{% if i.descricao_conteudo|length > 260 %}...{% endif %}</p>
+                                        <button class="retornar_card retornar_card_ex">Voltar</button>
                                     </div>
                                 </div>
-                                <div class="detalhes_card">
-                                    <h2 class="tipo_card"><strong class="card_strong">Tipo</strong> Projeto de Pesquisa</h2>
-                                    <h3 class="tipo_card"><strong class="card_strong">Postado em</strong> 25/04/2025</h3>
-                                    <p class="paragrafo_card"><strong class="card_strong">Descrição</strong> A expressão "servidores e microchips" não tem um significado direto ou específico no contexto que você pode estar procurando. No entanto, podemos analisar separadamente cada termo e como eles podem estar relacionados:</p>
-                                    <button class="retornar_card">Voltar</button>
-                                </div>
                             </div>
-                        </div>
+                        {% endfor %}
+                        {% else %}
+                            <h1 class="msg_caixa_vazia" style="margin-top: 50%;">Nenhum conteúdo favorito.</h1>
+                        {% endif %}
 
                         </div>
 
@@ -271,14 +272,15 @@
                         <div class="swiper-scrollbar"></div>
                     </div>
                     <div class="botoes_caixas">
-                        <a href="/templates/usuarios/professor/professor_favoritos.html" class="opcao_caixa"><i class="bi bi-files"></i> Ver Todos</a>
+                        {% if favoritos %}
+                            <a href="{% url 'todos_favorito' %}" class="opcao_caixa"><i class="bi bi-files"></i> Ver Todos</a>
+                        {% endif %}
                     </div>
                 </div>
             </div>
         <section>
 
     </main>
-
 
     {% include 'bases_templates/partials/footer_pag.html' %}
 
