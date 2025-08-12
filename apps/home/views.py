@@ -12,8 +12,4 @@ def index(request):
         conteudos = ConteudoAcademico.objects.filter(categoria_conteudo=i, validado=True).order_by('-id')
         categorias_com_conteudos.append((i, conteudos))
     
-    context = {
-        'categorias_com_conteudos': categorias_com_conteudos,
-    }
-    
-    return render(request, 'main/index.html', context)
+    return render(request, 'main/index.html', {'categorias_com_conteudos':categorias_com_conteudos})

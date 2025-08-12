@@ -512,10 +512,20 @@ def cad_externo(request):
     if usuario_auth:
         return usuario_auth
 
-    formulario_ce = cadastrar_obj(request, ConteudoExternoForms, 'Conteúdo postado com sucesso! Obrigado por sua contribuição. 😊', 'Erro ao cadastrar a conteúdo.', 'cad_externo')
+    if request.method == 'POST':
+        formulario_ce = ConteudoExternoForms(request.POST, request.FILE)
 
-    if isinstance(formulario_ce, HttpResponseRedirect):
-        return formulario_ce
+        if formulario_ce.is_valid():
+            conteudo_ex = formulario_ce.save(commit=False)
+            conteudo_ex.criador = request.user
+            conteudo_ex.campus_conteudo = request.user.usuario_professor.campus
+            conteudo_ex.save()
+            
+            messages.success(request, 'Conteúdo postado na plataforma, muito obrigado por sua contribuição.')
+            return redirect('vizualizar_ce', conteudo_ex.id)
+    
+    else:
+        formulario_ce = ConteudoExternoForms()
 
     return render(request, 'conteudos/cad_ce.html', {'formulario_ce':formulario_ce})
 
@@ -539,11 +549,11 @@ def vizualizar_ce(request, id):
     professor = hasattr(request.user, 'usuario_professor')
 
     conteudo_externo = get_object_or_404(ConteudoExterno, id=id)
-    professor_ce = ConteudoExterno.objects.none()
+    professor_ce = None
     if request.user.is_authenticated:
         professor_ce = ConteudoExterno.objects.filter(criador=request.user)
 
-    favorito = ConteudoExterno.objects.none()
+    favorito = None
     if request.user.is_authenticated:
         favorito = CaixaFavoritosExternos.objects.filter(conteudo_ce=conteudo_externo, usuario=request.user)
 

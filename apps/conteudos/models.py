@@ -57,6 +57,7 @@ class ConteudoExterno(models.Model):
     img_capa = models.ImageField(upload_to='img_lib/%Y/%m/%d/', blank=True, null=True)
     titulo = models.CharField(max_length=100)
     criador = models.ForeignKey(to=User, on_delete=models.SET_NULL, null=True, blank=False)
+    campus_conteudo = models.ForeignKey(to=Campus, on_delete=models.SET_NULL, null=True, related_name='externo_campus')
     descricao_conteudo = models.TextField(null=False, blank=False)
     tipo_conteudo = models.CharField(max_length=50, default='Conteúdo Externo')
     link_conteudo = models.URLField(max_length=2000)

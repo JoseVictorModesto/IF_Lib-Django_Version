@@ -11,7 +11,7 @@ from apps.notificacao.views import notificacao
 from apps.user_admin.forms import cadastroAdminForms, perfilAdminForm, instituicaoForms, cursoForms, campusForms, categoriaForms, tipoForms, cadastroBibliotecarioForms, perfilBibliotecarioForms
 from apps.user_admin.models import PerfilAdmin, Instituicao, Curso, Campus, Categoria, Tipos, PerfilBibliotecario
 
-from apps.login_perfil.views import infor_perfis, deletar_obj, cadastrar_obj, editar_obj, editar_foto, redefinir_senha, deletar_foto_perfil, editar_user
+from apps.login_perfil.views import infor_perfis, deletar_obj, cadastrar_obj, editar_obj, editar_foto, redefinir_senha, deletar_foto_perfil, editar_user, senha_alt, envio_msg_rabbitmq
 from apps.login_perfil.forms import senhaUsuarioForms
 
 def verificar_auth_admin(request):
@@ -77,6 +77,9 @@ def cadastro_admin(request):
     if request.method == 'POST':
         formulario_cadastro_admin = cadastroAdminForms(request.POST)
         if formulario_cadastro_admin.is_valid():
+
+            senha = senha_alt(request)
+
             usuario = formulario_cadastro_admin.save(commit=False)
             usuario.first_name = usuario.first_name.title()
             # set_password Criptografa e define a senha, nesse caso "0000"
@@ -88,6 +91,8 @@ def cadastro_admin(request):
             # Salva o Ususario
             usuario.save()
 
+            envio_msg_rabbitmq(request, usuario.email, usuario.first_name, senha)
+            
             notificacao_cad = notificacao(request, usuario, None, 'Bem vindo ao IF_Lib', f'  Olá {usuario.first_name}, seja muito bem vindo(a) ao IF_Lib, venha conosco descobrir um universo de conhecimento. Estamos felizes em ter você com a gente. Boa jornada!!')
 
             messages.success(request, 'Usuário cadastrado com sucesso')
@@ -415,9 +420,11 @@ def cad_bibliotecario(request):
         
         if formulario_cadastro_bibliotecario.is_valid() and formulario_perfil_bibliotecario.is_valid():
 
+            senha = senha_alt(request)
+
             user_bibliotecario = formulario_cadastro_bibliotecario.save(commit=False)
             user_bibliotecario.first_name = user_bibliotecario.first_name.title()
-            user_bibliotecario.set_password("0000")
+            user_bibliotecario.set_password(str(senha))
             user_bibliotecario.save()
 
             perfil_bibliotecario = formulario_perfil_bibliotecario.save(commit=False)
@@ -425,6 +432,8 @@ def cad_bibliotecario(request):
             perfil_bibliotecario.criador = request.user
             perfil_bibliotecario.instituicao = perfil_bibliotecario.campus.instituicao_campus
             perfil_bibliotecario.save()
+
+            envio_msg_rabbitmq(request, user_bibliotecario.email, user_bibliotecario.first_name, senha)
 
             notificacao_cad = notificacao(request, user_bibliotecario, None, 'Bem vindo ao IF_Lib', f'  Olá {user_bibliotecario.first_name}, seja muito bem vindo(a) ao IF_Lib, venha conosco descobrir um universo de conhecimento. Estamos felizes em ter você com a gente. Boa jornada!!')
 

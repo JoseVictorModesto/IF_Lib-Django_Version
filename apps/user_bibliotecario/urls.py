@@ -1,8 +1,8 @@
 from django.urls import path
 from apps.user_bibliotecario.views import informacoes_bibliotecario, editar_perfil_bibliotecario, editar_foto_bibliotecario, deletar_foto_bibliotecario, redefinir_senha_bibliotecario
-from apps.user_bibliotecario.views import cad_professor, deletar_professor, editar_professor
+from apps.user_bibliotecario.views import cad_professor, deletar_professor, editar_professor, conteudos_ce_bibliotecario
 from apps.user_bibliotecario.views import cad_aluno, deletar_aluno, editar_aluno
-from apps.user_bibliotecario.views import conteudos_cai_bibliotecario, deleta_cai_bibliotecario
+from apps.user_bibliotecario.views import conteudos_cai_bibliotecario, deleta_cai_bibliotecario, deleta_ce_bibliotecario
 # urls bibliotecario
 urlpatterns = [
     # user e perfil bibliotecario
@@ -22,4 +22,7 @@ urlpatterns = [
     # conteudos academicos
     path('conteudos_cai_bibliotecario/', conteudos_cai_bibliotecario, name='conteudos_cai_bibliotecario'),
     path('deleta_cai_bibliotecario/<int:id>', deleta_cai_bibliotecario, name='deleta_cai_bibliotecario'),
+    # conteudos externos
+    path('conteudos_ce_bibliotecario/', conteudos_ce_bibliotecario, name='conteudos_ce_bibliotecario'),
+    path('deleta_ce_bibliotecario/<int:id>', deleta_ce_bibliotecario, name='deleta_ce_bibliotecario'),
 ]

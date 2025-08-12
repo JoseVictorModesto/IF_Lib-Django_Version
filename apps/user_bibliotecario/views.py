@@ -11,11 +11,11 @@ from apps.notificacao.views import notificacao
 from apps.user_bibliotecario.forms import fotoBibliotecarioForms, editarBibliotecarioForms
 from apps.user_bibliotecario.forms import cadastroProfessorForm, cadastroAlunoForm, perfilProfessorForm, perfilAlunoForm, editarProfessorForm, editarAlunoForm
 
-from apps.login_perfil.views import infor_perfis, deletar_obj, editar_user
+from apps.login_perfil.views import infor_perfis, deletar_obj, editar_user, senha_alt, envio_msg_rabbitmq
 from apps.login_perfil.views import editar_foto, deletar_foto_perfil, redefinir_senha, editar_obj
 from apps.login_perfil.forms import senhaUsuarioForms
 
-from apps.conteudos.models import ConteudoAcademico
+from apps.conteudos.models import ConteudoAcademico, ConteudoExterno
 
 def verificar_auth(request):
     if not request.user.is_authenticated:
@@ -116,9 +116,11 @@ def cad_professor(request):
 
         if formulario_cadastro_professor.is_valid() and formulario_perfil_professor.is_valid():
 
+            senha = senha_alt(request)
+
             user_professor = formulario_cadastro_professor.save(commit=False)
             user_professor.first_name = user_professor.first_name.title()
-            user_professor.set_password('0000')
+            user_professor.set_password(str(senha))
             user_professor.save()
 
             perfil_professor = formulario_perfil_professor.save(commit=False)
@@ -127,6 +129,8 @@ def cad_professor(request):
             perfil_professor.campus = request.user.usuario_bibliotecario.campus
             perfil_professor.instituicao = perfil_professor.campus.instituicao_campus
             perfil_professor.save()
+
+            envio_msg_rabbitmq(request, user_professor.email, user_professor.first_name, senha)
 
             notificacao_cad = notificacao(request, user_professor, None, 'Bem vindo ao IF_Lib', f'  Olá {user_professor.first_name}, seja muito bem vindo(a) ao IF_Lib, venha conosco descobrir um universo de conhecimento. Estamos felizes em ter você com a gente. Boa jornada!!')
 
@@ -188,9 +192,12 @@ def cad_aluno(request):
         formulario_perfil_aluno = perfilAlunoForm(request.POST)
 
         if formulario_cadastro_aluno.is_valid() and formulario_perfil_aluno.is_valid():
+
+            senha = senha_alt(request)
+
             user_aluno = formulario_cadastro_aluno.save(commit=False)
             user_aluno.first_name = user_aluno.first_name.title()
-            user_aluno.set_password('0000')
+            user_aluno.set_password(str(senha))
             user_aluno.save()
 
             perfil_aluno = formulario_perfil_aluno.save(commit=False)
@@ -199,6 +206,8 @@ def cad_aluno(request):
             perfil_aluno.campus = request.user.usuario_bibliotecario.campus
             perfil_aluno.instituicao = perfil_aluno.campus.instituicao_campus
             perfil_aluno.save()
+
+            envio_msg_rabbitmq(request, user_aluno.email, user_aluno.first_name, senha)
 
             notificacao_cad = notificacao(request, user_aluno, None, 'Bem vindo ao IF_Lib', f'  Olá {user_aluno.first_name}, seja muito bem vindo(a) ao IF_Lib, venha conosco descobrir um universo de conhecimento. Estamos felizes em ter você com a gente. Boa jornada!!')
             
@@ -258,12 +267,42 @@ def conteudos_cai_bibliotecario(request):
 
     infor_bibliotecario = infor_perfis(request, PerfilBibliotecario)
 
-    conteudo_cai_tab = ConteudoAcademico.objects.filter(campus_conteudo = request.user.usuario_bibliotecario.campus).order_by('-data_envio')
+    conteudo_cai_tab = ConteudoAcademico.objects.filter(campus_conteudo = request.user.usuario_bibliotecario.campus).order_by('-id')
 
     return render(request, 'usuarios/bibliotecarios/conteudos/conteudo_cai_bibliotecario.html', {'infor_bibliotecario':infor_bibliotecario, 'conteudo_cai_tab':conteudo_cai_tab})
 
-# deletar conteudo
+# deletar cai
+@require_POST
 def deleta_cai_bibliotecario(request, id):
-    deletar_obj(request,ConteudoAcademico, 'Conteudo deletado com sucesso!', id )
+    usuario_auth = verificar_auth(request)
+    if usuario_auth:
+        return usuario_auth
+
+    deletar_obj(request, ConteudoAcademico, 'Conteudo deletado com sucesso!', id )
+    
     return redirect('conteudos_cai_bibliotecario')
 
+# --------------------------------------------------------------------------------------------------------------------------
+
+# FUNÇÕES BIBLIOTECARIO: CE
+
+def conteudos_ce_bibliotecario(request):
+    usuario_auth = verificar_auth(request)
+    if usuario_auth:
+        return usuario_auth
+
+    infor_bibliotecario = infor_perfis(request, PerfilBibliotecario)
+
+    conteudo_ce_tab = ConteudoExterno.objects.filter(campus_conteudo=request.user.usuario_bibliotecario.campus).order_by('-id')
+
+    return render(request, 'usuarios/bibliotecarios/conteudos/conteudo_ce_bibliotecario.html', {'infor_bibliotecario':infor_bibliotecario, 'conteudo_ce_tab':conteudo_ce_tab})
+
+# deletar ce
+@require_POST
+def deleta_ce_bibliotecario(request, id):
+    usuario_auth = verificar_auth(request)
+    if usuario_auth:
+        return usuario_auth
+
+    deletar_obj(request, ConteudoExterno, 'Conteudo deletado com sucesso!', id )
+    return redirect('conteudos_ce_bibliotecario')

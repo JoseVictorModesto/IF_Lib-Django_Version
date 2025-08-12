@@ -9,6 +9,10 @@ from django.contrib import messages
 
 from django.views.decorators.http import require_POST
 
+import random
+import pika
+import json
+
 # --------------------------------------------------------------------------------------------------------------------------
 
 # FUNÇÕES LOGIN + LOGOUT
@@ -228,3 +232,41 @@ def redefinir_senha(request, modelo_formulario, nova_senha, confirm_senha, mensa
 
     return formulario
 
+# gerador de senha aleatoria
+def senha_alt(request):
+    senha_aleatoria = random.randint(10000000, 99999999)
+    return senha_aleatoria
+
+def envio_msg_rabbitmq(request, user_email, user, senha_aleatoria):
+    try:
+        coneccao = pika.ConnectionParameters(
+            host="rabbitmq",
+            port=5672,
+            credentials=pika.PlainCredentials(
+                username='guest',
+                password='guest'
+            )
+        )
+
+        canal = pika.BlockingConnection(coneccao).channel()
+        canal.queue_declare('fila_emails', durable=True)
+
+        mensagem = {
+            'to':user_email,
+            'subject':f'Olá, {user} seu cadastro no IF_Lib acaba de ser realizado:',
+            'body':f'Sua senha: {senha_aleatoria}'
+        }
+
+        canal.basic_publish(
+            exchange='',
+            routing_key='fila_emails',
+            body=json.dumps(mensagem),
+            properties=pika.BasicProperties(
+                delivery_mode=2
+            )
+        )
+
+        canal.close()
+        
+    except Exception as erro:
+        print(f'Erro ao enviar a mensagem: {erro}')

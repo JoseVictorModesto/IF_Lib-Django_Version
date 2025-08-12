@@ -1,0 +1,57 @@
+version: '3.8'
+
+# mysql
+services:
+  db:
+    image: mysql:8.0
+    container_name: mysql-db
+    restart: always
+    environment:
+      MYSQL_DATABASE: ${DB_NAME}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+
+    ports:
+      - "3306:3306"
+
+    volumes:
+      - mysql_data:/var/lib/mysql
+    
+    networks:
+      - rabbitmq_network
+
+# sistema lib
+  django-app:
+    build: .
+    container_name: django-app
+
+    volumes:
+      - .:/app
+      - ./media:/app/media
+      - ./static:/app/static
+
+    ports:
+      - "8000:8000"
+
+    depends_on:
+      - db
+
+    environment:
+      SECRET_KEY: ${SECRET_KEY}
+      ENGINE: ${ENGINE}
+      DB_NAME: ${DB_NAME}
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_HOST: ${DB_HOST}
+      DB_PORT: ${DB_PORT}
+
+    networks:
+      - rabbitmq_network
+
+volumes:
+  mysql_data:
+
+networks:
+  rabbitmq_network:
+    external: true
+

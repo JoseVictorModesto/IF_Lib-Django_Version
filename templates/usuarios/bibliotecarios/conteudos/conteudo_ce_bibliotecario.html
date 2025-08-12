@@ -9,50 +9,42 @@
                     <a href="{% url 'informacoes_bibliotecario' %}" class="opcao">Informações</a>
                     <a href="{% url 'cad_professor' %}" class="opcao">Professor</a>
                     <a href="{% url 'cad_aluno' %}" class="opcao">Aluno</a>
-                    <a href="{% url 'conteudos_cai_bibliotecario' %}" class="opcao selecionado">C. Academicos</a>
-                    <a href="{% url 'conteudos_ce_bibliotecario' %}" class="opcao">C. Externo</a>
+                    <a href="{% url 'conteudos_cai_bibliotecario' %}" class="opcao">C. Academicos</a>
+                    <a href="{% url 'conteudos_ce_bibliotecario' %}" class="opcao selecionado">C. Externo</a>
                     <a href="#" class="opcao opcao_cad_perfil">Solicitações</a>
             </div>
         </div>
 
         <div class="consultas_ob">
-            <h1 class="titulo_consulta_ob">Conteúdos Academicos e Intelectuais</h1>
+            <h1 class="titulo_consulta_ob">Conteúdos Externos</h1>
             <form class="busca busca_consulta_ob">
                 <input type="search" class="input_busca input_busca_consulta" placeholder="   Digite o titulo de um CAI">
                 <button type="submit" class="botao_busca"><i class="bi bi-search"></i></button>
             </form>
         </div>
 
-        {% if conteudo_cai_tab %}
+        {% if conteudo_ce_tab %}
         <table class="tablela_ob">
             <thead class="cabecalho_tabela">
                 <th class="nome_atributo">ID</th>
                 <th class="nome_atributo">Titulo</th>
+                <th class="nome_atributo">Professos</th>
+                <th class="nome_atributo">Link</th>
                 <th class="nome_atributo">Data de envio</th>
-                <th class="nome_atributo">Professos Tutor</th>
-                <th class="nome_atributo">Instituição</th>
-                <th class="nome_atributo">Campus</th>
-                <th class="nome_atributo">Curso</th>
-                <th class="nome_atributo">Tipo</th>
-                <th class="nome_atributo">Categoria</th>
                 <th class="nome_atributo">Verificar</th>
                 <th class="nome_atributo">Deletar</th>
             </thead>
 
             <tbody class="infor_tabela">
-            {% for i in conteudo_cai_tab %}
+            {% for i in conteudo_ce_tab %}
                 <tr>
                     <td class="atributo">{{ i.id }}</td>
                     <td class="atributo">{{ i.titulo }}</td>
+                    <td class="atributo">{{ i.criador.first_name }}</td>
+                    <td class="atributo">{{ i.link_conteudo }}</td>
                     <td class="atributo">{{ i.data_envio|date:"d/m/Y" }}</td>
-                    <td class="atributo">{{ i.tutor_conteudo.usuario.first_name }}</td>
-                    <td class="atributo">{{ i.instituicao_conteudo }}</td>
-                    <td class="atributo">{{ i.campus_conteudo }}</td>
-                    <td class="atributo">{{ i.curso_conteudo }}</td>
-                    <td class="atributo">{{ i.tipos_conteudo }}</td>
-                    <td class="atributo">{{ i.categoria_conteudo }}</td>
-                    <td class="atributo"><a href="{% url 'vizualizar_cai' i.id %}" class="funcao_tabela"> <i class="bi bi-file-earmark-text"></i></i> </a></td>
-                    <form action="{% url 'deleta_cai_bibliotecario' i.id %}" method="POST">
+                    <td class="atributo"><a href="{% url 'vizualizar_ce' i.id %}" class="funcao_tabela"> <i class="bi bi-file-earmark-text"></i></i> </a></td>
+                    <form action="{% url 'deleta_ce_bibliotecario' i.id %}" method="POST">
                         {% csrf_token %}
                         <td class="atributo"><button type="submit" class="funcao_tabela" onclick="confirmar()"> <i class="bi bi-trash"></i> </button></td>
                     </form>
